@@ -12,9 +12,13 @@ class ChatRoom extends Component {
     render() {
 
         return (
-            <div>
-                
+            <div className="container-fluid justify-content-center main-container">
+                <div className="container-fluid justify-content-center inner-container">
+            yowzers this isn't working
+                </div>
             </div>
         );
     }
 }
+
+export default ChatRoom;
