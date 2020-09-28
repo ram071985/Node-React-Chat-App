@@ -1,22 +1,63 @@
+/* body */
+
 #root {
   height: 100%;
 }
 
 html, body {
+  font-size: 16px;
   height: 100%;
   margin: 0px;
 }
 
+/* containers */
+
 .main-container {
-  min-height: 100%;
-  background-color: brown;
-  padding: 80px;
-  height: 100% !important;
+  background-color: rgb(177, 149, 127);
+  padding: 50px;
+  height: 100%;
+}
+
+.outline-container {
+  border-radius: 2rem;
+  height: 100%;
+  padding: 15px;
+  border: solid white .1rem;
 }
 
 .inner-container {
-  border-radius: .8rem;
-  background-color: white;
-  padding: 7px;
+  border-radius: 2rem;
+  background-color: rgb(241, 241, 241);
+  padding: 20px;
   height: 100%;
 }
+
+.messages-container {
+  width: 78%;
+  margin-left: 7px !important;
+  border-radius: 2rem;
+  background-color: rgb(255, 255, 255);
+  height: 100%;
+  padding: 0px;
+}
+
+/* content */
+
+.user-row {
+height: 10px;
+width: 40%;
+margin-left: 81%;
+}
+
+.user-column {
+  padding: 0px !important;
+  margin-top: 25px;
+}
+
+.user-icon {
+
+}
+
+.username-text {
+}
+
