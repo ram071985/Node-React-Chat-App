@@ -18,7 +18,7 @@ class ChatRoom extends Component {
                   <User
                     width="25"
                     color="rgb(177, 149, 127)"
-                    className="mr-2 mb-2 user-icon"
+                    className="mb-2 user-icon"
                   />{" "}
                   Reid Muchow
                 </h6>
