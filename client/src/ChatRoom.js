@@ -24,7 +24,15 @@ class ChatRoom extends Component {
                 </h6>
               </div>
             </div>
-            <div className="container-fluid messages-container"></div>
+            <div className="container-fluid chat-container">            
+              <div className="container-fluid channel-name-container">
+                <h4 className="text-center channel-text">Main Channel</h4>
+              </div>
+              <div className="container-fluid messages-container">
+              </div>
+              <div className="container-fluid">
+              </div>              
+            </div>
           </div>
         </div>
       </div>
