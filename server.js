@@ -1,13 +1,15 @@
-const http = require('http');
 const express = require("express");
-const server  = http.createServer(http);
-const socketio = require('socket.io');
-const io = socketio(server);
 const app = express();
 const path = require('path');
 const port = 3000;
-require('dotenv').config()
-const axios = require("axios");
+const pgAccess = require("./DataAccess/pgAccess");
+const http = require('http');
+const server  = http.createServer(http);
+const socketio = require('socket.io');
+const io = socketio(server);
+require('dotenv').config();
+
+pgAccess.
 
 app.use("/", express.static(path.join(__dirname, "client/build")));
 
