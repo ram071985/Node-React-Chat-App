@@ -1,13 +1,14 @@
 /* body */
-
-#root {
-  height: 100%;
-}
-
 html,
 body {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.72),
+  rgba(0, 0, 0, 0.85)), url("./Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg");
+  background-size: cover;
+  overflow: auto;
+  background-repeat: no-repeat;
   font-size: 16px;
   height: 100%;
+  width: 100%;
   margin: 0px;
 }
 
@@ -73,4 +74,28 @@ body {
 
 .channel-text {
   padding-top: 15px;
+}
+
+#login-container {
+  background: transparent;
+  border-color: rgba(148, 148, 148, 0.5);
+  padding: 0;
+  margin-top: 15em;
+  height: 30em;
+  width: 20em;
+  border: solid 1px grey;
+}
+
+.login-title {
+  opacity: 0.8;
+ color: rgb(182, 182, 182);
+}
+
+.login-hr {
+  border-color: rgba(148, 148, 148, 0.5);
+  color: white;
+}
+
+#login-title-row {
+  padding: 0;
 }

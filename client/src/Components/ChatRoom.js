@@ -7,6 +7,11 @@ class ChatRoom extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    const { history } = this.props;
+    history.push("/login");
+  }
+
   render() {
     return (
       <div className="container-fluid justify-content-center main-container">
