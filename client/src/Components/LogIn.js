@@ -36,7 +36,7 @@ class LogIn extends Component {
           </Button>
         </Row>
         <Row className="justify-content-center">
-          <Button className="mt-3 d-inline-block" variant="light">
+          <Button className="mt-4 d-inline-block" variant="light">
             Register An Account
           </Button>
         </Row>

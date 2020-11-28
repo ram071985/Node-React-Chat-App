@@ -128,4 +128,9 @@ input, select, textarea:focus {
   -webkit-appearance:none;
 }
 
+button {
+  border-radius: 0px !important;
+  background-color: rgb(223, 223, 223) !important;
+}
+
 
