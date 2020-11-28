@@ -16,12 +16,11 @@ class LogIn extends Component {
         <Row id="login-title-row" className="justify-content-center">
           <h3 className="mt-3 login-title">Log In</h3>
         </Row>
-        <hr className="login-hr" />
         <Row className="justify-content-center">
           {" "}
           <Form>
             <Form.Group>
-              <Form.Label className="login-label">Username</Form.Label>
+              <Form.Label className="mt-2 login-label">Username</Form.Label>
               <Form.Control className="login-form-control" type="username" />
             </Form.Group>
             <Form.Group>
