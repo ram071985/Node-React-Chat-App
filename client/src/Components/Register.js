@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { Container, Row, Form, Button } from "react-bootstrap";
 
-class LogIn extends Component {
+class Register extends Component {
   constructor() {
     super();
     this.state = {};
   }
 
   handleClick = () => {
-    const { history } = this.props;
-    history.push("/register");
+      const { history } = this.props;
+      history.push("/login");
   }
 
   render() {
@@ -19,7 +19,7 @@ class LogIn extends Component {
         className="container justify-content-center"
       >
         <Row id="login-title-row" className="justify-content-center">
-          <h3 className="mt-3 login-title">Log In</h3>
+          <h3 className="mt-3 login-title">Register</h3>
         </Row>
         <Row className="justify-content-center">
           {" "}
@@ -41,7 +41,7 @@ class LogIn extends Component {
         </Row>
         <Row className="justify-content-center">
           <Button onClick={this.handleClick} className="mt-4 d-inline-block" variant="light">
-            Register An Account
+            I Have An Account
           </Button>
         </Row>
       </Container>
@@ -49,4 +49,4 @@ class LogIn extends Component {
   }
 }
 
-export default LogIn;
+export default Register;
