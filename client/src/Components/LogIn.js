@@ -1,15 +1,23 @@
 import React, { Component } from "react";
 import { Container, Row, Form, Button } from "react-bootstrap";
+import axios from  "axios";
 
 class LogIn extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      username: "",
+      password: "",
+    };
   }
 
   handleClick = () => {
     const { history } = this.props;
     history.push("/register");
+  }
+
+  logInUser = async => {
+
   }
 
   render() {

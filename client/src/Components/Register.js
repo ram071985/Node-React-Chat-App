@@ -1,16 +1,44 @@
+import axios from "axios";
 import React, { Component } from "react";
 import { Container, Row, Form, Button } from "react-bootstrap";
 
 class Register extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      username: "",
+      password: "",
+    };
   }
 
   handleClick = () => {
-      const { history } = this.props;
-      history.push("/login");
-  }
+    const { history } = this.props;
+    history.push("/login");
+  };
+
+  handleSubmit = () => {
+    const { username, password } = this.state;
+    //if (username || password === "") {
+    //}
+
+    const newUser = {
+      username: username,
+      password: password,
+    };
+
+    this.logInUser(newUser);
+  };
+
+  logInUser = async (user) => {
+    await axios
+      .post("/api/authorize", user)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   render() {
     return (
@@ -40,7 +68,11 @@ class Register extends Component {
           </Button>
         </Row>
         <Row className="justify-content-center">
-          <Button onClick={this.handleClick} className="mt-4 d-inline-block" variant="light">
+          <Button
+            onClick={this.handleClick}
+            className="mt-4 d-inline-block"
+            variant="light"
+          >
             I Have An Account
           </Button>
         </Row>
