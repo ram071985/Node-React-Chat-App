@@ -44,8 +44,9 @@ app.post("/api/register", async (req, res) => {
   );
 
   await pool.query("COMMIT");
+  console.log(insertResult.status);
   } catch(err) {
-    
+
   }
 
 });
