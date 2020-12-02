@@ -11,12 +11,21 @@ class Register extends Component {
     };
   }
 
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value,
+    });
+  };
+
   handleClick = () => {
     const { history } = this.props;
     history.push("/login");
   };
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
+    console.log("click");
+    e.preventDefault();
     const { username, password } = this.state;
     //if (username || password === "") {
     //}
@@ -26,12 +35,12 @@ class Register extends Component {
       password: password,
     };
 
-    this.logInUser(newUser);
+    this.registerUser(newUser);
   };
 
-  logInUser = async (user) => {
+  registerUser = async (user) => {
     await axios
-      .post("/api/authorize", user)
+      .post("/api/register", user)
       .then((res) => {
         console.log(res);
       })
@@ -41,6 +50,7 @@ class Register extends Component {
   };
 
   render() {
+    console.log(this.state.username);
     return (
       <Container
         id="login-container"
@@ -51,21 +61,29 @@ class Register extends Component {
         </Row>
         <Row className="justify-content-center">
           {" "}
-          <Form>
+          <Form onSubmit={(e) => this.handleSubmit(e)}>
             <Form.Group>
               <Form.Label className="mt-2 login-label">Username</Form.Label>
-              <Form.Control className="login-form-control" type="username" />
+              <Form.Control
+                name="username"
+                className="login-form-control"
+                type="input"
+                onChange={this.handleChange}
+              />
             </Form.Group>
             <Form.Group>
               <Form.Label className="login-label">Password</Form.Label>
-              <Form.Control className="login-form-control" type="username" />
+              <Form.Control
+                name="password"
+                className="login-form-control"
+                type="input"
+                onChange={this.handleChange}
+              />
             </Form.Group>
-          </Form>
-        </Row>
-        <Row className="justify-content-center">
-          <Button className="mt-2 d-inline-block" variant="light">
+            <Button type="submit" className="mt-2 d-inline-block" variant="light">
             Submit
           </Button>
+          </Form>
         </Row>
         <Row className="justify-content-center">
           <Button

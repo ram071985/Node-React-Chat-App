@@ -1,27 +1,25 @@
 const express = require("express");
+const router = express.Router();
 const app = express();
-const path = require("path");
 const port = 3000;
-const pgDataAccess = require("./DataAccess/pgDataAccess");
+const path = require("path");
+const pgDataAccess = require("./DataAccess/pgDataAccess.js");
 const http = require("http");
-const server = http.createServer(http);
-const socketio = require("socket.io");
-const io = socketio(server);
-
+const server = http.createServer(app);
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 const exjwt = require("express-jwt");
-
+const socketio = require("socket.io");
+const io = socketio(server);
 require("dotenv").config();
 
 app.use("/", express.static(path.join(__dirname, "client/build")));
 
-const jwtMW = exjwt({
-  secret: process.env.SECRET,
-});
 
-pgDataAccess.dbConnection();
+const jwtMW = exjwt({
+  secret: process.env.SECRET, algorithms: ['RS256']
+});
 
 app.post("/api/register", async (req, res) => {
   let pool = await pgDataAccess.dbConnection();
@@ -44,16 +42,19 @@ app.post("/api/register", async (req, res) => {
   );
 
   await pool.query("COMMIT");
-  console.log(insertResult.status);
+  console.log(insertResult);
   } catch(err) {
 
   }
 
 });
 
-
 app.post("/api/authorize", async (req, res) => {
   const { username, password } = req.body;
+});
+
+app.get("/*", async (req, res) => {
+	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
