@@ -28,14 +28,14 @@ const jwtMW = exjwt({
 
 app.post("/api/register", async (req, res) => {
   console.log(req);
-  const { username, password } = req.body;
+
   let pool = await pgDataAccess.dbConnection();
 
-  const hash = await bcrypt.hashSync(password, saltRounds);
+  const hash = await bcrypt.hashSync(req.body.password, saltRounds);
 
   await pool.query("BEGIN");
   const result = await pool.query(
-    `SELECT * FROM users WHERE username = "${username}";`
+    `SELECT * FROM users WHERE username = "${req.body.username}";`
   );
   if (!result) {
     res.status(401).json({ message: "Username already exists" });
@@ -44,7 +44,7 @@ app.post("/api/register", async (req, res) => {
   try {
   const insertResult = await pool.query(
     "INSERT INTO users(username, password) VALUES($1, $2)",
-    [username, hash]
+    [req.body.username, hash]
   );
 
   await pool.query("COMMIT");
