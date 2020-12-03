@@ -14,8 +14,6 @@ const socketio = require("socket.io");
 const io = socketio(server);
 require("dotenv").config();
 
-pgDataAccess.dbConnection();
-
 app.use("/", express.static(path.join(__dirname, "client/build")));
 
 app.use(express.json()) // for parsing application/json
@@ -27,30 +25,12 @@ const jwtMW = exjwt({
 });
 
 app.post("/api/register", async (req, res) => {
-  console.log(req);
-
   let pool = await pgDataAccess.dbConnection();
-
-  const hash = await bcrypt.hashSync(req.body.password, saltRounds);
-
-  await pool.query("BEGIN");
-  const result = await pool.query(
-    `SELECT * FROM users WHERE username = "${req.body.username}";`
-  );
-  if (!result) {
-    res.status(401).json({ message: "Username already exists" });
-  }
+  console.log(pool);
 
   try {
-  const insertResult = await pool.query(
-    "INSERT INTO users(username, password) VALUES($1, $2)",
-    [req.body.username, hash]
-  );
-
-  await pool.query("COMMIT");
-  console.log(insertResult);
   } catch(err) {
-
+    console.log(err)
   }
 
 });
