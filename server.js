@@ -16,23 +16,28 @@ require("dotenv").config();
 
 app.use("/", express.static(path.join(__dirname, "client/build")));
 
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: false }))
-
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: false }));
 
 const jwtMW = exjwt({
-  secret: process.env.SECRET, algorithms: ['RS256']
+  secret: process.env.SECRET,
+  algorithms: ["RS256"],
 });
 
 app.post("/api/register", async (req, res) => {
   let pool = await pgDataAccess.dbConnection();
-  console.log(pool);
-
+  console.log("connected to to create user");
   try {
-  } catch(err) {
-    console.log(err)
+    const hash = await bcrypt.hashSync(req.body.password, saltRounds);
+    await pool.query("BEGIN");
+   const checkForUser =  await pool.query(
+      `SELECT * FROM users WHERE username = '${req.body.username}';`
+      );
+      console.log(checkForUser.rows[0]);
+    await pool.query("COMMIT")
+  } catch (err) {
+    console.log(err);
   }
-
 });
 
 app.post("/api/authorize", async (req, res) => {
@@ -40,7 +45,7 @@ app.post("/api/authorize", async (req, res) => {
 });
 
 app.get("/*", async (req, res) => {
-	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
