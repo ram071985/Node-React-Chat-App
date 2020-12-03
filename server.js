@@ -30,11 +30,15 @@ app.post("/api/register", async (req, res) => {
   try {
     const hash = await bcrypt.hashSync(req.body.password, saltRounds);
     await pool.query("BEGIN");
-   const checkForUser =  await pool.query(
+    const checkForUser = await pool.query(
       `SELECT * FROM users WHERE username = '${req.body.username}';`
-      );
-      console.log(checkForUser.rows[0]);
-    await pool.query("COMMIT")
+    );
+    if (checkForUser.rows[0] !== undefined) {
+      res.status(401).send({
+        message: "username exists",
+      });
+    }
+    await pool.query("COMMIT");
   } catch (err) {
     console.log(err);
   }

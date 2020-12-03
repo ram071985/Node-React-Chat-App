@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { Component } from "react";
 import { Container, Row, Form, Button } from "react-bootstrap";
+import AlertComponent from "./AlertComponent";
 
 class Register extends Component {
   constructor() {
@@ -8,10 +9,16 @@ class Register extends Component {
     this.state = {
       username: "",
       password: "",
+      errorMessage: "",
+      setShow: false,
     };
   }
 
   handleChange = (event) => {
+    this.setState({
+      errorMessage: "",
+      setShow: false
+    })
     const { name, value } = event.target;
     this.setState({
       [name]: value,
@@ -38,19 +45,33 @@ class Register extends Component {
     this.registerUser(newUser);
   };
 
-  registerUser = async user => {
+  registerUser = async (user) => {
     await axios
       .post("/api/register", user)
-      .then((res) => {
-        console.log(res);
-      })
+      .then((res) => {})
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          this.setState({
+            errorMessage: "Yo dawg, this username exists.",
+            setShow: true
+          });
+        }
       });
   };
 
+  renderAlert = () => {
+    if (this.state.logInErrorMessage !== "") {
+      return (
+        <AlertComponent
+          setShow={this.state.setShow}
+          errorMessage={this.state.errorMessage}
+        />
+      );
+    }
+  };
+
   render() {
-    console.log(this.state.username);
+    console.log(this.state.errorMessage);
     return (
       <Container
         id="login-container"
@@ -80,19 +101,26 @@ class Register extends Component {
                 onChange={this.handleChange}
               />
             </Form.Group>
-            <Button type="submit" className="mt-2 d-inline-block" variant="light">
-            Submit
-          </Button>
+            <Button
+              type="submit"
+              className="mt-2 d-inline-block"
+              variant="light"
+            >
+              Submit
+            </Button>
           </Form>
         </Row>
         <Row className="justify-content-center">
           <Button
             onClick={this.handleClick}
-            className="mt-4 d-inline-block"
+            className="mt-4 mb-3 d-inline-block"
             variant="light"
           >
             I Have An Account
           </Button>
+        </Row>
+        <Row className="justify-content-center">
+        {this.renderAlert()}
         </Row>
       </Container>
     );
