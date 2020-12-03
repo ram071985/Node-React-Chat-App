@@ -14,7 +14,12 @@ const socketio = require("socket.io");
 const io = socketio(server);
 require("dotenv").config();
 
+pgDataAccess.dbConnection();
+
 app.use("/", express.static(path.join(__dirname, "client/build")));
+
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: false }))
 
 
 const jwtMW = exjwt({
@@ -22,8 +27,9 @@ const jwtMW = exjwt({
 });
 
 app.post("/api/register", async (req, res) => {
-  let pool = await pgDataAccess.dbConnection();
+  console.log(req);
   const { username, password } = req.body;
+  let pool = await pgDataAccess.dbConnection();
 
   const hash = await bcrypt.hashSync(password, saltRounds);
 

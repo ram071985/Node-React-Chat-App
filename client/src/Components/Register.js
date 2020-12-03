@@ -38,7 +38,7 @@ class Register extends Component {
     this.registerUser(newUser);
   };
 
-  registerUser = async (user) => {
+  registerUser = async user => {
     await axios
       .post("/api/register", user)
       .then((res) => {
