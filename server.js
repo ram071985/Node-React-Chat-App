@@ -50,7 +50,20 @@ app.post("/api/register", async (req, res) => {
 });
 
 app.post("/api/authorize", async (req, res) => {
-  const { username, password } = req.body;
+  let pool = await pgDataAccess.dbConnection();
+  try {
+  await pool.query("BEGIN");
+  const result = await pool.query(
+    `SELECT * FROM users WHERE username = "${req.body.username}";`
+  );
+
+  const saltedPassword = result.rows[0].password;
+  const match = await bcrypt.compare(req.body.password, saltedPassword);
+  } catch (err) {
+    
+  }
+  
+  
 });
 
 app.get("/*", async (req, res) => {
