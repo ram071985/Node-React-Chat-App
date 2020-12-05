@@ -37,6 +37,11 @@ app.post("/api/register", async (req, res) => {
       res.status(401).send({
         message: "username exists",
       });
+    } else {
+      await pool.query("INSERT INTO users(username, password) VALUES($1, $2)", [
+        req.body.username,
+        hash,
+      ]);
     }
     await pool.query("COMMIT");
   } catch (err) {
