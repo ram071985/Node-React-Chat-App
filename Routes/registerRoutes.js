@@ -8,7 +8,7 @@ router.post("/", async (req, res) => {
   const newUsername = req.body.username;
   const password = req.body.password;
 
-  let newUser = await registerDataAccess.logInUser(newUsername, password);
+  let newUser = await registerDataAccess.createUser(newUsername, password);
 
   res.status(201).send({ newUser });
 

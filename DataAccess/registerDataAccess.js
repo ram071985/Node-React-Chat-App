@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const pgDataAccess = require("./pgDataAccess.js");
 
-logInUser = async (username, password) => {
+createUser = async (username, password) => {
   let pool = await pgDataAccess.dbConnection();
 
   try {
@@ -30,4 +30,4 @@ logInUser = async (username, password) => {
   } catch (err) {}
 };
 
-module.exports = { logInUser }
+module.exports = { createUser }
