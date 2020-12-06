@@ -1,5 +1,3 @@
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
 const pgDataAccess = require("./pgDataAccess");
 
 createMessage = async (userId, text) => {
@@ -8,9 +6,8 @@ createMessage = async (userId, text) => {
   try {
     await pool.query("BEGIN");
     const result = await pool.query(
-      "INSERT INTO messages(user_id, text) VALUES($1, $2) RETURNING id, created_date, user_id, text"[
-        (userId, text)
-      ]
+      "INSERT INTO messages(user_id, text) VALUES($1, $2) RETURNING id, created_date, user_id, text",
+      [userId, text]
     );
     await pool.query("UPDATE users SET last_active_at = NOW() WHERE id = $1,", [
       userId,
