@@ -140,4 +140,40 @@ button {
   width: 12em !important;
 }
 
+/* containers */
+.left-row {
+  width: 20% !important;
+}
+
+.right-row {
+  width: 50% !important;
+}
+.user-col {
+border: solid 0.5px grey;
+margin-left: 1em;
+height: 38em;
+}
+
+.message-col {
+  border: solid 0.5px grey;
+  margin-left: 10em;
+  height: 38em;
+}
+
+.type-col {
+margin-left: 22em !important;
+border: solid 0.5px grey;
+}
+
+div.chatroom-container {
+  margin: 0 !important;
+}
+
+.type-row {
+  width: 70% !important;
+  
+}
+
+
+
 
