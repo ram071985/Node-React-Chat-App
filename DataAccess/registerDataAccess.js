@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const pgDataAccess = require("./pgDataAccess.js");
+const pgDataAccess = require("./pgDataAccess");
 
 createUser = async (username, password) => {
   let pool = await pgDataAccess.dbConnection();
