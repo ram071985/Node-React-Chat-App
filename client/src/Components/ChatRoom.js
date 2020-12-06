@@ -20,16 +20,13 @@ class ChatRoom extends Component {
   render() {
     return (
       <div className="container-fluid chatroom-container">
-        <Row className="h-100 mt-5 d-inline-block left-row">
+        <Row className="d-inline-block left-row">
           <Col className="user-col"></Col>
         </Row>
-        <Row className="h-100 mt-5 d-inline-block right-row">
+        <Row className="mt-5 d-inline-block right-row">
           <Col className="d-inline-block message-col">
             <div className="mt-3 chat-bubble">Howdy.</div>
           </Col>
-        </Row>
-        <Row className="h-100 type-row">
-          <Col className="d-inline-block type-col">Doo</Col>
         </Row>
       </div>
     );
