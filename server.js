@@ -60,8 +60,10 @@ app.post("/api/authorize", async (req, res) => {
     
     //const saltedPassword = result.rows[0].password;
     //const match = await bcrypt.compare(req.body.password, saltedPassword);
+    const authUser = result.rows[0];
    console.log(result.rows[0]);
-    
+    res.status(201).send({ authUser });
+
   } catch (err) {
     console.log(err);
   }
