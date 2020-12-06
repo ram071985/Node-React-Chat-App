@@ -31,7 +31,6 @@ class LogIn extends Component {
   };
 
   handleSubmit = (e) => {
-    console.log("click");
     e.preventDefault();
     const { username, password } = this.state;
 

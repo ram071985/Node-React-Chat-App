@@ -51,24 +51,20 @@ app.post("/api/register", async (req, res) => {
 
 app.post("/api/authorize", async (req, res) => {
   let pool = await pgDataAccess.dbConnection();
+  console.log("connected to login");
   try {
     await pool.query("BEGIN");
     const result = await pool.query(
-      `SELECT * FROM users WHERE username = "${req.body.username}";`
+      "SELECT * FROM users WHERE username = $1", [req.body.username]
     );
-
-    const saltedPassword = result.rows[0].password;
-    const match = await bcrypt.compare(req.body.password, saltedPassword);
-
-    if (!match) {
-      res.status(401).json({
-        message: "incorrect password",
-      });
-    } else {
-      return result.rows[0]
-    }
-    await pool.query("COMMIT");
-  } catch (err) {}
+    
+    //const saltedPassword = result.rows[0].password;
+    //const match = await bcrypt.compare(req.body.password, saltedPassword);
+   console.log(result.rows[0]);
+    
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.get("/*", async (req, res) => {

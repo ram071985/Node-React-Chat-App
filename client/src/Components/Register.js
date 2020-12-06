@@ -47,7 +47,9 @@ class Register extends Component {
   registerUser = async (user) => {
     await axios
       .post("/api/register", user)
-      .then((res) => {})
+      .then((res) => {
+        console.log(res);
+      })
       .catch((err) => {
         if (err.response.data.message === "username exists") {
           this.setState({
