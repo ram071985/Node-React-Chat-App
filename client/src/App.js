@@ -7,7 +7,7 @@ import Register from "./Components/Register";
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
+      <div className="app">
         <BrowserRouter>
           <Switch>
             <Route path="/register" component={Register} />

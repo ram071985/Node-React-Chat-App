@@ -19,7 +19,7 @@ class ChatRoom extends Component {
 
   render() {
     return (
-      <Container className="container-fluid chatroom-container">
+      <div className="container-fluid chatroom-container">
         <Row className="h-100 mt-5 d-inline-block left-row">
           <Col className="user-col">Hey</Col>
         </Row>
@@ -29,7 +29,7 @@ class ChatRoom extends Component {
         <Row className="mt-1 type-row">
           <Col className="d-inline-block type-col">Doo</Col>
         </Row>
-      </Container>
+      </div>
     );
   }
 }
