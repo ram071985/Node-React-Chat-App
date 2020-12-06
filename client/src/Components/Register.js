@@ -17,8 +17,8 @@ class Register extends Component {
   handleChange = (event) => {
     this.setState({
       errorMessage: "",
-      setShow: false
-    })
+      setShow: false,
+    });
     const { name, value } = event.target;
     this.setState({
       [name]: value,
@@ -31,7 +31,6 @@ class Register extends Component {
   };
 
   handleSubmit = (e) => {
-    console.log("click");
     e.preventDefault();
     const { username, password } = this.state;
     //if (username || password === "") {
@@ -50,12 +49,13 @@ class Register extends Component {
       .post("/api/register", user)
       .then((res) => {})
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.data.message === "username exists") {
           this.setState({
             errorMessage: "Yo dawg, this username exists.",
-            setShow: true
+            setShow: true,
           });
         }
+        console.log(err.response.data.message)
       });
   };
 
@@ -71,7 +71,6 @@ class Register extends Component {
   };
 
   render() {
-    console.log(this.state.errorMessage);
     return (
       <Container
         id="login-container"
@@ -119,9 +118,7 @@ class Register extends Component {
             I Have An Account
           </Button>
         </Row>
-        <Row className="justify-content-center">
-        {this.renderAlert()}
-        </Row>
+        <Row className="justify-content-center">{this.renderAlert()}</Row>
       </Container>
     );
   }

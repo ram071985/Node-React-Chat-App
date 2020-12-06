@@ -34,7 +34,7 @@ app.post("/api/register", async (req, res) => {
       `SELECT * FROM users WHERE username = '${req.body.username}';`
     );
     if (checkForUser.rows[0] !== undefined) {
-      res.status(401).send({
+      res.status(401).json({
         message: "username exists",
       });
     } else {
@@ -52,18 +52,23 @@ app.post("/api/register", async (req, res) => {
 app.post("/api/authorize", async (req, res) => {
   let pool = await pgDataAccess.dbConnection();
   try {
-  await pool.query("BEGIN");
-  const result = await pool.query(
-    `SELECT * FROM users WHERE username = "${req.body.username}";`
-  );
+    await pool.query("BEGIN");
+    const result = await pool.query(
+      `SELECT * FROM users WHERE username = "${req.body.username}";`
+    );
 
-  const saltedPassword = result.rows[0].password;
-  const match = await bcrypt.compare(req.body.password, saltedPassword);
-  } catch (err) {
-    
-  }
-  
-  
+    const saltedPassword = result.rows[0].password;
+    const match = await bcrypt.compare(req.body.password, saltedPassword);
+
+    if (!match) {
+      res.status(401).json({
+        message: "incorrect password",
+      });
+    } else {
+      return result.rows[0]
+    }
+    await pool.query("COMMIT");
+  } catch (err) {}
 });
 
 app.get("/*", async (req, res) => {
