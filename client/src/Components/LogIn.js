@@ -49,16 +49,17 @@ class LogIn extends Component {
       .then((res) => {
         console.log(res);
         const userSpecs = {
-          id: res.data.authUser.id,
-          username: res.data.authUser.username
+          id: res.data.userMatch.user.id,
+          username: res.data.userMatch.user.username
         }
         if (res.status === 201) {
-          localStorage.setItem("user", JSON.stringify(userSpecs));          
+          localStorage.setItem("user", JSON.stringify(userSpecs));      
+          history.push("/");    
         }
-        history.push("/");
+        
       })
       .catch((err) => {
-        console.log(err.response.data);
+        console.log(err);
         if (err.response.data.message === "incorrect password") {
           this.setState({
             errorMessage: "You've entered an incorrect password.",

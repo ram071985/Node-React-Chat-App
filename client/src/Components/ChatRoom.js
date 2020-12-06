@@ -10,7 +10,22 @@ class ChatRoom extends Component {
       text: "",
       errorMessage: "",
       setshow: false,
+      currentUser: {},
     };
+  }
+
+  componentDidMount() {
+    const { history } = this.props;
+    const isLocalStorage = localStorage.getItem("user");
+    if (!isLocalStorage) {
+      history.push("/login");
+    }
+
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    this.setState({
+      currentUser: storedUser,
+    });
   }
 
   handleChange = (e) => {
@@ -24,9 +39,8 @@ class ChatRoom extends Component {
     });
   };
 
-  handleSubmit = async () => {
-    const { username, password } = this.state;
-
+  handleSubmit = async (e) => {
+    e.preventDefault();
     let newMessage = {
       id: this.state.currentUser.id,
       username: this.state.currentUser.username,
@@ -43,15 +57,8 @@ class ChatRoom extends Component {
       .catch((err) => console.log(err));
   };
 
-  componentDidMount() {
-    const { history } = this.props;
-    const isLocalStorage = localStorage.getItem("user");
-    if (!isLocalStorage) {
-      history.push("/login");
-    }
-  }
-
   render() {
+    console.log(this.state.currentUser);
     return (
       <div className="container-fluid chatroom-container">
         <Row className="d-inline-block left-row no-gutters">
@@ -65,13 +72,21 @@ class ChatRoom extends Component {
             <Form onSubmit={this.handleSubmit} inline>
               <Form.Group>
                 <Form.Control
+                  name="text"
+                  onChange={this.handleChange}
                   className="message-input"
                   size="sm"
                   type="input"
                   placeholder="Small text"
                 />
               </Form.Group>
-              <Button className="d-inline-inline" variant="outline-secondary">Secondary</Button>{" "}
+              <Button
+                className="d-inline-inline"
+                type="submit"
+                variant="outline-secondary"
+              >
+                Secondary
+              </Button>{" "}
             </Form>
           </Col>
         </Row>

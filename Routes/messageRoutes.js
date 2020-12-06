@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const authDataAccess = require("../DataAccess/messageDataAccess");
+const messageDataAccess = require("../DataAccess/messageDataAccess");
 
 
-router.post("/messages", async (req,res) => {
+router.post("/", async (req,res) => {
     let newMessage = {
         id: req.body.id,
         username: req.body.username,
@@ -11,12 +11,12 @@ router.post("/messages", async (req,res) => {
     }
 
     const newMessageId = req.body.id;
-    const newMessageText = req.body.id;
+    const newMessageText = req.body.text;
 
     let responseMessage = await messageDataAccess.createMessage(
         newMessageId, newMessageText
     )
 
-    returnedMessage.username = newMessage.username;
+    responseMessage.username = newMessage.username;
 })
 module.exports = router;
