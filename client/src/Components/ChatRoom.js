@@ -21,12 +21,14 @@ class ChatRoom extends Component {
     return (
       <div className="container-fluid chatroom-container">
         <Row className="h-100 mt-5 d-inline-block left-row">
-          <Col className="user-col">Hey</Col>
+          <Col className="user-col"></Col>
         </Row>
         <Row className="h-100 mt-5 d-inline-block right-row">
-          <Col className="d-inline-block message-col">Howdy</Col>
+          <Col className="d-inline-block message-col">
+            <div className="mt-3 chat-bubble">Howdy.</div>
+          </Col>
         </Row>
-        <Row className="mt-1 type-row">
+        <Row className="h-100 type-row">
           <Col className="d-inline-block type-col">Doo</Col>
         </Row>
       </div>
