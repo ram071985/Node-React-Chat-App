@@ -48,10 +48,14 @@ class LogIn extends Component {
       .post("api/authorize", user)
       .then((res) => {
         console.log(res);
-        if (res.status === 201) {
-          localStorage.setItem("username", JSON.stringify(res.data.username))
-          history.push("/");
+        const userSpecs = {
+          id: res.data.authUser.id,
+          username: res.data.authUser.username
         }
+        if (res.status === 201) {
+          localStorage.setItem("user", JSON.stringify(userSpecs));          
+        }
+        history.push("/");
       })
       .catch((err) => {
         console.log(err.response.data);

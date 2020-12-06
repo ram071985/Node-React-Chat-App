@@ -10,11 +10,10 @@ class ChatRoom extends Component {
 
   componentDidMount() {
     const { history } = this.props;
-    const isLocalStorage = localStorage.getItem("username");
-
-    if (!isLocalStorage) {
-      history.push("/login");
-    }
+    const isLocalStorage = localStorage.getItem("user");
+     if (!isLocalStorage) {
+       history.push("/login");
+     }
   }
 
   render() {
@@ -29,7 +28,12 @@ class ChatRoom extends Component {
           </Col>
           <Col className="type-col">
             <Form.Group>
-              <Form.Control className="message-input" size="sm" type="input" placeholder="Small text" />
+              <Form.Control
+                className="message-input"
+                size="sm"
+                type="input"
+                placeholder="Small text"
+              />
             </Form.Group>
           </Col>
         </Row>
