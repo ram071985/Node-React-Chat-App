@@ -10,7 +10,7 @@ class LogIn extends Component {
       username: "",
       password: "",
       setShow: false,
-      errorMessage: ""
+      errorMessage: "",
     };
   }
 
@@ -43,10 +43,15 @@ class LogIn extends Component {
   };
 
   logInUser = async (user) => {
+    const { history } = this.props;
     await axios
       .post("api/authorize", user)
       .then((res) => {
         console.log(res);
+        if (res.status === 201) {
+          localStorage.setItem("username", JSON.stringify(res.data.username))
+          history.push("/");
+        }
       })
       .catch((err) => {
         console.log(err.response.data);

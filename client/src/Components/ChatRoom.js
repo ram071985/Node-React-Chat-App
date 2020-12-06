@@ -9,7 +9,11 @@ class ChatRoom extends Component {
 
   componentDidMount() {
     const { history } = this.props;
-    history.push("/login");
+    const isLocalStorage = localStorage.getItem("username");
+
+    if (!isLocalStorage) {
+      history.push("/login");
+    }
   }
 
   render() {

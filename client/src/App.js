@@ -2,18 +2,18 @@ import React from "react";
 import ChatRoom from "./Components/ChatRoom";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import LogIn from "./Components/LogIn";
-import Register from "./Components/Register"
+import Register from "./Components/Register";
 
 class App extends React.Component {
   render() {
     return (
       <div className="App">
         <BrowserRouter>
-        <Switch>
-          <Route path="/register" component={Register} />
-          <Route path="/login" component={LogIn} />
-          <Route path="/" component={ChatRoom}></Route>
-        </Switch>
+          <Switch>
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={LogIn} />
+            <Route path="/" component={ChatRoom} />
+          </Switch>
         </BrowserRouter>
       </div>
     );
