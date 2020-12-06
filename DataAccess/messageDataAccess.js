@@ -1,5 +1,16 @@
 const pgDataAccess = require("./pgDataAccess");
 
+queryMessages = async () => {
+  let pool = await pgDataAccess.dbConnection();
+  try {
+    const results = await pool.query(
+      "SELECT m.user_id, m.id, m.created_date, u.username FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id ORDER by m.id;"
+    );
+    return results.rows;
+  } catch (err) {
+      console.log(err);
+  }
+};
 createMessage = async (userId, text) => {
   let pool = await pgDataAccess.dbConnection();
 
@@ -10,7 +21,7 @@ createMessage = async (userId, text) => {
       [userId, text]
     );
     await pool.query("UPDATE users SET last_active_at = NOW() WHERE id = $1", [
-      userId
+      userId,
     ]);
 
     await pool.query("COMMIT");
