@@ -21,8 +21,11 @@ const jwtMW = exjwt({
   algorithms: ["RS256"],
 });
 
-const userRoutes = require("./Routes/registerRoutes");
-app.use("/api/register", userRoutes);
+const registerRoutes = require("./Routes/registerRoutes");
+app.use("/api/register", registerRoutes);
+
+const authRoutes = require("./Routes/authRoutes")
+app.use("api/login", authRoutes);
 
 app.post("/api/authorize", async (req, res) => {
   let pool = await pgDataAccess.dbConnection();

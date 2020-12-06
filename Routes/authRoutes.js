@@ -10,3 +10,5 @@ router.post("/login", async (req, res) => {
 
     res.status(201).send({ userMatch }); 
 });
+
+module.exports = router;
