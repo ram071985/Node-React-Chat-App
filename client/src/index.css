@@ -211,6 +211,7 @@ div.chatroom-container {
   color: white;
   opacity: 0.6;
   background-color: rgb(0, 0, 0);
+  width: 45em !important;
 }
 
 div.chatroom-container input,

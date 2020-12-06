@@ -1,19 +1,54 @@
 import React, { Component } from "react";
 import { User } from "react-feather";
-import { Row, Col, Form } from "react-bootstrap";
+import { Row, Col, Form, Button } from "react-bootstrap";
+import axios from "axios";
 
 class ChatRoom extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      text: "",
+      errorMessage: "",
+      setshow: false,
+    };
   }
+
+  handleChange = (e) => {
+    this.setState({
+      errorMessage: "",
+      setShow: false,
+    });
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  handleSubmit = async () => {
+    const { username, password } = this.state;
+
+    let newMessage = {
+      id: this.state.currentUser.id,
+      username: this.state.currentUser.username,
+      text: this.state.text,
+    };
+
+    this.submitMessage(newMessage);
+  };
+
+  submitMessage = async (newMessage) => {
+    await axios
+      .post("/api/messages", newMessage)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  };
 
   componentDidMount() {
     const { history } = this.props;
     const isLocalStorage = localStorage.getItem("user");
-     if (!isLocalStorage) {
-       history.push("/login");
-     }
+    if (!isLocalStorage) {
+      history.push("/login");
+    }
   }
 
   render() {
@@ -27,14 +62,17 @@ class ChatRoom extends Component {
             <div className="mt-3 chat-bubble">Howdy.</div>
           </Col>
           <Col className="type-col">
-            <Form.Group>
-              <Form.Control
-                className="message-input"
-                size="sm"
-                type="input"
-                placeholder="Small text"
-              />
-            </Form.Group>
+            <Form onSubmit={this.handleSubmit} inline>
+              <Form.Group>
+                <Form.Control
+                  className="message-input"
+                  size="sm"
+                  type="input"
+                  placeholder="Small text"
+                />
+              </Form.Group>
+              <Button className="d-inline-inline" variant="outline-secondary">Secondary</Button>{" "}
+            </Form>
           </Col>
         </Row>
       </div>

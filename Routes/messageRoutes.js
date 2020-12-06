@@ -6,7 +6,7 @@ const authDataAccess = require("../DataAccess/messageDataAccess");
 router.post("/messages", async (req,res) => {
     let newMessage = {
         id: req.body.id,
-        username = req.body.username,
+        username: req.body.username,
         text: req.body.text
     }
 

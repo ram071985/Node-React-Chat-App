@@ -24,24 +24,26 @@ const jwtMW = exjwt({
 const registerRoutes = require("./Routes/registerRoutes");
 app.use("/api/register", registerRoutes);
 
-const authRoutes = require("./Routes/authRoutes")
+const authRoutes = require("./Routes/authRoutes");
 app.use("api/login", authRoutes);
+
+const messageRoutes = require("./Routes/messageRoutes");
+app.use("api/messages", messageRoutes);
 
 app.post("/api/authorize", async (req, res) => {
   let pool = await pgDataAccess.dbConnection();
   console.log("connected to login");
   try {
     await pool.query("BEGIN");
-    const result = await pool.query(
-      "SELECT * FROM users WHERE username = $1", [req.body.username]
-    );
-    
+    const result = await pool.query("SELECT * FROM users WHERE username = $1", [
+      req.body.username,
+    ]);
+
     //const saltedPassword = result.rows[0].password;
     //const match = await bcrypt.compare(req.body.password, saltedPassword);
     const authUser = result.rows[0];
-   console.log(result.rows[0]);
+    console.log(result.rows[0]);
     res.status(201).send({ authUser });
-
   } catch (err) {
     console.log(err);
   }
@@ -51,4 +53,6 @@ app.get("/*", async (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
-server.listen(port, () => console.log(`Example app listening on port ${port}!`));
+server.listen(port, () =>
+  console.log(`Example app listening on port ${port}!`)
+);
