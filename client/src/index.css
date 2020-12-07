@@ -198,10 +198,13 @@ div.chatroom-container {
   height: 100%;
 }
 
-.chat-bubble {
+#bubble-container {
+  overflow: auto;
+}
+
+#chat-bubble {
   width: 50% !important;
   color: white;
-  float: right;
   border-radius: 10px;
   background-color: rgb(177, 47, 30);
   padding: 9px;

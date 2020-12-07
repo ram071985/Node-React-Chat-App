@@ -4,7 +4,7 @@ const registerDataAccess = require("../DataAccess/registerDataAccess");
 //const socketService = require("../services/socket-service");
 //const io = socketService.getIo();
 
-router.post("/register", async (req, res) => {
+router.post("/", async (req, res) => {
   const newUsername = req.body.username;
   const password = req.body.password;
 

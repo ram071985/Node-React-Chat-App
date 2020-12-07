@@ -62,8 +62,11 @@ class ChatRoom extends Component {
     await axios
       .get("/api/messages")
       .then((res) => {
+        const sortMessages = res.data.sort(
+          (a, b) => parseFloat(a.id) - parseFloat(b.id)
+        );
         this.setState({
-          messages: res.data,
+          messages: sortMessages,
         });
         console.log(res);
       })
@@ -74,8 +77,22 @@ class ChatRoom extends Component {
 
   render() {
     const renderMessages = this.state.messages.map((message, index) => (
-      <div key={index} className="container d-block mt-3 chat-bubble">
-        {message.text}
+      <div id="bubble-container" className="container">
+        <div
+          key={index}
+          id="chat-bubble"
+          style={{
+            float:
+              message.user_id !== this.state.currentUser.id ? "left" : "right",
+            backgroundColor:
+              message.user_id !== this.state.currentUser.id
+                ? "rgb(66, 57, 55)"
+                : "rgb(177, 47, 30);",
+          }}
+          className="container d-block mt-3"
+        >
+          {message.text}
+        </div>
       </div>
     ));
     console.log(this.state.messages);
