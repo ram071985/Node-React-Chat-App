@@ -4,7 +4,7 @@ queryMessages = async () => {
   let pool = await pgDataAccess.dbConnection();
   try {
     const results = await pool.query(
-      "SELECT m.user_id, m.id, m.created_date, u.username FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id ORDER by m.id;"
+      "SELECT m.user_id, m.id, m.created_date, u.username, m.text FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id ORDER by m.id;"
     );
     return results.rows;
   } catch (err) {
@@ -32,4 +32,4 @@ createMessage = async (userId, text) => {
   }
 };
 
-module.exports = { createMessage };
+module.exports = { queryMessages, createMessage };

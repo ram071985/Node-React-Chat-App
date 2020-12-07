@@ -199,12 +199,14 @@ div.chatroom-container {
 }
 
 .chat-bubble {
+  width: 50% !important;
   color: white;
   float: right;
   border-radius: 10px;
   background-color: rgb(177, 47, 30);
   padding: 9px;
   border-bottom-right-radius: 0px;
+  display: block !important;
 }
 
 .message-input {
