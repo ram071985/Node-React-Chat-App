@@ -12,6 +12,9 @@ class ChatRoom extends Component {
       setshow: false,
       currentUser: {},
       messages: [],
+      users: [],
+      onlineUsers: [],
+      offlineUsers: [],
     };
   }
 
@@ -56,6 +59,28 @@ class ChatRoom extends Component {
       .post("/api/messages", newMessage)
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
+  };
+
+  getUsers = async () => {
+    await axios
+      .get("/api/users?active=true")
+      .then((res) => {
+        this.setState({
+          usersOnline: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  getOfflineUser = async () => {
+    await axios
+      .get("/api/users")
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   getMessages = async () => {
