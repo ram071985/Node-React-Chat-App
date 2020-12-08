@@ -1,0 +1,19 @@
+const express = require("express");
+const router = express.Router();
+const userDataAccess = require("../DataAccess/userDataAccess");
+
+router.get("/", async (req,res) => {
+    const users = userDataAccess.queryUsers();
+    res.send(users);
+})
+
+router.post("/", async (req, res) => {
+    const newUsername = req.body.username;
+    const password = req.body.password;
+  
+    let newUser = await registerDataAccess.createUser(newUsername, password);
+  
+    res.status(201).send({ newUser });
+  
+   // io.emit("user_online", JSON.stringify(newUser));
+  });

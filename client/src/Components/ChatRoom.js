@@ -83,6 +83,11 @@ class ChatRoom extends Component {
       });
   };
 
+  handleLogOut = async () => {
+    await axios.post("/api/logout");
+    localStorage.removeItem("user");
+  };
+
   getMessages = async () => {
     await axios
       .get("/api/messages")
@@ -120,11 +125,15 @@ class ChatRoom extends Component {
         </div>
       </div>
     ));
+
+    const renderUsers = this.state.usersOnline.map((user, index) => (
+      <h6 key={index}>{user.username}</h6>
+    ));
     console.log(this.state.messages);
     return (
       <div className="container-fluid chatroom-container">
         <Row className="d-inline-block left-row no-gutters">
-          <Col className="user-col"></Col>
+          <Col className="user-col">{renderUsers}</Col>
         </Row>
         <Row className="mt-5 d-inline-block right-row no-gutters">
           <Col className="d-block justify-content-right message-col">

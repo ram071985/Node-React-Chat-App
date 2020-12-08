@@ -21,8 +21,8 @@ const jwtMW = exjwt({
   algorithms: ["RS256"],
 });
 
-const registerRoutes = require("./Routes/registerRoutes");
-app.use("/api/register", registerRoutes);
+const userRoutes = require("./Routes/userRoutes");
+app.use("/api/users", userRoutes);
 
 const messageRoutes = require("./Routes/messageRoutes");
 app.use("/api/messages", messageRoutes);
