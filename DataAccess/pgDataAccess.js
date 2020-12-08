@@ -7,14 +7,14 @@ const config = {
   user: process.env.PG_USER,
   port: process.env.PG_PORT,
   password: process.env.PG_PASSWORD,
-  host: process.env.PG_HOST
+  host: process.env.PG_HOST,
 };
 
-dbConnection = async () => {
-  const pool = new Pool(config);
-  await pool.connect();
+let pool = new Pool(config);
+
+getClient = async () => {
   console.log("connected to chat_app database");
-  return pool;
+  return pool.connect();
 };
 
-module.exports = { dbConnection };
+module.exports = { dbConnection: getClient };

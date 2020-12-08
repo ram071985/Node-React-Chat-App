@@ -8,7 +8,7 @@ queryMessages = async () => {
     );
     return results.rows;
   } catch (err) {
-      console.log(err);
+    console.log(err);
   }
 };
 createMessage = async (userId, text) => {

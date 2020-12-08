@@ -43,6 +43,8 @@ queryUsers = async () => {
     return results.rows;
   } catch (err) {
     return [];
+  } finally {
+    pool.release();
   }
 };
 
