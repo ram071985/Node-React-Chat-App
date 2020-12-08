@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const pgDataAccess = require("./DataAccess/pgDataAccess.js");
+const pgDataAccess = require("./pgDataAccess.js");
 
 createUser = async (username, password) => {
   let pool = await pgDataAccess.dbConnection();
@@ -19,8 +19,8 @@ createUser = async (username, password) => {
         });
       } else {
         await pool.query(
-          "INSERT INTO users(username, password) VALUES($1, $2)",
-          [username, hash]
+          "INSERT INTO users(username, password, is_logged_in) VALUES($1, $2, $3)",
+          [username, hash, false]
         );
       }
       await pool.query("COMMIT");
@@ -55,7 +55,8 @@ queryInactiveUsers = async () => {
     return results.rows;
   } catch (err) {
     console.log(err);
+    return [];
   }
 };
 
-module.exports = { cretaeUser, queryUsers, queryInactiveUsers };
+module.exports = { createUser, queryUsers, queryInactiveUsers };

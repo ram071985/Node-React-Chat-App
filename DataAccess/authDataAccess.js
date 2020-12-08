@@ -6,14 +6,18 @@ logInUser = async (username, password) => {
   console.log("connected to login");
   try {
     await pool.query("BEGIN");
+    await pool.query(
+      "UPDATE users SET is_logged_in = true WHERE username = $1",
+      [username]
+    );
+    await pool.query("COMMIT");
+    //const saltedPassword = result.rows[0].password;
+    //const match = await bcrypt.compare(req.body.password, saltedPassword);
     const result = await pool.query("SELECT * FROM users WHERE username = $1", [
       username,
     ]);
-
-    //const saltedPassword = result.rows[0].password;
-    //const match = await bcrypt.compare(req.body.password, saltedPassword);
     const authUser = {
-      user: result.rows[0]
+      user: result.rows[0],
     };
     console.log(result.rows[0]);
     return authUser;

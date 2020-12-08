@@ -29,7 +29,8 @@ class ChatRoom extends Component {
     this.setState({
       currentUser: storedUser,
     });
-    this.getMessages();
+    this.getUsers();
+  //  this.getMessages();
   }
 
   handleChange = (e) => {
@@ -66,7 +67,7 @@ class ChatRoom extends Component {
       .get("/api/users?active=true")
       .then((res) => {
         this.setState({
-          usersOnline: res.data,
+          onlineUsers: res.data,
         });
       })
       .catch((err) => {
@@ -126,14 +127,14 @@ class ChatRoom extends Component {
       </div>
     ));
 
-    const renderUsers = this.state.usersOnline.map((user, index) => (
-      <h6 key={index}>{user.username}</h6>
-    ));
-    console.log(this.state.messages);
+   // const renderUsers = this.state.onlineUsers.map((user, index) => (
+    //  <h6 key={index}>{user.username}</h6>
+   // ));
+    console.log(this.state.onlineUsers);
     return (
       <div className="container-fluid chatroom-container">
         <Row className="d-inline-block left-row no-gutters">
-          <Col className="user-col">{renderUsers}</Col>
+          <Col className="user-col"></Col>
         </Row>
         <Row className="mt-5 d-inline-block right-row no-gutters">
           <Col className="d-block justify-content-right message-col">
