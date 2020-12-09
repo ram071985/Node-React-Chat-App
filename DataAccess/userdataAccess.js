@@ -38,11 +38,11 @@ queryUsers = async () => {
       "UPDATE users SET is_logged_in = false WHERE last_active_at < NOW() - INTERVAL '20 minutes';"
     );
     const results = await pool.query(
-      "SELECT FROM users WHERE last_active_at > NOW() - INTERVAL '20 minutes' AND is_logged_in = true;"
+      "SELECT * FROM users WHERE is_logged_in = true;"
     );
     return results.rows;
   } catch (err) {
-    return [];
+    console.log(err);
   } finally {
     pool.release();
   }

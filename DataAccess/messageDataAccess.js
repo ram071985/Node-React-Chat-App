@@ -9,6 +9,8 @@ queryMessages = async () => {
     return results.rows;
   } catch (err) {
     console.log(err);
+  } finally {
+    pool.release();
   }
 };
 createMessage = async (userId, text) => {

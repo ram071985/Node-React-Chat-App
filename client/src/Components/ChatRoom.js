@@ -30,7 +30,7 @@ class ChatRoom extends Component {
       currentUser: storedUser,
     });
     this.getUsers();
-  //  this.getMessages();
+    this.getMessages();
   }
 
   handleChange = (e) => {
@@ -64,11 +64,12 @@ class ChatRoom extends Component {
 
   getUsers = async () => {
     await axios
-      .get("/api/users?active=true")
+      .get("/api/users")
       .then((res) => {
         this.setState({
           onlineUsers: res.data,
         });
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -118,7 +119,7 @@ class ChatRoom extends Component {
             backgroundColor:
               message.user_id !== this.state.currentUser.id
                 ? "rgb(66, 57, 55)"
-                : "rgb(177, 47, 30);",
+                : "rgb(177, 47, 30)",
           }}
           className="container d-block mt-3"
         >
@@ -127,9 +128,9 @@ class ChatRoom extends Component {
       </div>
     ));
 
-   // const renderUsers = this.state.onlineUsers.map((user, index) => (
+    // const renderUsers = this.state.onlineUsers.map((user, index) => (
     //  <h6 key={index}>{user.username}</h6>
-   // ));
+    // ));
     console.log(this.state.onlineUsers);
     return (
       <div className="container-fluid chatroom-container">

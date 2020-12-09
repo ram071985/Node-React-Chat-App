@@ -13,7 +13,7 @@ const config = {
 let pool = new Pool(config);
 
 getClient = async () => {
-  console.log("connected to chat_app database");
+  console.log("connected to chat database");
   return pool.connect();
 };
 

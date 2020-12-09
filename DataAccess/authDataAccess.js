@@ -7,6 +7,10 @@ logInUser = async (username, password) => {
   try {
     await pool.query("BEGIN");
     await pool.query(
+      "UPDATE users SET last_active_at = NOW() WHERE username = $1",
+      [username]
+    );
+    await pool.query(
       "UPDATE users SET is_logged_in = true WHERE username = $1",
       [username]
     );
