@@ -4,7 +4,7 @@ const userDataAccess = require("../DataAccess/userDataAccess");
 
 router.get("/", async (req,res) => {
     const users = userDataAccess.queryUsers();
-    res.status(201).send(users);
+    res.send(users);
 })
 
 router.post("/", async (req, res) => {
