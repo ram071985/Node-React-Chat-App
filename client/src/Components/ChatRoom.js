@@ -139,10 +139,10 @@ class ChatRoom extends Component {
       <div className="container-fluid chatroom-container">
         <Row className="h-100 d-inline-block left-row no-gutters">
           <Col className="d-inline-block user-col">
-            <h2 className="user-heading">Users</h2>
+            <h2 className="user-heading"></h2>
           </Col>
         </Row>
-        <Row className="d-inline-block">
+        <Row className="h-100 d-inline-block">
           <Col className="d-inline-block message-col"></Col>
         </Row>
       </div>
