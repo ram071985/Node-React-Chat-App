@@ -137,14 +137,14 @@ class ChatRoom extends Component {
     console.log(this.state.onlineUsers);
     return (
       <div className="container-fluid chatroom-container">
-        <Row className="h-100 d-inline-block left-row no-gutters">
-          <Col className="d-inline-block user-col">
-            <h2 className="user-heading"></h2>
-          </Col>
-        </Row>
-        <Row className="h-100 d-inline-block">
-          <Col className="d-inline-block message-col"></Col>
-        </Row>
+        <div className="d-inline-block left-row">
+          <div className="d-inline-block user-col">
+            <h2 className="user-heading">Users</h2>
+          </div>
+          </div>
+        <div className="h-100 d-inline-block">
+          <div className="d-inline-block message-col">{renderMessages}</div>
+        </div>
       </div>
     );
   }
