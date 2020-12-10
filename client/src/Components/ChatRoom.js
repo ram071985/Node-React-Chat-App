@@ -116,9 +116,9 @@ class ChatRoom extends Component {
           style={{
             float:
               message.user_id !== this.state.currentUser.id ? "left" : "right",
-            backgroundColor:
+            background:
               message.user_id !== this.state.currentUser.id
-                ? "rgb(66, 57, 55)"
+                ? "rgb(255, 255, 255)"
                 : "rgb(177, 47, 30)",
           }}
           className="container d-block mt-3"
@@ -128,40 +128,22 @@ class ChatRoom extends Component {
       </div>
     ));
 
-    // const renderUsers = this.state.onlineUsers.map((user, index) => (
-    //  <h6 key={index}>{user.username}</h6>
-    // ));
+    const renderUsers = this.state.onlineUsers.map((user, index) => (
+      <h3 className="username-text" key={index}>
+        {user.username}
+      </h3>
+    ));
+
     console.log(this.state.onlineUsers);
     return (
       <div className="container-fluid chatroom-container">
-        <Row className="d-inline-block left-row no-gutters">
-          <Col className="user-col"></Col>
+        <Row className="h-100 d-inline-block left-row no-gutters">
+          <Col className="d-inline-block user-col">
+            <h2 className="user-heading">Users</h2>
+          </Col>
         </Row>
-        <Row className="mt-5 d-inline-block right-row no-gutters">
-          <Col className="d-block justify-content-right message-col">
-            {renderMessages}
-          </Col>
-          <Col className="type-col">
-            <Form onSubmit={this.handleSubmit} inline>
-              <Form.Group>
-                <Form.Control
-                  name="text"
-                  onChange={this.handleChange}
-                  className="message-input"
-                  size="sm"
-                  type="input"
-                  placeholder="Small text"
-                />
-              </Form.Group>
-              <Button
-                className="d-inline-inline"
-                type="submit"
-                variant="outline-secondary"
-              >
-                Secondary
-              </Button>{" "}
-            </Form>
-          </Col>
+        <Row className="d-inline-block">
+          <Col className="d-inline-block message-col"></Col>
         </Row>
       </div>
     );

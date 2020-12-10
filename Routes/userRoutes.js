@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const userDataAccess = require("../DataAccess/userDataAccess");
 
-router.get("/", async (req,res) => {
-    const users = userDataAccess.queryUsers();
+router.get("/", async (req, res) => {
+    const users = await userDataAccess.queryUsers();
     res.send(users);
 })
 

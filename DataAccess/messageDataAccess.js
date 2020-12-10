@@ -31,6 +31,8 @@ createMessage = async (userId, text) => {
   } catch (err) {
     console.log(err);
     await pool.query("ROLLBACK");
+  } finally {
+    pool.release();
   }
 };
 
