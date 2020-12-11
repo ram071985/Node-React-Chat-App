@@ -137,13 +137,36 @@ class ChatRoom extends Component {
     console.log(this.state.onlineUsers);
     return (
       <div className="container-fluid chatroom-container">
-        <div className="d-inline-block left-row">
+        <div className="container d-inline-block left-container">
           <div className="d-inline-block user-col">
-            <h2 className="user-heading">Users</h2>
+            <h2 className="mt-1 user-heading">Users</h2>
           </div>
-          </div>
-        <div className="h-100 d-inline-block">
+        </div>
+        <div className="container d-inline-block right-container">
           <div className="d-inline-block message-col">{renderMessages}</div>
+          <div className="d-inline-block type-col">
+            {" "}
+            <Form className="message-form" onSubmit={this.handleSubmit} inline>
+              <Form.Group>
+                <Form.Control
+                  name="text"
+                  onChange={this.handleChange}
+                  className="message-input"
+                  size="sm"
+                  type="input"
+                  placeholder="Small text"
+                />
+              </Form.Group>
+              <Button
+                id="message-button"
+                className="d-inline-inline"
+                type="submit"
+                variant="outline-secondary"
+              >
+                Secondary
+              </Button>{" "}
+            </Form>
+          </div>
         </div>
       </div>
     );
