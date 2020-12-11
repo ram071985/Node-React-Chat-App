@@ -50,7 +50,7 @@ class ChatRoom extends Component {
     });
 
     socket.on("message", (chatMessage) => {
-      console.log("message sent back")
+      console.log("message sent back");
       const parsedMessage = JSON.parse(chatMessage);
 
       this.setState({
@@ -113,8 +113,12 @@ class ChatRoom extends Component {
 
   handleLogOut = async () => {
     const { history } = this.props;
-    
-    await axios.post("/api/logout");
+    const { currentUser } = this.state;
+
+    await axios
+      .post("/api/logout")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
 
     localStorage.removeItem("user");
     history.push("/login");
@@ -171,6 +175,11 @@ class ChatRoom extends Component {
           <div className="d-inline-block user-col">
             <h2 className="mt-1 user-heading">Users</h2>
             {renderUsers}
+            <Form inline>
+              <Button className="d-inline" variant="light">
+                Log Out
+              </Button>{" "}
+            </Form>
           </div>
         </div>
         <div className="container d-inline-block right-container">

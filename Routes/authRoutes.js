@@ -12,7 +12,11 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", async (req, res) => {
-    const id = 
+    const username = req.body.username;
+
+    const id = logOutUser = await authDataAccess.logOutUser(username);
+    
+    res.status(201).send({ logOutUser });
 })
 
 module.exports = router;
