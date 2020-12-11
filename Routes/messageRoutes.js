@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const messageDataAccess = require("../DataAccess/messageDataAccess");
+const socketService = require("../Services/socketService");
+const io = socketService.getIo();
 
 router.get("/", async (req, res) => {
-    const messages = await messageDataAccess.queryMessages();
-    res.send(messages);
-})
+  const messages = await messageDataAccess.queryMessages();
+  res.send(messages);
+});
 router.post("/", async (req, res) => {
   let newMessage = {
     id: req.body.id,
@@ -22,5 +24,7 @@ router.post("/", async (req, res) => {
   );
 
   responseMessage.username = newMessage.username;
+
+  io.emit("message", JSON.stringify(responseMessage));
 });
 module.exports = router;

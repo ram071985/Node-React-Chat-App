@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { User } from "react-feather";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import axios from "axios";
+import io from "socket.io-client";
+
+let socket;
 
 class ChatRoom extends Component {
   constructor() {
@@ -15,7 +18,9 @@ class ChatRoom extends Component {
       users: [],
       onlineUsers: [],
       offlineUsers: [],
+      endpoint: "http://localhost:3000",
     };
+    socket = io(this.state.endpoint);
   }
 
   componentDidMount() {
@@ -31,6 +36,27 @@ class ChatRoom extends Component {
     });
     this.getUsers();
     this.getMessages();
+
+    socket.on("new_message", (message) => {
+      console.log("connection to message socket:" + message);
+    });
+
+    socket.on("user_online", (userOnline) => {
+      const parsedUsers = JSON.parse(userOnline);
+
+      this.setState({
+        usersOnline: [...this.state.usersOnline, parsedUsers],
+      });
+    });
+
+    socket.on("message", (chatMessage) => {
+      console.log("message sent back")
+      const parsedMessage = JSON.parse(chatMessage);
+
+      this.setState({
+        messages: [...this.state.messages, parsedMessage],
+      });
+    });
   }
 
   handleChange = (e) => {
@@ -140,6 +166,7 @@ class ChatRoom extends Component {
         <div className="container d-inline-block left-container">
           <div className="d-inline-block user-col">
             <h2 className="mt-1 user-heading">Users</h2>
+            {renderUsers}
           </div>
         </div>
         <div className="container d-inline-block right-container">

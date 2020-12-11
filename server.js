@@ -7,9 +7,13 @@ const http = require("http");
 const server = http.createServer(app);
 const jwt = require("jsonwebtoken");
 const exjwt = require("express-jwt");
-const socketio = require("socket.io");
-const io = socketio(server);
+const socketService = require("./Services/socketService");
+const io = socketService.getIo(server);
 require("dotenv").config();
+
+io.on("connection", socket => {
+  socket.emit("new_message", "sockets connected");
+})
 
 app.use("/", express.static(path.join(__dirname, "client/build")));
 
