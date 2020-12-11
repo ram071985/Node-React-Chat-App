@@ -112,8 +112,12 @@ class ChatRoom extends Component {
   };
 
   handleLogOut = async () => {
+    const { history } = this.props;
+    
     await axios.post("/api/logout");
+
     localStorage.removeItem("user");
+    history.push("/login");
   };
 
   getMessages = async () => {

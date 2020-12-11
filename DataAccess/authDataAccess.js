@@ -30,4 +30,22 @@ logInUser = async (username, password) => {
   }
 };
 
-module.exports = { logInUser };
+logOutUser = async (username) => {
+  let pool = await pgDataAccess.dbConnection();
+  try {
+    await pool.query("BEGIN");
+    const results = await pool.query(
+      "SELECT * FROM users WHERE username = $1",
+      [username]
+    );
+    await pool.query(
+      "UPDATE users SET is_logged_in = false WHERE username = $1",
+      [username]
+    );
+    await pool.query("COMMIT");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = { logInUser, logOutUser };

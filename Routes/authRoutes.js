@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authDataAccess = require("../DataAccess/authDataAccess");
 
-router.post("/", async (req, res) => {
+router.post("/login", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
@@ -10,5 +10,9 @@ router.post("/", async (req, res) => {
 
     res.status(201).send({ userMatch }); 
 });
+
+router.post("/logout", async (req, res) => {
+    const id = 
+})
 
 module.exports = router;
