@@ -6,25 +6,34 @@ logInUser = async (username, password) => {
   console.log("connected to login");
   try {
     await pool.query("BEGIN");
-    await pool.query(
-      "UPDATE users SET last_active_at = NOW() WHERE username = $1",
-      [username]
-    );
-    await pool.query(
-      "UPDATE users SET is_logged_in = true WHERE username = $1",
-      [username]
-    );
-    await pool.query("COMMIT");
-    //const saltedPassword = result.rows[0].password;
-    //const match = await bcrypt.compare(req.body.password, saltedPassword);
     const result = await pool.query("SELECT * FROM users WHERE username = $1", [
       username,
     ]);
-    const authUser = {
+    const saltedPassword = result.rows[0].password;
+    const match = await bcrypt.compare(password, saltedPassword);
+
+    if (!match) {
+      return {
+        isSuccessful: false,
+        errorMessage: "Incorrect password",
+      };
+    } else {
+      await pool.query(
+        "UPDATE users SET last_active_at = NOW() WHERE username = $1",
+        [username]
+      );
+      await pool.query(
+        "UPDATE users SET is_logged_in = true WHERE username = $1",
+        [username]
+      );
+      await pool.query("COMMIT");
+    }
+    let successfulLogin = {
+      isSuccesful: true,
       user: result.rows[0],
     };
     console.log(result.rows[0]);
-    return authUser;
+    return successfulLogin;
   } catch (err) {
     console.log(err);
   }

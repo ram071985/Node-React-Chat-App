@@ -59,7 +59,7 @@ class LogIn extends Component {
       })
       .catch((err) => {
         console.log(err);
-        if (err.response.data.message === "incorrect password") {
+        if (err.response.data.message === "Incorrect password") {
           this.setState({
             errorMessage: "You've entered an incorrect password.",
             setShow: true,

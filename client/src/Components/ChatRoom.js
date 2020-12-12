@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { User } from "react-feather";
-import { Row, Col, Form, Button, Image } from "react-bootstrap";
+import { Form, Button, Image } from "react-bootstrap";
 import axios from "axios";
 import io from "socket.io-client";
 import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg";
@@ -222,7 +222,7 @@ class ChatRoom extends Component {
             <div className="container d-block users-list-container">
               <h6 className="users-list">{renderUsers}</h6>
               <hr className="onoff-hr"/>
-              <h6 className="online-text">Offline (4 Members)</h6>
+              <h6 className="offline-text">Offline (4 Members)</h6>
             </div>
           </div>
         </div>
