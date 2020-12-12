@@ -35,18 +35,11 @@ class ChatRoom extends Component {
       currentUser: storedUser,
     });
     this.getUsers();
+    window.setInterval(this.getUsers, 100000);
     this.getMessages();
 
     socket.on("new_message", (message) => {
       console.log("connection to message socket:" + message);
-    });
-
-    socket.on("user_online", (userOnline) => {
-      const parsedUsers = JSON.parse(userOnline);
-
-      this.setState({
-        usersOnline: [...this.state.usersOnline, parsedUsers],
-      });
     });
 
     socket.on("message", (chatMessage) => {
@@ -79,6 +72,9 @@ class ChatRoom extends Component {
     };
 
     this.submitMessage(newMessage);
+    this.setState({
+      text: "",
+    });
   };
 
   submitMessage = async (newMessage) => {
@@ -100,12 +96,17 @@ class ChatRoom extends Component {
       .catch((err) => {
         console.log(err);
       });
+    this.getOfflineUsers();
   };
 
-  getOfflineUser = async () => {
+  getOfflineUsers = async () => {
     await axios
       .get("/api/users")
-      .then((res) => {})
+      .then((res) => {
+        this.setState({
+          offlineUsers: res.data,
+        });
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -152,7 +153,7 @@ class ChatRoom extends Component {
               message.user_id !== this.state.currentUser.id ? "left" : "right",
             background:
               message.user_id !== this.state.currentUser.id
-                ? "rgb(255, 255, 255)"
+                ? "rgb(48, 48, 48)"
                 : "rgb(177, 47, 30)",
           }}
           className="container d-block mt-3"
@@ -168,25 +169,42 @@ class ChatRoom extends Component {
       </h3>
     ));
 
-    console.log(this.state.onlineUsers);
+    const renderOfflineUsers = this.state.offlineUsers.map((user, index) => (
+      <h3 className="username-text" key={index}>
+        {user.username}
+      </h3>
+    ));
+
+    console.log(this.state.message);
     return (
       <div className="container-fluid chatroom-container">
         <div className="container d-inline-block left-container">
           <div className="d-inline-block user-col">
-            <h2 className="mt-1 user-heading">Users</h2>
-            {renderUsers}
+            <h3 className="d-inline-block mt-2 user-heading">Online Users</h3>
             <Form inline>
-              <Button className="d-inline" variant="light">
+              <Button
+                onClick={this.handleLogOut}
+                className="d-inline logout-button mr-2"
+                variant="outline-dark"
+              >
                 Log Out
               </Button>{" "}
             </Form>
+            <div className="container d-block users-list-container">
+              <h6 className="users-list">{renderUsers}</h6>
+              <h3 className="d-inline-block offline-heading">Offline Users</h3>
+            </div>
           </div>
         </div>
         <div className="container d-inline-block right-container">
           <div className="d-inline-block message-col">{renderMessages}</div>
           <div className="d-inline-block type-col">
             {" "}
-            <Form className="message-form" onSubmit={this.handleSubmit} inline>
+            <Form
+              className="justify-content-center message-form"
+              onSubmit={this.handleSubmit}
+              inline
+            >
               <Form.Group>
                 <Form.Control
                   name="text"
@@ -194,7 +212,7 @@ class ChatRoom extends Component {
                   className="message-input"
                   size="sm"
                   type="input"
-                  placeholder="Small text"
+                  placeholder="Say something"
                 />
               </Form.Group>
               <Button
@@ -203,7 +221,7 @@ class ChatRoom extends Component {
                 type="submit"
                 variant="outline-secondary"
               >
-                Secondary
+                Send
               </Button>{" "}
             </Form>
           </div>

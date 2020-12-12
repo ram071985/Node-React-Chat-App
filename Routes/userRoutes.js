@@ -16,8 +16,6 @@ router.post("/", async (req, res) => {
   let newUser = await userDataAccess.createUser(newUsername, password);
 
   res.status(201).send({ newUser });
-
-  io.emit("user_online", JSON.stringify(newUser));
 });
 
 module.exports = router;

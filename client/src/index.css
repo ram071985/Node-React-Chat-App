@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Roboto:wght@100;300;400;500;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
 
 /* body */
 html,
@@ -217,7 +216,9 @@ form.message-form {
 }
 
 #chat-bubble {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+  font-size: .9em;
   width: 40% !important;
   color: white;
   border-radius: 10px;
@@ -229,7 +230,7 @@ form.message-form {
 
 .message-input {
   color: white;
-  width: 20em !important;
+  width: 25em !important;
   margin-right: 10px;
 }
 
@@ -238,7 +239,7 @@ form.message-form {
 }
 
 #message-button {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Raleway', sans-serif;
   padding: 2.5px;
   width: 6rem;
   background-color: rgb(48, 48, 48) !important;
@@ -246,7 +247,7 @@ form.message-form {
 }
 
 .message-form {
-  padding: 20px;
+  margin-bottom: 3em !important;
 }
 
 #message-button:hover {
@@ -258,7 +259,7 @@ div.chatroom-container input,
 select,
 textarea:focus {
   border-color: white;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Raleway', sans-serif;
   color: white !important;
   box-shadow: none !important;
   background-color: rgb(48, 48, 48) !important;
@@ -266,12 +267,33 @@ textarea:focus {
 }
 
 .user-heading {
+  float: left;
   margin-left: 1em;
-  margin-top: 1em;
-  color: rgb(214, 125, 155);
+  margin-right: 20%;
+  margin-bottom: 0;
+  color: rgb(255, 180, 205);
 }
+
 .username-text {
   font-size: 1.3em;
   color: rgb(206, 206, 206);
   margin-left: 1em;
 }
+
+.logout-button {
+  color: white;
+  margin-top: 0.5em;
+  padding: 2px !important;
+}
+
+.users-list-container {
+  margin-top: 1em;
+  float: left;
+}
+
+.offline-heading {
+  margin-left: 14px;
+  margin-top: 20px;
+  color: rgb(206, 166, 178);
+}
+

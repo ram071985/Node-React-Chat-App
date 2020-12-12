@@ -45,7 +45,7 @@ class LogIn extends Component {
   logInUser = async (user) => {
     const { history } = this.props;
     await axios
-      .post("api/authorize", user)
+      .post("api/authorize/login", user)
       .then((res) => {
         console.log(res);
         const userSpecs = {
