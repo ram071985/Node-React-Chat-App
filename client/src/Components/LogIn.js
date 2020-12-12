@@ -49,8 +49,8 @@ class LogIn extends Component {
       .then((res) => {
         console.log(res);
         const userSpecs = {
-          id: res.data.userMatch.user.id,
-          username: res.data.userMatch.user.username,
+          id: res.data.userMatch.id,
+          username: res.data.userMatch.username,
         };
         if (res.status === 201) {
           localStorage.setItem("user", JSON.stringify(userSpecs));

@@ -111,7 +111,7 @@ body {
 }
 
 .login-form-control {
-  background-color: transparent;
+  background-color: transparent !important;
   width: 12em;
   border-radius: 0;
   border: 1px solid rgba(148, 148, 148, 0.5);
@@ -139,6 +139,7 @@ textarea:focus {
 }
 
 .alert {
+  margin-top: 1em;
   width: 12em !important;
 }
 
@@ -277,8 +278,10 @@ textarea:focus {
 
 .username-text {
   font-size: 1.3em;
-  color: rgb(206, 206, 206);
-  margin-left: 1em;
+  font-weight: 300;
+  color: rgb(255, 255, 255);
+  margin-left: 2.2em;
+  margin-bottom: 1em;
 }
 
 .logout-button {
@@ -290,7 +293,7 @@ textarea:focus {
 }
 
 .users-list-container {
-  margin-top: 1em;
+  margin-top: .5em;
   float: left;
 }
 
@@ -331,6 +334,8 @@ textarea:focus {
   font-size: .8em;
   color: white;
   margin-left: 4.7em;
+  margin-bottom: 1em;
+  margin-top: 0.5em;
 }
 
 hr.onoff-hr {
@@ -343,4 +348,10 @@ hr.onoff-hr {
   font-size: .8em;
   color: white;
   margin-left: 3.6em;
+}
+
+#main-avatar {
+  margin-right: 0.5em;
+  height: 35px;
+  width: 35px;
 }

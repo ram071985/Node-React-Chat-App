@@ -17,8 +17,6 @@ router.post("/login", async (req, res) => {
 
     res.status(201).send({ userMatch });
   }
-
-  res.status(201).send({ userMatch });
 });
 
 router.post("/logout", async (req, res) => {

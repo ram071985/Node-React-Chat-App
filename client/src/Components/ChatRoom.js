@@ -170,7 +170,9 @@ class ChatRoom extends Component {
             }}
           >
             <Image id="avatar" src={DefaultAvatar} roundedCircle />
-            <p className="text-center username-avatar">Yo <span id="time">12:32 PM</span></p>
+            <p className="text-center username-avatar">
+              Yo <span id="time">12:32 PM</span>
+            </p>
           </div>
         </div>
         <div
@@ -192,9 +194,10 @@ class ChatRoom extends Component {
     ));
 
     const renderUsers = this.state.onlineUsers.map((user, index) => (
-      <h3 className="username-text" key={index}>
+      <h5 className="username-text" key={index}>
+        <Image id="main-avatar" src={DefaultAvatar} roundedCircle/>
         {user.username}
-      </h3>
+      </h5>
     ));
 
     const renderOfflineUsers = this.state.offlineUsers.map((user, index) => (
@@ -203,7 +206,6 @@ class ChatRoom extends Component {
       </h3>
     ));
 
-    console.log(this.avatarCondition === "rgb(177, 47, 30)");
     return (
       <div className="container-fluid chatroom-container">
         <div className="container d-inline-block left-container">
@@ -221,7 +223,7 @@ class ChatRoom extends Component {
             <h6 className="online-text">Online (4 Members)</h6>
             <div className="container d-block users-list-container">
               <h6 className="users-list">{renderUsers}</h6>
-              <hr className="onoff-hr"/>
+              <hr className="onoff-hr" />
               <h6 className="offline-text">Offline (4 Members)</h6>
             </div>
           </div>

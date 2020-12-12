@@ -27,7 +27,10 @@ createUser = async (username, password) => {
     } catch (err) {
       console.log(err);
     }
-  } catch (err) {}
+  } catch (err) {
+  } finally {
+    pool.release();
+  }
 };
 
-module.exports = { createUser }
+module.exports = { createUser };

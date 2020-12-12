@@ -36,6 +36,8 @@ logInUser = async (username, password) => {
     return successfulLogin;
   } catch (err) {
     console.log(err);
+  } finally {
+    pool.release();
   }
 };
 
@@ -54,6 +56,8 @@ logOutUser = async (username) => {
     await pool.query("COMMIT");
   } catch (err) {
     console.log(err);
+  } finally {
+    pool.release();
   }
 };
 
