@@ -52,6 +52,11 @@ class ChatRoom extends Component {
     });
   }
 
+  componentDidUpdate() {
+    const columnScroll = document.querySelector(".message-col");
+    columnScroll.scrollTop = columnScroll.scrollHeight;
+  }
+
   handleChange = (e) => {
     this.setState({
       errorMessage: "",

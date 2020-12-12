@@ -148,7 +148,8 @@ button {
   margin-right: 1.9em !important;
 }
 
-.right-row {
+.right-container {
+  padding-left: 0;
 }
 
 .user-col {
@@ -173,7 +174,8 @@ button {
   border-top-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
-  padding-bottom: 0 !important;
+  padding-bottom: 10px !important;
+  overflow: auto;
 }
 
 .type-col {
@@ -200,10 +202,6 @@ div.chatroom-container {
 
 div.left-container {
   width: 60%;
-}
-
-div.right-container {
-  padding: 0;
 }
 
 #bubble-container {
