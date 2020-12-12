@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Roboto:wght@100;300;400;500;700&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap');
 
 /* body */
 html,
@@ -10,7 +9,7 @@ body {
   overflow: auto;
   background-repeat: no-repeat;
   font-size: 16px;
-  font-family: "Berkshire Swash", cursive;
+  font-family: 'Raleway', sans-serif;
   height: 100%;
   width: 100%;
   margin: 0px;
@@ -133,7 +132,8 @@ textarea:focus {
   -webkit-appearance: none;
 }
 
-button {
+ button.auth-button {
+  font-weight: 500;
   width: 12em;
   border-radius: 0px !important;
 }
@@ -214,7 +214,6 @@ form.message-form {
 }
 
 #chat-bubble {
-  font-family: 'Raleway', sans-serif;
   font-weight: 300;
   font-size: .9em;
   width: 40% !important;
@@ -223,7 +222,9 @@ form.message-form {
   padding: 4px;
   border-bottom-right-radius: 0px;
   display: block !important;
-  margin-top: 1em;
+  margin-top: .6em !important;
+  margin-right: .5em;
+  margin-left: .5em;
 }
 
 .message-input {
@@ -265,6 +266,7 @@ textarea:focus {
 }
 
 .user-heading {
+  font-family: 'Raleway', sans-serif;
   float: left;
   margin-left: 1em;
   margin-right: 20%;
@@ -279,6 +281,7 @@ textarea:focus {
 }
 
 .logout-button {
+  font-family: 'Raleway', sans-serif;
   color: white;
   margin-top: 0.5em;
   padding: 2px !important;
@@ -290,8 +293,26 @@ textarea:focus {
 }
 
 .offline-heading {
+  font-family: 'Raleway', sans-serif;
   margin-left: 14px;
   margin-top: 20px;
   color: rgb(206, 166, 178);
+}
+
+.chatroom-name {
+  font-family: 'Raleway', sans-serif;
+  margin-top: 1em;
+  margin-left: 1em;
+  color: white;
+}
+
+.avatar-container {
+  
+}
+
+#avatar {
+  height: 35px;
+  width: 35px;
+  margin-top: .4em;
 }
 

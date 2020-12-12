@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { User } from "react-feather";
-import { Row, Col, Form, Button } from "react-bootstrap";
+import { Row, Col, Form, Button, Image } from "react-bootstrap";
 import axios from "axios";
 import io from "socket.io-client";
+import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg";
 
 let socket;
 
@@ -147,9 +148,30 @@ class ChatRoom extends Component {
       });
   };
 
+  avatarCondition = async () => {
+    const messageBackground = document.getElementById("chat-bubble");
+    if (messageBackground) {
+      return messageBackground.style.backgroundColor;
+    }
+  };
+
   render() {
+    const messageBackground = document.getElementById("chat-bubble");
     const renderMessages = this.state.messages.map((message, index) => (
       <div id="bubble-container" className="container">
+        <div className="container avatar-container">
+          <div
+            style={{
+              float:
+                this.avatarCondition === "rgb(177, 47, 30)" ||
+                message.user_id !== this.state.currentUser.id
+                  ? "left"
+                  : "right",
+            }}
+          >
+            <Image id="avatar" src={DefaultAvatar} roundedCircle />
+          </div>
+        </div>
         <div
           key={index}
           id="chat-bubble"
@@ -180,7 +202,7 @@ class ChatRoom extends Component {
       </h3>
     ));
 
-    console.log(this.state.message);
+    console.log(this.avatarCondition === "rgb(177, 47, 30)");
     return (
       <div className="container-fluid chatroom-container">
         <div className="container d-inline-block left-container">
@@ -202,7 +224,10 @@ class ChatRoom extends Component {
           </div>
         </div>
         <div className="container d-inline-block right-container">
-          <div className="d-inline-block message-col">{renderMessages}</div>
+          <div className="d-inline-block message-col">
+            <h5 className="chatroom-name">#General</h5>
+            {renderMessages}
+          </div>
           <div className="d-inline-block type-col">
             {" "}
             <Form

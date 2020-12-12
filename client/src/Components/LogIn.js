@@ -50,13 +50,12 @@ class LogIn extends Component {
         console.log(res);
         const userSpecs = {
           id: res.data.userMatch.user.id,
-          username: res.data.userMatch.user.username
-        }
+          username: res.data.userMatch.user.username,
+        };
         if (res.status === 201) {
-          localStorage.setItem("user", JSON.stringify(userSpecs));      
-          history.push("/");    
+          localStorage.setItem("user", JSON.stringify(userSpecs));
+          history.push("/");
         }
-        
       })
       .catch((err) => {
         console.log(err);
@@ -112,7 +111,7 @@ class LogIn extends Component {
             </Form.Group>
             <Button
               type="submit"
-              className="mt-2 d-inline-block"
+              className="mt-2 d-inline-block auth-button"
               variant="light"
             >
               Submit
@@ -123,7 +122,7 @@ class LogIn extends Component {
         <Row className="justify-content-center">
           <Button
             onClick={this.handleClick}
-            className="mt-4 d-inline-block"
+            className="mt-4 d-inline-block auth-button"
             variant="light"
           >
             Register An Account
