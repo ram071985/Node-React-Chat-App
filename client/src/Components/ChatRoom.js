@@ -170,6 +170,7 @@ class ChatRoom extends Component {
             }}
           >
             <Image id="avatar" src={DefaultAvatar} roundedCircle />
+            <p className="text-center username-avatar">Yo <span id="time">12:32 PM</span></p>
           </div>
         </div>
         <div
@@ -207,7 +208,7 @@ class ChatRoom extends Component {
       <div className="container-fluid chatroom-container">
         <div className="container d-inline-block left-container">
           <div className="d-inline-block user-col">
-            <h3 className="d-inline-block mt-2 user-heading">Online Users</h3>
+            <h5 className="d-inline-block user-heading">Member List</h5>
             <Form inline>
               <Button
                 onClick={this.handleLogOut}
@@ -217,16 +218,18 @@ class ChatRoom extends Component {
                 Log Out
               </Button>{" "}
             </Form>
+            <h6 className="online-text">Online (4 Members)</h6>
             <div className="container d-block users-list-container">
               <h6 className="users-list">{renderUsers}</h6>
-              <h3 className="d-inline-block offline-heading">Offline Users</h3>
+              <hr className="onoff-hr"/>
+              <h6 className="online-text">Offline (4 Members)</h6>
             </div>
           </div>
         </div>
         <div className="container d-inline-block right-container">
           <div className="d-inline-block message-col">
             <h5 className="chatroom-name">#General</h5>
-            {renderMessages}
+            <p className="message-text">{renderMessages}</p>
           </div>
           <div className="d-inline-block type-col">
             {" "}
