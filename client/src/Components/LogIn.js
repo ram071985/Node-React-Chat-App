@@ -49,12 +49,13 @@ class LogIn extends Component {
       .then((res) => {
         console.log(res);
         const userSpecs = {
-          id: res.data.userMatch.id,
-          username: res.data.userMatch.username,
-          id_token: res.token
+          id: res.data.userMatch.user.id,
+          username: res.data.userMatch.user.username
         };
+        const token = res.data.userMatch.secretToken;
         if (res.status === 201) {
           localStorage.setItem("user", JSON.stringify(userSpecs));
+          localStorage.setItem("id_token", JSON.stringify(token));
           history.push("/");
         }
       })
@@ -67,7 +68,13 @@ class LogIn extends Component {
           });
         }
       });
+      this.loggedIn();
   };
+
+  loggedIn = async () => {
+    const token = localStorage.getItem("user")
+    console.log(token);
+  }
 
   renderAlert = () => {
     if (this.state.errorMessage !== "") {

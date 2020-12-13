@@ -13,8 +13,6 @@ router.post("/login", async (req, res) => {
       message: userMatch.errorMessage,
     });
   } else {
-    userMatch = userMatch.user;
-
     res.status(201).send({ userMatch });
   }
 });

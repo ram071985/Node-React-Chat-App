@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const pgDataAccess = require("./pgDataAccess");
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 logInUser = async (username, password) => {
   let pool = await pgDataAccess.dbConnection();
