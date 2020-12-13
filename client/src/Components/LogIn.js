@@ -51,6 +51,7 @@ class LogIn extends Component {
         const userSpecs = {
           id: res.data.userMatch.id,
           username: res.data.userMatch.username,
+          id_token: res.token
         };
         if (res.status === 201) {
           localStorage.setItem("user", JSON.stringify(userSpecs));
