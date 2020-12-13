@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const pgDataAccess = require("./pgDataAccess");
+require("dotenv").config();
 
 logInUser = async (username, password) => {
   let pool = await pgDataAccess.dbConnection();
@@ -28,9 +29,11 @@ logInUser = async (username, password) => {
       );
       await pool.query("COMMIT");
     }
+    let token = jwt.sign({ username: result.rows[0].username}, process.env.SECRET, { expiresIn: 129600 });
     let successfulLogin = {
       isSuccesful: true,
       user: result.rows[0],
+      secretToken: token
     };
     console.log(result.rows[0]);
     return successfulLogin;
