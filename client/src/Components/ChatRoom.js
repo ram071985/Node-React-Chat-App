@@ -4,6 +4,7 @@ import { Form, Button, Image } from "react-bootstrap";
 import axios from "axios";
 import io from "socket.io-client";
 import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg";
+import decode from "jwt-decode";
 
 let socket;
 
@@ -20,6 +21,8 @@ class ChatRoom extends Component {
       onlineUsers: [],
       offlineUsers: [],
       endpoint: "http://localhost:3000",
+      confirm: null,
+      loaded: false,
     };
     socket = io(this.state.endpoint);
   }
@@ -27,8 +30,19 @@ class ChatRoom extends Component {
   componentDidMount() {
     const { history } = this.props;
     const isLocalStorage = localStorage.getItem("user");
-    if (!isLocalStorage) {
+    if (!this.loggedIn()) {
       history.push("/login");
+    } else {
+      try {
+        const confirm = this.getConfirm();
+        console.log("confirmation is:", confirm);
+        this.setState({
+          confirm: confirm,
+          loaded: true,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
@@ -57,6 +71,29 @@ class ChatRoom extends Component {
     const columnScroll = document.querySelector(".message-col");
     columnScroll.scrollTop = columnScroll.scrollHeight;
   }
+
+  loggedIn = async () => {
+    const token = localStorage.getItem("user");
+    return !!token && !!this.isTokenExpired(token);
+  };
+
+  isTokenExpired = async (token) => {
+    try {
+      const decoded = decode(token);
+      if (decoded.exp < Date.now() / 1000) {
+        return true;
+      } else return false;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  getConfirm = async () => {
+    let token = localStorage.getItem("id_token");
+    let answer = decode(token);
+    return answer;
+  };
 
   handleChange = (e) => {
     this.setState({
@@ -195,7 +232,7 @@ class ChatRoom extends Component {
 
     const renderUsers = this.state.onlineUsers.map((user, index) => (
       <h5 className="username-text" key={index}>
-        <Image id="main-avatar" src={DefaultAvatar} roundedCircle/>
+        <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
         {user.username}
       </h5>
     ));
@@ -206,63 +243,74 @@ class ChatRoom extends Component {
       </h3>
     ));
 
-    return (
-      <div className="container-fluid chatroom-container">
-        <div className="container d-inline-block left-container">
-          <div className="d-inline-block user-col">
-            <h5 className="d-inline-block user-heading">Member List</h5>
-            <Form inline>
-              <Button
-                onClick={this.handleLogOut}
-                className="d-inline logout-button mr-2"
-                variant="outline-dark"
-              >
-                Log Out
-              </Button>{" "}
-            </Form>
-            <h6 className="online-text">Online (4 Members)</h6>
-            <div className="container d-block users-list-container">
-              <h6 className="users-list">{renderUsers}</h6>
-              <hr className="onoff-hr" />
-              <h6 className="offline-text">Offline (4 Members)</h6>
+    if (this.state.loaded === true) {
+      if (this.state.confirm) {
+        console.log("confirmed!");
+
+        return (
+          <div className="container-fluid chatroom-container">
+            <div className="container d-inline-block left-container">
+              <div className="d-inline-block user-col">
+                <h5 className="d-inline-block user-heading">Member List</h5>
+                <Form inline>
+                  <Button
+                    onClick={this.handleLogOut}
+                    className="d-inline logout-button mr-2"
+                    variant="outline-dark"
+                  >
+                    Log Out
+                  </Button>{" "}
+                </Form>
+                <h6 className="online-text">Online (4 Members)</h6>
+                <div className="container d-block users-list-container">
+                  <h6 className="users-list">{renderUsers}</h6>
+                  <hr className="onoff-hr" />
+                  <h6 className="offline-text">Offline (4 Members)</h6>
+                </div>
+              </div>
+            </div>
+            <div className="container d-inline-block right-container">
+              <div className="d-inline-block message-col">
+                <h5 className="chatroom-name">#General</h5>
+                <p className="message-text">{renderMessages}</p>
+              </div>
+              <div className="d-inline-block type-col">
+                {" "}
+                <Form
+                  className="justify-content-center message-form"
+                  onSubmit={this.handleSubmit}
+                  inline
+                >
+                  <Form.Group>
+                    <Form.Control
+                      name="text"
+                      onChange={this.handleChange}
+                      className="message-input"
+                      size="sm"
+                      type="input"
+                      placeholder="Say something"
+                    />
+                  </Form.Group>
+                  <Button
+                    id="message-button"
+                    className="d-inline-inline"
+                    type="submit"
+                    variant="outline-secondary"
+                  >
+                    Send
+                  </Button>{" "}
+                </Form>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="container d-inline-block right-container">
-          <div className="d-inline-block message-col">
-            <h5 className="chatroom-name">#General</h5>
-            <p className="message-text">{renderMessages}</p>
-          </div>
-          <div className="d-inline-block type-col">
-            {" "}
-            <Form
-              className="justify-content-center message-form"
-              onSubmit={this.handleSubmit}
-              inline
-            >
-              <Form.Group>
-                <Form.Control
-                  name="text"
-                  onChange={this.handleChange}
-                  className="message-input"
-                  size="sm"
-                  type="input"
-                  placeholder="Say something"
-                />
-              </Form.Group>
-              <Button
-                id="message-button"
-                className="d-inline-inline"
-                type="submit"
-                variant="outline-secondary"
-              >
-                Send
-              </Button>{" "}
-            </Form>
-          </div>
-        </div>
-      </div>
-    );
+        );
+      } else {
+        console.log("not confirmed!");
+        return null;
+      }
+    } else {
+      return null;
+    }
   }
 }
 

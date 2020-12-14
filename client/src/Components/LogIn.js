@@ -50,7 +50,7 @@ class LogIn extends Component {
         console.log(res);
         const userSpecs = {
           id: res.data.userMatch.user.id,
-          username: res.data.userMatch.user.username
+          username: res.data.userMatch.user.username,
         };
         const token = res.data.userMatch.secretToken;
         if (res.status === 201) {
@@ -68,13 +68,9 @@ class LogIn extends Component {
           });
         }
       });
-      this.loggedIn();
   };
 
-  loggedIn = async () => {
-    const token = localStorage.getItem("user")
-    console.log(token);
-  }
+
 
   renderAlert = () => {
     if (this.state.errorMessage !== "") {
