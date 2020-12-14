@@ -50,7 +50,7 @@ class ChatRoom extends Component {
       currentUser: storedUser,
     });
     this.getUsers();
-    window.setInterval(this.getUsers, 100000);
+    window.setInterval(this.getUsers, 20000);
     this.getMessages();
 
     socket.on("new_message", (message) => {
