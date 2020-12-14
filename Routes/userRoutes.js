@@ -9,6 +9,11 @@ router.get("/", async (req, res) => {
   res.send(users);
 });
 
+router.get("/inactive", async (req, res) => {
+  const users = await userDataAccess.queryInactiveUsers();
+  res.send(users);
+});
+
 router.post("/", async (req, res) => {
   const newUsername = req.body.username;
   const password = req.body.password;

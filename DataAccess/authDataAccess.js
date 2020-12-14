@@ -30,11 +30,15 @@ logInUser = async (username, password) => {
       );
       await pool.query("COMMIT");
     }
-    let token = jwt.sign({ username: result.rows[0].username}, process.env.SECRET, { expiresIn: 129600 });
+    let token = jwt.sign(
+      { username: result.rows[0].username },
+      process.env.SECRET,
+      { expiresIn: 129600 }
+    );
     let successfulLogin = {
       isSuccesful: true,
       user: result.rows[0],
-      secretToken: token
+      secretToken: token,
     };
     console.log(result.rows[0]);
     return successfulLogin;

@@ -52,7 +52,7 @@ queryUsers = async () => {
 queryInactiveUsers = async () => {
   let pool = await pgDataAccess.dbConnection();
   try {
-    await pool.query("SELECT * FROM users WHERE is_logged_in = false;");
+    const results = await pool.query("SELECT * FROM users WHERE is_logged_in = false;");
     return results.rows;
   } catch (err) {
   } finally {

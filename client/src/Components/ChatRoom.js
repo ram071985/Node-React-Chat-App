@@ -29,6 +29,11 @@ class ChatRoom extends Component {
 
   componentDidMount() {
     const { history } = this.props;
+    const findId = this.state.offlineUsers.filter(x => x.id === this.state.currentUser.id)
+    if (findId) {
+      localStorage.clear();
+      history.push("/login");
+    }
     if (!this.loggedIn()) {
       history.push("/login");
     } else {
@@ -143,7 +148,7 @@ class ChatRoom extends Component {
 
   getOfflineUsers = async () => {
     await axios
-      .get("/api/users")
+      .get("/api/users/inactive")
       .then((res) => {
         this.setState({
           offlineUsers: res.data,
@@ -192,7 +197,6 @@ class ChatRoom extends Component {
   };
 
   render() {
-    const messageBackground = document.getElementById("chat-bubble");
     const renderMessages = this.state.messages.map((message, index) => (
       <div id="bubble-container" className="container">
         <div className="container avatar-container">
@@ -237,9 +241,10 @@ class ChatRoom extends Component {
     ));
 
     const renderOfflineUsers = this.state.offlineUsers.map((user, index) => (
-      <h3 className="username-text" key={index}>
+      <h5 className="username-text" key={index}>
+        <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
         {user.username}
-      </h3>
+      </h5>
     ));
 
     if (this.state.loaded === true) {
@@ -265,6 +270,7 @@ class ChatRoom extends Component {
                   <h6 className="users-list">{renderUsers}</h6>
                   <hr className="onoff-hr" />
                   <h6 className="offline-text">Offline (4 Members)</h6>
+                  <h6 className="users-list">{renderOfflineUsers}</h6>
                 </div>
               </div>
             </div>
