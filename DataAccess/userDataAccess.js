@@ -35,11 +35,11 @@ queryUsers = async () => {
   try {
     await pool.query("BEGIN");
     await pool.query(
-      "UPDATE users SET is_logged_in = false WHERE last_active_at < NOW() - INTERVAL '20 minutes';"
+      "UPDATE users SET is_logged_in = false WHERE last_active_at < NOW() - INTERVAL '2 minutes';"
     );
     await pool.query("COMMIT");
     const results = await pool.query(
-      "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '20 minutes' AND is_logged_in = true;"
+      "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '2 minutes' AND is_logged_in = true;"
     );
     return results.rows;
   } catch (err) {

@@ -11,9 +11,14 @@ const socketService = require("./Services/socketService");
 const io = socketService.getIo(server);
 require("dotenv").config();
 
-io.on("connection", socket => {
+io.on("connection", (socket) => {
   socket.emit("new_message", "sockets connected");
-})
+});
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Headers", "Content-type,Authorization");
+  next();
+});
 
 app.use("/", express.static(path.join(__dirname, "client/build")));
 
@@ -34,7 +39,8 @@ app.use("/api/messages", messageRoutes);
 const authRoutes = require("./Routes/authRoutes");
 app.use("/api/authorize", authRoutes);
 
-app.get("/*", async (req, res) => {
+app.get("/*", jwtMW, async (req, res) => {
+  console.log("Web Token Checked.");
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 

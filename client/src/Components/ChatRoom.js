@@ -29,11 +29,7 @@ class ChatRoom extends Component {
 
   componentDidMount() {
     const { history } = this.props;
-    const findId = this.state.offlineUsers.filter(x => x.id === this.state.currentUser.id)
-    if (findId) {
-      localStorage.clear();
-      history.push("/login");
-    }
+
     if (!this.loggedIn()) {
       history.push("/login");
     } else {
@@ -48,6 +44,7 @@ class ChatRoom extends Component {
         console.log(err);
       }
     }
+
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     this.setState({

@@ -70,8 +70,6 @@ class LogIn extends Component {
       });
   };
 
-
-
   renderAlert = () => {
     if (this.state.errorMessage !== "") {
       return (
