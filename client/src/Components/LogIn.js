@@ -33,19 +33,29 @@ class LogIn extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { username, password } = this.state;
+     const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+     };
 
-    const newUser = {
+    const config = {
+      headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+       },
+      params: {
       username: username,
       password: password,
+      }
     };
 
-    this.logInUser(newUser);
+    this.logInUser(config);
   };
 
-  logInUser = async (user) => {
+  logInUser = async (options) => {
     const { history } = this.props;
     await axios
-      .post("api/authorize/login", user)
+      .post("api/authorize/login", options)
       .then((res) => {
         console.log(res);
         const userSpecs = {
@@ -68,6 +78,29 @@ class LogIn extends Component {
           });
         }
       });
+  };
+
+  loggedIn = async () => {
+    const token = localStorage.getItem("user");
+    return !!token && !!this.isTokenExpired(token);
+  };
+
+  isTokenExpired = async (token) => {
+    try {
+      const decoded = decode(token);
+      if (decoded.exp < Date.now() / 1000) {
+        return true;
+      } else return false;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  getConfirm = async () => {
+    let token = localStorage.getItem("id_token");
+    let answer = decode(token);
+    return answer;
   };
 
   renderAlert = () => {

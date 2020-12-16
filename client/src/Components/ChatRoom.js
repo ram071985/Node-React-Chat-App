@@ -73,29 +73,6 @@ class ChatRoom extends Component {
     columnScroll.scrollTop = columnScroll.scrollHeight;
   }
 
-  loggedIn = async () => {
-    const token = localStorage.getItem("user");
-    return !!token && !!this.isTokenExpired(token);
-  };
-
-  isTokenExpired = async (token) => {
-    try {
-      const decoded = decode(token);
-      if (decoded.exp < Date.now() / 1000) {
-        return true;
-      } else return false;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  };
-
-  getConfirm = async () => {
-    let token = localStorage.getItem("id_token");
-    let answer = decode(token);
-    return answer;
-  };
-
   handleChange = (e) => {
     this.setState({
       errorMessage: "",
