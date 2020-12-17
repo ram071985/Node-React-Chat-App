@@ -30,7 +30,7 @@ class ChatRoom extends Component {
   componentDidMount() {
     const { history } = this.props;
 
-    if (!this.loggedIn()) {
+    if (this.getToken() && !this.isTokenExpired()) {
       history.push("/login");
     } else {
       try {
@@ -74,8 +74,8 @@ class ChatRoom extends Component {
   }
 
   loggedIn = async () => {
-    const token = localStorage.getItem("user");
-    return !!token && !!this.isTokenExpired(token);
+    const token = localStorage.getItem("id_token");
+    return !!token && !this.isTokenExpired(token);
   };
 
   isTokenExpired = async (token) => {
@@ -177,7 +177,7 @@ class ChatRoom extends Component {
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
 
-    localStorage.removeItem("user");
+    localStorage.clear();
     history.push("/login");
   };
 

@@ -163,6 +163,7 @@ textarea:focus {
   border-radius: 12px !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+  overflow: auto;
 }
 
 .message-col {

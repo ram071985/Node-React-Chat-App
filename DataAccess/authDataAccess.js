@@ -7,7 +7,7 @@ logInUser = async (username, password) => {
   let pool = await pgDataAccess.dbConnection();
   console.log("connected to login");
   try {
-    await pool.query("BEGIN");
+    
     const result = await pool.query("SELECT * FROM users WHERE username = $1", [
       username,
     ]);
@@ -20,6 +20,7 @@ logInUser = async (username, password) => {
         errorMessage: "Incorrect password",
       };
     } else {
+      await pool.query("BEGIN");
       await pool.query(
         "UPDATE users SET last_active_at = NOW() WHERE username = $1",
         [username]
