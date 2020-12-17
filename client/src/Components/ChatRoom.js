@@ -73,6 +73,29 @@ class ChatRoom extends Component {
     columnScroll.scrollTop = columnScroll.scrollHeight;
   }
 
+  loggedIn = async () => {
+    const token = localStorage.getItem("user");
+    return !!token && !!this.isTokenExpired(token);
+  };
+
+  isTokenExpired = async (token) => {
+    try {
+      const decoded = decode(token);
+      if (decoded.exp < Date.now() / 1000) {
+        return true;
+      } else return false;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  getConfirm = async () => {
+    let token = localStorage.getItem("id_token");
+    let answer = decode(token);
+    return answer;
+  };
+
   handleChange = (e) => {
     this.setState({
       errorMessage: "",
@@ -86,11 +109,6 @@ class ChatRoom extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    let newMessage = {
-      id: this.state.currentUser.id,
-      username: this.state.currentUser.username,
-      text: this.state.text,
-    };
 
     this.submitMessage(newMessage);
     this.setState({
@@ -98,7 +116,14 @@ class ChatRoom extends Component {
     });
   };
 
-  submitMessage = async (newMessage) => {
+  submitMessage = async (message) => {
+    let newMessage = {
+      data: {
+        id: this.state.currentUser.id,
+        username: this.state.currentUser.username,
+        text: this.state.text,
+      },
+    };
     await axios
       .post("/api/messages", newMessage)
       .then((res) => console.log(res.data))
@@ -106,8 +131,13 @@ class ChatRoom extends Component {
   };
 
   getUsers = async () => {
+    const token = JSON.parse(localStorage.getItem("id_token"));
     await axios
-      .get("/api/users")
+      .get("/api/users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         this.setState({
           onlineUsers: res.data,
@@ -121,8 +151,13 @@ class ChatRoom extends Component {
   };
 
   getOfflineUsers = async () => {
+    const token = JSON.parse(localStorage.getItem("id_token"));
     await axios
-      .get("/api/users/inactive")
+      .get("/api/users/inactive", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         this.setState({
           offlineUsers: res.data,
@@ -168,6 +203,10 @@ class ChatRoom extends Component {
     if (messageBackground) {
       return messageBackground.style.backgroundColor;
     }
+  };
+
+  getToken = async () => {
+    return localStorage.getItem("id_token");
   };
 
   render() {

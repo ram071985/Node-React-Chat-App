@@ -15,11 +15,6 @@ io.on("connection", (socket) => {
   socket.emit("new_message", "sockets connected");
 });
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Headers", "Content-type,Authorization");
-  next();
-});
-
 app.use("/", express.static(path.join(__dirname, "client/build")));
 
 app.use(express.json()); // for parsing application/json
@@ -39,7 +34,17 @@ app.use("/api/messages", messageRoutes);
 const authRoutes = require("./Routes/authRoutes");
 app.use("/api/authorize", authRoutes);
 
-app.get("/*", jwtMW, async (req, res) => {
+app.get("/api", jwtMW, (req, res) => {
+  console.log("Web Token Checked.");
+  res.send("You are authenticated");
+});
+
+app.get("/", jwtMW, (req, res) => {
+  console.log("Web Token Checked.");
+  res.send("You are authenticated");
+});
+
+app.get("/*", async (req, res) => {
   console.log("Web Token Checked.");
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });

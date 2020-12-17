@@ -1,15 +1,22 @@
 const express = require("express");
+const app = express();
 const router = express.Router();
 const userDataAccess = require("../DataAccess/userDataAccess");
 const socketService = require("../Services/socketService");
-const io = socketService.getIo();
+const exjwt = require("express-jwt");
+require("dotenv").config();
 
-router.get("/", async (req, res) => {
+const jwtMW = exjwt({
+  secret: process.env.SECRET,
+  algorithms: ["HS256"],
+});
+ 
+router.get("/", jwtMW, async (req, res) => {
   const users = await userDataAccess.queryUsers();
   res.send(users);
 });
 
-router.get("/inactive", async (req, res) => {
+router.get("/inactive", jwtMW, async (req, res) => {
   const users = await userDataAccess.queryInactiveUsers();
   res.send(users);
 });
