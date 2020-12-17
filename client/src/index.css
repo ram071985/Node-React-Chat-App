@@ -180,6 +180,23 @@ textarea:focus {
   overflow: auto;
 }
 
+.message-col::-webkit-scrollbar {
+  background: rgb(0, 0, 0);
+}
+
+.message-col::-webkit-scrollbar-thumb {
+  background: rgb(49, 49, 49);
+}
+
+.user-col::-webkit-scrollbar {
+  background: rgb(0, 0, 0);
+}
+
+.user-col::-webkit-scrollbar-thumb {
+  background: rgb(49, 49, 49);
+  border-radius: 6px;
+}
+
 .type-col {
   height: 7%;
   display: block !important;
