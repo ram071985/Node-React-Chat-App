@@ -30,7 +30,7 @@ class ChatRoom extends Component {
   componentDidMount() {
     const { history } = this.props;
 
-    if (this.getToken() && !this.isTokenExpired()) {
+    if (!this.getToken() && this.isTokenExpired()) {
       history.push("/login");
     } else {
       try {
@@ -173,12 +173,14 @@ class ChatRoom extends Component {
     const { currentUser } = this.state;
 
     await axios
-      .post("/api/logout")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-
-    localStorage.clear();
-    history.push("/login");
+      .post("/api/logout", currentUser.username)
+      .then((res) => {
+        localStorage.clear();
+        history.push("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   getMessages = async () => {
@@ -210,6 +212,8 @@ class ChatRoom extends Component {
   };
 
   render() {
+    const { history } = this.props;
+
     const renderMessages = this.state.messages.map((message, index) => (
       <div id="bubble-container" className="container">
         <div className="container avatar-container">
@@ -259,6 +263,8 @@ class ChatRoom extends Component {
         {user.username}
       </h5>
     ));
+
+    console.log(this.state.confirm);
 
     if (this.state.loaded === true) {
       if (this.state.confirm) {
@@ -327,6 +333,7 @@ class ChatRoom extends Component {
         return null;
       }
     } else {
+      history.push("/login");
       return null;
     }
   }
