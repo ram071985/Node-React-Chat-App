@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { User } from "react-feather";
 import { Form, Button, Image } from "react-bootstrap";
 import axios from "axios";
 import io from "socket.io-client";
 import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg";
 import decode from "jwt-decode";
+import refreshTokenService from "../../../Services/refreshTokenService.js";
 
 let socket;
 
@@ -30,7 +30,7 @@ class ChatRoom extends Component {
   componentDidMount() {
     const { history } = this.props;
 
-    if (!this.getToken() && this.isTokenExpired()) {
+    if (!this.getToken()) {
       history.push("/login");
     } else {
       try {
@@ -71,6 +71,10 @@ class ChatRoom extends Component {
   componentDidUpdate() {
     const columnScroll = document.querySelector(".message-col");
     columnScroll.scrollTop = columnScroll.scrollHeight;
+    if (this.isTokenExpired) {
+      const token = refreshTokenService.refreshToken(this.state.currentUser.username);
+      localStorage.setItem("id_token", token.secretToken)
+    }
   }
 
   loggedIn = async () => {
@@ -266,76 +270,64 @@ class ChatRoom extends Component {
 
     console.log(this.state.confirm);
 
-    if (this.state.loaded === true) {
-      if (this.state.confirm) {
-        console.log("confirmed!");
-
-        return (
-          <div className="container-fluid chatroom-container">
-            <div className="container d-inline-block left-container">
-              <div className="d-inline-block user-col">
-                <h5 className="d-inline-block user-heading">Member List</h5>
-                <Form inline>
-                  <Button
-                    onClick={this.handleLogOut}
-                    className="d-inline logout-button mr-2"
-                    variant="outline-dark"
-                  >
-                    Log Out
-                  </Button>{" "}
-                </Form>
-                <h6 className="online-text">Online (4 Members)</h6>
-                <div className="container d-block users-list-container">
-                  <h6 className="users-list">{renderUsers}</h6>
-                  <hr className="onoff-hr" />
-                  <h6 className="offline-text">Offline (4 Members)</h6>
-                  <h6 className="users-list">{renderOfflineUsers}</h6>
-                </div>
-              </div>
-            </div>
-            <div className="container d-inline-block right-container">
-              <div className="d-inline-block message-col">
-                <h5 className="chatroom-name">#General</h5>
-                <p className="message-text">{renderMessages}</p>
-              </div>
-              <div className="d-inline-block type-col">
-                {" "}
-                <Form
-                  className="justify-content-center message-form"
-                  onSubmit={this.handleSubmit}
-                  inline
-                >
-                  <Form.Group>
-                    <Form.Control
-                      name="text"
-                      onChange={this.handleChange}
-                      className="message-input"
-                      size="sm"
-                      type="input"
-                      placeholder="Say something"
-                    />
-                  </Form.Group>
-                  <Button
-                    id="message-button"
-                    className="d-inline-inline"
-                    type="submit"
-                    variant="outline-secondary"
-                  >
-                    Send
-                  </Button>{" "}
-                </Form>
-              </div>
+    return (
+      <div className="container-fluid chatroom-container">
+        <div className="container d-inline-block left-container">
+          <div className="d-inline-block user-col">
+            <h5 className="d-inline-block user-heading">Member List</h5>
+            <Form inline>
+              <Button
+                onClick={this.handleLogOut}
+                className="d-inline logout-button mr-2"
+                variant="outline-dark"
+              >
+                Log Out
+              </Button>{" "}
+            </Form>
+            <h6 className="online-text">Online (4 Members)</h6>
+            <div className="container d-block users-list-container">
+              <h6 className="users-list">{renderUsers}</h6>
+              <hr className="onoff-hr" />
+              <h6 className="offline-text">Offline (4 Members)</h6>
+              <h6 className="users-list">{renderOfflineUsers}</h6>
             </div>
           </div>
-        );
-      } else {
-        console.log("not confirmed!");
-        return null;
-      }
-    } else {
-      history.push("/login");
-      return null;
-    }
+        </div>
+        <div className="container d-inline-block right-container">
+          <div className="d-inline-block message-col">
+            <h5 className="chatroom-name">#General</h5>
+            <p className="message-text">{renderMessages}</p>
+          </div>
+          <div className="d-inline-block type-col">
+            {" "}
+            <Form
+              className="justify-content-center message-form"
+              onSubmit={this.handleSubmit}
+              inline
+            >
+              <Form.Group>
+                <Form.Control
+                  name="text"
+                  onChange={this.handleChange}
+                  className="message-input"
+                  size="sm"
+                  type="input"
+                  placeholder="Say something"
+                />
+              </Form.Group>
+              <Button
+                id="message-button"
+                className="d-inline-inline"
+                type="submit"
+                variant="outline-secondary"
+              >
+                Send
+              </Button>{" "}
+            </Form>
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 

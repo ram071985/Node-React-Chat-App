@@ -7,7 +7,6 @@ logInUser = async (username, password) => {
   let pool = await pgDataAccess.dbConnection();
   console.log("connected to login");
   try {
-    
     const result = await pool.query("SELECT * FROM users WHERE username = $1", [
       username,
     ]);
@@ -34,7 +33,7 @@ logInUser = async (username, password) => {
     let token = jwt.sign(
       { username: result.rows[0].username },
       process.env.SECRET,
-      { expiresIn: 129600 }
+      { expiresIn: 900000 }
     );
     let successfulLogin = {
       isSuccesful: true,
