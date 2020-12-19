@@ -33,7 +33,7 @@ logInUser = async (username, password) => {
     let token = jwt.sign(
       { username: result.rows[0].username },
       process.env.SECRET,
-      { expiresIn: 900000 }
+      { expiresIn: 30 }
     );
     let successfulLogin = {
       isSuccesful: true,

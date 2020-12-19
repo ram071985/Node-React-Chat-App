@@ -4,6 +4,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg";
 import decode from "jwt-decode";
+import ExpiredModal from "./ExpiredTokenModal";
 
 let socket;
 
@@ -22,6 +23,7 @@ class ChatRoom extends Component {
       endpoint: "http://localhost:3000",
       confirm: null,
       loaded: false,
+      setModalShow: false,
     };
     socket = io(this.state.endpoint);
   }
@@ -65,6 +67,8 @@ class ChatRoom extends Component {
         messages: [...this.state.messages, parsedMessage],
       });
     });
+
+    this.updateToken();
   }
 
   componentDidUpdate() {
@@ -72,16 +76,26 @@ class ChatRoom extends Component {
     columnScroll.scrollTop = columnScroll.scrollHeight;
   }
 
+  updateToken = async () => {
+    const token = this.getToken();
+    returnInterval = setInterval(() => {
+      if (this.isTokenExpired(token)) {
+        this.setState({
+          setModalShow: true,
+        });
+      }
+      return returnInterval;
+    }, 20000);
+  };
+
   loggedIn = async () => {
     const token = localStorage.getItem("id_token");
     return !!token && !this.isTokenExpired(token);
   };
 
   isTokenExpired = async (token) => {
-    const storage = localStorage.getItem("id_token");
     try {
-      const decoded = decode(storage);
-      console.log(decoded.exp);
+      const decoded = decode(token);
       if (decoded.exp < Date.now() / 1000) {
         return true;
       } else return false;
@@ -114,6 +128,12 @@ class ChatRoom extends Component {
     this.submitMessage(newMessage);
     this.setState({
       text: "",
+    });
+  };
+
+  handleClose = async () => {
+    this.setState({
+      setModalShow: false,
     });
   };
 
@@ -213,7 +233,7 @@ class ChatRoom extends Component {
   };
 
   render() {
-    console.log(this.isTokenExpired())
+    console.log(this.isTokenExpired());
     const { history } = this.props;
 
     const renderMessages = this.state.messages.map((message, index) => (
@@ -270,6 +290,10 @@ class ChatRoom extends Component {
 
     return (
       <div className="container-fluid chatroom-container">
+        <ExpiredModal
+          show={this.state.setModalShow}
+          onHide={this.handleClose}
+        />
         <div className="container d-inline-block left-container">
           <div className="d-inline-block user-col">
             <h5 className="d-inline-block user-heading">Member List</h5>
