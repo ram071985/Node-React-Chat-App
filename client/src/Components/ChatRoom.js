@@ -31,19 +31,8 @@ class ChatRoom extends Component {
   componentDidMount() {
     const { history } = this.props;
 
-    if (!this.getToken()) {
+    if (localStorage.getItem("id_token" === null)) {
       history.push("/login");
-    } else {
-      try {
-        const confirm = this.getConfirm();
-        console.log("confirmation is:", confirm);
-        this.setState({
-          confirm: confirm,
-          loaded: true,
-        });
-      } catch (err) {
-        console.log(err);
-      }
     }
 
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -68,7 +57,7 @@ class ChatRoom extends Component {
       });
     });
 
-    this.updateToken();
+    //this.updateToken();
   }
 
   componentDidUpdate() {
@@ -77,6 +66,7 @@ class ChatRoom extends Component {
   }
 
   updateToken = async () => {
+    let returnInterval;
     const token = this.getToken();
     returnInterval = setInterval(() => {
       if (this.isTokenExpired(token)) {
@@ -85,7 +75,7 @@ class ChatRoom extends Component {
         });
       }
       return returnInterval;
-    }, 20000);
+    }, 5000);
   };
 
   loggedIn = async () => {
@@ -108,7 +98,11 @@ class ChatRoom extends Component {
   getConfirm = async () => {
     let token = localStorage.getItem("id_token");
     let answer = decode(token);
-    return answer;
+    try {
+      return answer;
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   handleChange = (e) => {
@@ -131,7 +125,9 @@ class ChatRoom extends Component {
     });
   };
 
-  handleClose = async () => {
+  handleClose = async (e) => {
+    localStorage.clear();
+    const { history } = this.props;
     this.setState({
       setModalShow: false,
     });
@@ -233,7 +229,6 @@ class ChatRoom extends Component {
   };
 
   render() {
-    console.log(this.isTokenExpired());
     const { history } = this.props;
 
     const renderMessages = this.state.messages.map((message, index) => (

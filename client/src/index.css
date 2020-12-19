@@ -373,3 +373,8 @@ hr.onoff-hr {
   height: 35px;
   width: 35px;
 }
+
+div.modal-content {
+  color: white;
+  background-color: rgb(8, 8, 8);
+}
