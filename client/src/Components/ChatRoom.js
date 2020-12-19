@@ -4,7 +4,6 @@ import axios from "axios";
 import io from "socket.io-client";
 import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg";
 import decode from "jwt-decode";
-import refreshTokenService from "../../../Services/refreshTokenService.js";
 
 let socket;
 
@@ -71,10 +70,6 @@ class ChatRoom extends Component {
   componentDidUpdate() {
     const columnScroll = document.querySelector(".message-col");
     columnScroll.scrollTop = columnScroll.scrollHeight;
-    if (this.isTokenExpired) {
-      const token = refreshTokenService.refreshToken(this.state.currentUser.username);
-      localStorage.setItem("id_token", token.secretToken)
-    }
   }
 
   loggedIn = async () => {
@@ -83,8 +78,10 @@ class ChatRoom extends Component {
   };
 
   isTokenExpired = async (token) => {
+    const storage = localStorage.getItem("id_token");
     try {
-      const decoded = decode(token);
+      const decoded = decode(storage);
+      console.log(decoded);
       if (decoded.exp < Date.now() / 1000) {
         return true;
       } else return false;
@@ -212,10 +209,11 @@ class ChatRoom extends Component {
   };
 
   getToken = async () => {
-    return localStorage.getItem("id_token");
+    return JSON.parse(localStorage.getItem("id_token"));
   };
 
   render() {
+    console.log(this.isTokenExpired())
     const { history } = this.props;
 
     const renderMessages = this.state.messages.map((message, index) => (

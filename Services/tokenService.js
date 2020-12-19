@@ -1,9 +1,9 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
-refreshToken = async (username) => {
+getToken = async (username) => {
   let token = jwt.sign({ username: username }, process.env.SECRET, {
-    expiresIn: 129600,
+    expiresIn: 900000,
   });
 
   newToken = {
@@ -13,4 +13,4 @@ refreshToken = async (username) => {
   return newToken;
 };
 
-module.exports = { refreshToken };
+module.exports = { getToken };
