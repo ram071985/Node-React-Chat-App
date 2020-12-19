@@ -81,7 +81,7 @@ class ChatRoom extends Component {
     const storage = localStorage.getItem("id_token");
     try {
       const decoded = decode(storage);
-      console.log(decoded);
+      console.log(decoded.exp);
       if (decoded.exp < Date.now() / 1000) {
         return true;
       } else return false;
