@@ -29,35 +29,35 @@ class ChatRoom extends Component {
   }
 
   componentDidMount() {
+    console.log(this.getToken());
+    console.log("yo");
     const { history } = this.props;
-    if (!this.getToken()) {
+    if (localStorage.getItem("id_token") === null) {
       history.push("/login");
-    }
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    } else {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
 
-    this.setState({
-      currentUser: storedUser,
-    });
-    if (this.getToken()) {
+      this.setState({
+        currentUser: storedUser,
+      });
+
       this.getUsers();
       window.setInterval(this.getUsers, 20000);
       this.getMessages();
-    }
 
-    socket.on("new_message", (message) => {
-      console.log("connection to message socket:" + message);
-    });
-
-    socket.on("message", (chatMessage) => {
-      console.log("message sent back");
-      const parsedMessage = JSON.parse(chatMessage);
-
-      this.setState({
-        messages: [...this.state.messages, parsedMessage],
+      socket.on("new_message", (message) => {
+        console.log("connection to message socket:" + message);
       });
-    });
 
-    if (this.getToken()) {
+      socket.on("message", (chatMessage) => {
+        console.log("message sent back");
+        const parsedMessage = JSON.parse(chatMessage);
+
+        this.setState({
+          messages: [...this.state.messages, parsedMessage],
+        });
+      });
+
       this.updateToken();
     }
   }
@@ -154,7 +154,7 @@ class ChatRoom extends Component {
     await axios
       .get("/api/users", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${this.getToken()}`,
         },
       })
       .then((res) => {
@@ -283,8 +283,6 @@ class ChatRoom extends Component {
         {user.username}
       </h5>
     ));
-
-    console.log(this.state.confirm);
 
     return (
       <div className="container-fluid chatroom-container">

@@ -34,16 +34,6 @@ app.use("/api/messages", messageRoutes);
 const authRoutes = require("./Routes/authRoutes");
 app.use("/api/authorize", authRoutes);
 
-app.get("/api", jwtMW, (req, res) => {
-  console.log("Web Token Checked.");
-  res.send("You are authenticated");
-});
-
-app.get("/", jwtMW, (req, res) => {
-  console.log("Web Token Checked.");
-  res.send("You are authenticated");
-});
-
 app.get("/*", async (req, res) => {
   console.log("Web Token Checked.");
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
