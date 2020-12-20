@@ -30,19 +30,19 @@ class ChatRoom extends Component {
 
   componentDidMount() {
     const { history } = this.props;
-
-    if (localStorage.getItem("id_token" === null)) {
+    if (!this.getToken()) {
       history.push("/login");
     }
-
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     this.setState({
       currentUser: storedUser,
     });
-    this.getUsers();
-    window.setInterval(this.getUsers, 20000);
-    this.getMessages();
+    if (this.getToken()) {
+      this.getUsers();
+      window.setInterval(this.getUsers, 20000);
+      this.getMessages();
+    }
 
     socket.on("new_message", (message) => {
       console.log("connection to message socket:" + message);
@@ -57,7 +57,9 @@ class ChatRoom extends Component {
       });
     });
 
-    //this.updateToken();
+    if (this.getToken()) {
+      this.updateToken();
+    }
   }
 
   componentDidUpdate() {
@@ -185,12 +187,13 @@ class ChatRoom extends Component {
       });
   };
 
-  handleLogOut = async () => {
+  handleLogOut = async (e) => {
+    e.preventDefault();
     const { history } = this.props;
     const { currentUser } = this.state;
 
     await axios
-      .post("/api/logout", currentUser.username)
+      .post("/api/authorize/logout", currentUser.username)
       .then((res) => {
         localStorage.clear();
         history.push("/login");
@@ -287,14 +290,14 @@ class ChatRoom extends Component {
       <div className="container-fluid chatroom-container">
         <ExpiredModal
           show={this.state.setModalShow}
-          onHide={this.handleClose}
+          onHide={this.handleLogOut}
         />
         <div className="container d-inline-block left-container">
           <div className="d-inline-block user-col">
             <h5 className="d-inline-block user-heading">Member List</h5>
-            <Form inline>
+            <Form onSubmit={this.handleLogOut} inline>
               <Button
-                onClick={this.handleLogOut}
+                type="submit"
                 className="d-inline logout-button mr-2"
                 variant="outline-dark"
               >
