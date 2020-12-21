@@ -69,32 +69,23 @@ class ChatRoom extends Component {
 
   checkToken = async () => {
     let returnInterval;
-    const token = this.getToken();
+    const token = localStorage.getItem("id_token");
+    const decoded = decode(token);
+
     returnInterval = setInterval(() => {
-      if (this.isTokenExpired(token)) {
+      if (decoded.exp < Date.now() / 1000) {
         this.setState({
           setModalShow: true,
         });
       }
       return returnInterval;
-    }, 900000);
+    }, 50000);
+    console.log("decoded dates", decoded)
   };
 
   loggedIn = async () => {
     const token = localStorage.getItem("id_token");
     return !!token && !this.isTokenExpired(token);
-  };
-
-  isTokenExpired = async (token) => {
-    try {
-      const decoded = decode(token);
-      if (decoded.exp < Date.now() / 1000) {
-        return true;
-      } else return false;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
   };
 
   getConfirm = async () => {
@@ -268,7 +259,7 @@ class ChatRoom extends Component {
             background:
               message.user_id !== this.state.currentUser.id
                 ? "rgb(48, 48, 48)"
-                : "rgb(177, 47, 30)",
+                : "rgb(170, 77, 84)",
           }}
           className="container d-block mt-3"
         >
@@ -291,6 +282,7 @@ class ChatRoom extends Component {
       </h5>
     ));
 
+    console.log("time now", Date.now() / 1000);
     return (
       <div className="container-fluid chatroom-container">
         <ExpiredModal
@@ -300,10 +292,10 @@ class ChatRoom extends Component {
         <div className="container d-inline-block left-container">
           <div className="d-inline-block user-col">
             <h5 className="d-inline-block user-heading">Member List</h5>
-            <Form onSubmit={this.handleLogOut} inline>
+            <Form className="logout-form" onSubmit={this.handleLogOut} inline>
               <Button
                 type="submit"
-                className="d-inline logout-button mr-2"
+                className="d-inline logout-button"
                 variant="outline-dark"
               >
                 Log Out
@@ -323,7 +315,7 @@ class ChatRoom extends Component {
             <h5 className="chatroom-name">#General</h5>
             <p className="message-text">{renderMessages}</p>
           </div>
-          <div className="d-inline-block type-col">
+          <div className="container d-inline-block type-col">
             {" "}
             <Form
               className="justify-content-center message-form"
