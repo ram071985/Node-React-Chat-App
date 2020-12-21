@@ -44,6 +44,10 @@ logInUser = async (username, password) => {
     return successfulLogin;
   } catch (err) {
     console.log(err);
+    return {
+      isSuccesful: false,
+      errorMessage:"This username does not exist. Please register."
+    }
   } finally {
     pool.release();
   }

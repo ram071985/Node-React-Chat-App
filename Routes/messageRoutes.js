@@ -2,13 +2,19 @@ const express = require("express");
 const router = express.Router();
 const messageDataAccess = require("../DataAccess/messageDataAccess");
 const socketService = require("../Services/socketService");
+const exjwt = require("express-jwt");
 const io = socketService.getIo();
 
-router.get("/", async (req, res) => {
+const jwtMW = exjwt({
+  secret: process.env.SECRET,
+  algorithms: ["HS256"],
+});
+
+router.get("/", jwtMW, async (req, res) => {
   const messages = await messageDataAccess.queryMessages();
   res.send(messages);
 });
-router.post("/", async (req, res) => {
+router.post("/", jwtMW, async (req, res) => {
   let newMessage = {
     id: req.body.id,
     username: req.body.username,

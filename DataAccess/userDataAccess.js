@@ -33,13 +33,8 @@ createUser = async (username, password) => {
 queryUsers = async () => {
   let pool = await pgDataAccess.dbConnection();
   try {
-    await pool.query("BEGIN");
-    await pool.query(
-      "UPDATE users SET is_logged_in = false WHERE last_active_at < NOW() - INTERVAL '2 minutes';"
-    );
-    await pool.query("COMMIT");
     const results = await pool.query(
-      "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '2 minutes' AND is_logged_in = true;"
+      "SELECT * FROM users WHERE is_logged_in = true;"
     );
     return results.rows;
   } catch (err) {
@@ -52,7 +47,9 @@ queryUsers = async () => {
 queryInactiveUsers = async () => {
   let pool = await pgDataAccess.dbConnection();
   try {
-    const results = await pool.query("SELECT * FROM users WHERE is_logged_in = false;");
+    const results = await pool.query(
+      "SELECT * FROM users WHERE is_logged_in = false;"
+    );
     return results.rows;
   } catch (err) {
   } finally {

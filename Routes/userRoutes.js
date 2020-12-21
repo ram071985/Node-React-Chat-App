@@ -1,8 +1,6 @@
 const express = require("express");
-const app = express();
 const router = express.Router();
 const userDataAccess = require("../DataAccess/userDataAccess");
-const socketService = require("../Services/socketService");
 const exjwt = require("express-jwt");
 require("dotenv").config();
 

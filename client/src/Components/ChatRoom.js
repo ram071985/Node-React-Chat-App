@@ -121,7 +121,12 @@ class ChatRoom extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
 
-    this.submitMessage(newMessage);
+    const data = {
+      id: this.state.currentUser.id,
+      username: this.state.currentUser.username,
+      text: this.state.text,
+    };
+    this.submitMessage(data);
     this.setState({
       text: "",
     });
@@ -136,15 +141,12 @@ class ChatRoom extends Component {
   };
 
   submitMessage = async (message) => {
-    let newMessage = {
-      data: {
-        id: this.state.currentUser.id,
-        username: this.state.currentUser.username,
-        text: this.state.text,
-      },
+    const token = JSON.parse(localStorage.getItem("id_token"));
+    const headers = {
+      Authorization: `Bearer ${token}`,
     };
     await axios
-      .post("/api/messages", newMessage)
+      .post("/api/messages", message, {headers})
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
   };
@@ -154,7 +156,7 @@ class ChatRoom extends Component {
     await axios
       .get("/api/users", {
         headers: {
-          Authorization: `Bearer ${this.getToken()}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
@@ -204,8 +206,13 @@ class ChatRoom extends Component {
   };
 
   getMessages = async () => {
+    const token = JSON.parse(localStorage.getItem("id_token"));
     await axios
-      .get("/api/messages")
+      .get("/api/messages", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         const sortMessages = res.data.sort(
           (a, b) => parseFloat(a.id) - parseFloat(b.id)
@@ -232,7 +239,7 @@ class ChatRoom extends Component {
   };
 
   render() {
-    const { history } = this.props;
+    console.log(this.state.currentUser.id);
 
     const renderMessages = this.state.messages.map((message, index) => (
       <div id="bubble-container" className="container">
