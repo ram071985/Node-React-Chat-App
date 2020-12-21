@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authDataAccess = require("../DataAccess/authDataAccess");
+const tokenService = require("../Services/tokenService.js");
 
 router.post("/login", async (req, res) => {
  
@@ -25,5 +26,13 @@ router.post("/logout", async (req, res) => {
 
   res.status(201).send({ logOutUser });
 });
+
+router.post("/token", async (req, res) => {
+  const username = req.body.username;
+
+  let newToken = await tokenService.getToken(username);
+
+  res.status(201).send({ newToken });
+})
 
 module.exports = router;

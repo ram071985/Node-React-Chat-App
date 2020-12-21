@@ -77,7 +77,21 @@ class ChatRoom extends Component {
         });
       }
       return returnInterval;
-    }, 5000);
+    }, 900000);
+  };
+
+  newToken = async () => {
+    const { currentUser } = this.state;
+    await axios
+      .get("/api/authorize/token", currentUser.username)
+      .then((res) => {
+        localStorage.removeItem("id_token", res.data.newToken.secretToken);
+        localStorage.setItem("id_token", );
+        history.push("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   loggedIn = async () => {
