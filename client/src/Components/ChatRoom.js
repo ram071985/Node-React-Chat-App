@@ -58,7 +58,7 @@ class ChatRoom extends Component {
         });
       });
 
-      this.updateToken();
+      this.checkToken();
     }
   }
 
@@ -67,7 +67,7 @@ class ChatRoom extends Component {
     columnScroll.scrollTop = columnScroll.scrollHeight;
   }
 
-  updateToken = async () => {
+  checkToken = async () => {
     let returnInterval;
     const token = this.getToken();
     returnInterval = setInterval(() => {
@@ -78,20 +78,6 @@ class ChatRoom extends Component {
       }
       return returnInterval;
     }, 900000);
-  };
-
-  newToken = async () => {
-    const { currentUser } = this.state;
-    await axios
-      .get("/api/authorize/token", currentUser.username)
-      .then((res) => {
-        localStorage.removeItem("id_token", res.data.newToken.secretToken);
-        localStorage.setItem("id_token", );
-        history.push("/login");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   loggedIn = async () => {
