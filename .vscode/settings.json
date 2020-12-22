@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/83fa74f0-dd58-48aa-8e2d-3b5847a5ad62/resourceGroups/NodeChat-rg/providers/Microsoft.Web/sites/reidNodeChat",
+    "appService.deploySubpath": "."
+}
