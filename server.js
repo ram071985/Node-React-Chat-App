@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = process.dev.env.PORT;
 const path = require("path");
 const pgDataAccess = require("./DataAccess/pgDataAccess.js");
 const http = require("http");
