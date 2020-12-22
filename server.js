@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,7 +10,7 @@ const jwt = require("jsonwebtoken");
 const exjwt = require("express-jwt");
 const socketService = require("./Services/socketService");
 const io = socketService.getIo(server);
-require("dotenv").config();
+
 
 io.on("connection", (socket) => {
   socket.emit("new_message", "sockets connected");
