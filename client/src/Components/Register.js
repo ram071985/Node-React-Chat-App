@@ -45,19 +45,21 @@ class Register extends Component {
   };
 
   registerUser = async (user) => {
+    const { history } = this.props;
     await axios
       .post("/api/users", user)
       .then((res) => {
-        console.log(res);
+        history.push("/login");
       })
       .catch((err) => {
         if (err.response.data.message === "username exists") {
           this.setState({
-            errorMessage: "Yo dawg, this username exists.",
+            errorMessage:
+              "The username entered is already taken. Please try again.",
             setShow: true,
           });
         }
-        console.log(err.response.data.message)
+        console.log(err.response.data.message);
       });
   };
 
@@ -87,6 +89,7 @@ class Register extends Component {
             <Form.Group>
               <Form.Label className="mt-2 login-label">Username</Form.Label>
               <Form.Control
+                autoComplete="off"
                 name="username"
                 className="login-form-control"
                 type="input"
@@ -96,6 +99,7 @@ class Register extends Component {
             <Form.Group>
               <Form.Label className="login-label">Password</Form.Label>
               <Form.Control
+                autoComplete="off"
                 name="password"
                 className="login-form-control"
                 type="input"
@@ -104,7 +108,7 @@ class Register extends Component {
             </Form.Group>
             <Button
               type="submit"
-              className="mt-2 d-inline-block"
+              className="mt-2 d-inline-block auth-button"
               variant="light"
             >
               Submit
@@ -114,7 +118,7 @@ class Register extends Component {
         <Row className="justify-content-center">
           <Button
             onClick={this.handleClick}
-            className="mt-4 mb-3 d-inline-block"
+            className="mt-4 mb-3 d-inline-block auth-button"
             variant="light"
           >
             I Have An Account

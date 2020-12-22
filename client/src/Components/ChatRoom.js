@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Button, Image } from "react-bootstrap";
+import { Form, Button, Image, Spinner } from "react-bootstrap";
 import axios from "axios";
 import io from "socket.io-client";
 import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg";
@@ -24,6 +24,7 @@ class ChatRoom extends Component {
       confirm: null,
       loaded: false,
       setModalShow: false,
+      loading: false,
     };
     socket = io(this.state.endpoint);
   }
@@ -59,6 +60,8 @@ class ChatRoom extends Component {
       });
 
       this.checkToken();
+      const columnScroll = document.querySelector(".message-col");
+      columnScroll.scrollTop = columnScroll.scrollHeight;
     }
   }
 
@@ -80,7 +83,7 @@ class ChatRoom extends Component {
       }
       return returnInterval;
     }, 50000);
-    console.log("decoded dates", decoded)
+    console.log("decoded dates", decoded);
   };
 
   loggedIn = async () => {
@@ -137,12 +140,15 @@ class ChatRoom extends Component {
       Authorization: `Bearer ${token}`,
     };
     await axios
-      .post("/api/messages", message, {headers})
+      .post("/api/messages", message, { headers })
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
   };
 
   getUsers = async () => {
+    this.setState({
+      loading: true,
+    });
     const token = JSON.parse(localStorage.getItem("id_token"));
     await axios
       .get("/api/users", {
@@ -160,6 +166,9 @@ class ChatRoom extends Component {
         console.log(err);
       });
     this.getOfflineUsers();
+    this.setState({
+      loading: false,
+    });
   };
 
   getOfflineUsers = async () => {
@@ -269,17 +278,21 @@ class ChatRoom extends Component {
     ));
 
     const renderUsers = this.state.onlineUsers.map((user, index) => (
-      <h5 className="username-text" key={index}>
-        <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
-        {user.username}
-      </h5>
+      <div>
+        <h5 className="username-text" key={index}>
+          <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
+          {user.username}
+        </h5>
+      </div>
     ));
 
     const renderOfflineUsers = this.state.offlineUsers.map((user, index) => (
-      <h5 className="username-text" key={index}>
-        <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
-        {user.username}
-      </h5>
+      <div>
+        <h5 className="username-text" key={index}>
+          <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
+          {user.username}
+        </h5>
+      </div>
     ));
 
     console.log("time now", Date.now() / 1000);
@@ -303,7 +316,13 @@ class ChatRoom extends Component {
             </Form>
             <h6 className="online-text">Online (4 Members)</h6>
             <div className="container d-block users-list-container">
-              <h6 className="users-list">{renderUsers}</h6>
+              <h6 className="users-list">
+                {this.state.onlineUsers === null ? (
+                  <Spinner className="user-spinner" animation="grow" variant="warning" />
+                ) : (
+                  renderUsers
+                )}
+              </h6>
               <hr className="onoff-hr" />
               <h6 className="offline-text">Offline (4 Members)</h6>
               <h6 className="users-list">{renderOfflineUsers}</h6>
@@ -311,8 +330,8 @@ class ChatRoom extends Component {
           </div>
         </div>
         <div className="container d-inline-block right-container">
+          <h5 className="chatroom-name">#General</h5>
           <div className="d-inline-block message-col">
-            <h5 className="chatroom-name">#General</h5>
             <p className="message-text">{renderMessages}</p>
           </div>
           <div className="container d-inline-block type-col">
@@ -324,6 +343,7 @@ class ChatRoom extends Component {
             >
               <Form.Group>
                 <Form.Control
+                  autoComplete="off"
                   name="text"
                   onChange={this.handleChange}
                   className="message-input"

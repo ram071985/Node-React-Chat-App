@@ -12,7 +12,6 @@ logInUser = async (username, password) => {
     ]);
     const saltedPassword = result.rows[0].password;
     const match = await bcrypt.compare(password, saltedPassword);
-
     if (!match) {
       return {
         isSuccessful: false,
@@ -46,8 +45,8 @@ logInUser = async (username, password) => {
     console.log(err);
     return {
       isSuccesful: false,
-      errorMessage:"This username does not exist. Please register."
-    }
+      errorMessage: "unregistered user",
+    };
   } finally {
     pool.release();
   }

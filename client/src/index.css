@@ -167,7 +167,6 @@ textarea:focus {
 }
 
 .message-col {
-  margin-top: 3em;
   width: 100%;
   height: 72.2%;
   opacity: 0.6;
@@ -244,6 +243,7 @@ form.message-form {
   margin-top: .6em !important;
   margin-right: .5em;
   margin-left: .5em;
+  min-height: 2.3em;
 }
 
 .message-input {
@@ -326,8 +326,10 @@ margin-right: 2em;
 .chatroom-name {
   font-family: 'Raleway', sans-serif;
   margin-top: 1em;
+  margin-bottom: .2em;
   margin-left: 1em;
-  color: white;
+  color: rgb(202, 202, 202);
+  opacity: 0.8;
 }
 
 .avatar-container {
@@ -378,4 +380,13 @@ hr.onoff-hr {
 div.modal-content {
   color: white;
   background-color: rgb(46, 46, 46);
+}
+
+div.spinner-grow.user-spinner {
+  margin-left: 45px;
+  margin-bottom: 5px;
+}
+
+.alert-danger.auth-alert {
+  font-weight: 500;
 }

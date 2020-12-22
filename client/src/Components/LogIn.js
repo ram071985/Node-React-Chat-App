@@ -67,6 +67,13 @@ class LogIn extends Component {
             setShow: true,
           });
         }
+        if (err.response.data.message === "unregistered user") {
+          this.setState({
+            errorMessage:
+              "The username entered doesn't exist. Please register.",
+            setShow: true,
+          });
+        }
       });
   };
 
@@ -100,11 +107,13 @@ class LogIn extends Component {
                 onChange={this.handleChange}
                 className="login-form-control"
                 type="input"
+                autoComplete="off"
               />
             </Form.Group>
             <Form.Group>
               <Form.Label className="login-label">Password</Form.Label>
               <Form.Control
+                autoComplete="off"
                 name="password"
                 onChange={this.handleChange}
                 className="login-form-control"

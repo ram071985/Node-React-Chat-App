@@ -16,7 +16,7 @@ class AlertComponent extends Component {
               display: this.props.errorMessage !== "" ? "block" : "none",
             }}
             show={this.props.setShow}
-            className="d-block"
+            className="d-block auth-alert"
             variant="danger"
           >
             <p>{this.props.errorMessage}</p>

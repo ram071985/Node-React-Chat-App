@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const authDataAccess = require("../DataAccess/authDataAccess");
+const authDataAccess = require("../DataAccess/authDataAccess")
 
 router.post("/login", async (req, res) => {
  
