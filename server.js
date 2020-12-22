@@ -21,11 +21,6 @@ app.use("/", express.static(path.join(__dirname, "client/build")));
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: false }));
 
-const jwtMW = exjwt({
-  secret: process.env.SECRET,
-  algorithms: ["RS256"],
-});
-
 const userRoutes = require("./Routes/userRoutes");
 app.use("/api/users", userRoutes);
 

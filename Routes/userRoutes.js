@@ -6,7 +6,7 @@ const exjwt = require("express-jwt");
 require("dotenv").config();
 
 const jwtMW = exjwt({
-  secret: process.env.SECRET,
+  secret: process.env.JWT_KEY,
   algorithms: ["HS256"],
 });
  

@@ -7,7 +7,7 @@ const exjwt = require("express-jwt");
 const io = socketService.getIo();
 
 const jwtMW = exjwt({
-  secret: process.env.SECRET,
+  secret: process.env.JWT_KEY,
   algorithms: ["HS256"],
 });
 
