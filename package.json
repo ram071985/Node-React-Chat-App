@@ -16,6 +16,9 @@
     "socket.io": "^2.3.0",
     "toastr": "^2.1.4"
   },
+  "engines": {
+    "node": "12.15.0"
+  },
   "scripts": {
     "client": "npm run watch --prefix client",
     "dev": "concurrently \"nodemon server.js\" \"npm run client\"",
