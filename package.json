@@ -22,7 +22,6 @@
   "scripts": {
     "client": "npm run watch --prefix client",
     "dev": "concurrently \"nodemon server.js\" \"npm run client\"",
-    "start": "node server.js",
     "test": "react-scripts test",
     "debug": "node --inspect server.js",
     "heroku-postbuild": "cd client && npm install && npm run build"
