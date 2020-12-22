@@ -20,8 +20,9 @@
     "node": "12.19.0"
   },
   "scripts": {
+    "client": "npm run watch --prefix client",
     "dev": "concurrently \"nodemon server.js\" \"npm run client\"",
-    "start": "react-scripts start",
+    "start": "node server.js",
     "test": "react-scripts test",
     "debug": "node --inspect server.js"
   },
