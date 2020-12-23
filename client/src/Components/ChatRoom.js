@@ -25,7 +25,7 @@ class ChatRoom extends Component {
       setModalShow: false,
       loading: false,
     };
-    socket = io("http://localhost:3000");
+    socket = io.connect();
   }
 
   componentDidMount() {
