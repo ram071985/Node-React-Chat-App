@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authDataAccess = require("../DataAccess/authDataAccess");
+const socketService = require("../Services/socketService");
 const io = socketService.getIo();
 
 router.post("/login", async (req, res) => {

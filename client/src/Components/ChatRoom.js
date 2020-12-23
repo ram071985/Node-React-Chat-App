@@ -202,7 +202,7 @@ class ChatRoom extends Component {
       });
   };
 
-  handleLogOut = async () => {
+  handleLogOut = async (e) => {
     const { history } = this.props;
     const { currentUser } = this.state;
 
@@ -307,6 +307,7 @@ class ChatRoom extends Component {
       </div>
     ));
 
+    console.log(this.state.currentUser);
     console.log(this.state.messages);
     return (
       <div className="container-fluid chatroom-container">

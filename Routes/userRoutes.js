@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const userDataAccess = require("../DataAccess/userDataAccess");
+const socketService = require("../Services/socketService");
 const exjwt = require("express-jwt");
 const io = socketService.getIo();
 
