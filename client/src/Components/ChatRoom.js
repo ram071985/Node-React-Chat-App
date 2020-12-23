@@ -97,7 +97,7 @@ class ChatRoom extends Component {
         });
       }
       return returnInterval;
-    }, 50000);
+    }, 300000);
     console.log("decoded dates", decoded);
   };
 
@@ -320,7 +320,7 @@ class ChatRoom extends Component {
       <div className="container-fluid chatroom-container">
         <ExpiredModal
           show={this.state.setModalShow}
-          onHide={this.handleLogOut}
+          onHide={this.handleLogOutSubmit}
         />
         <div className="container d-inline-block left-container">
           <div className="d-inline-block user-col">

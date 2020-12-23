@@ -102,7 +102,7 @@ class Register extends Component {
                 autoComplete="off"
                 name="password"
                 className="login-form-control"
-                type="input"
+                type="password"
                 onChange={this.handleChange}
               />
             </Form.Group>

@@ -117,7 +117,7 @@ class LogIn extends Component {
                 name="password"
                 onChange={this.handleChange}
                 className="login-form-control"
-                type="input"
+                type="password"
               />
             </Form.Group>
             <Button
