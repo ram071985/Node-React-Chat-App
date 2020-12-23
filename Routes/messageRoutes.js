@@ -32,6 +32,8 @@ router.post("/", jwtMW, async (req, res) => {
 
   responseMessage.username = newMessage.username;
 
+  res.status(201).send({ responseMessage });
+
   io.emit("message", JSON.stringify(responseMessage));
 });
 module.exports = router;
