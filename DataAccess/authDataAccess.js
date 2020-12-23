@@ -72,4 +72,19 @@ logOutUser = async (username) => {
   }
 };
 
-module.exports = { logInUser, logOutUser };
+updateLogoutUser = async (id) => {
+  let pool = await pgDataAccess.dbConnection();
+  try {
+    await pool.query("BEGIN");
+    await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+    await pool.query("UPDATE users SET is_logged_in = false WHERE id = $1", [
+      id,
+    ]);
+    await pool.query("COMMIT");
+  } catch (err) {
+  } finally {
+    pool.release();
+  }
+};
+
+module.exports = { logInUser, logOutUser, updateLogoutUser };

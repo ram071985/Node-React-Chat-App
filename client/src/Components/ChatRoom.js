@@ -63,19 +63,18 @@ class ChatRoom extends Component {
 
         this.setState({
           onlineUsers: [...this.state.onlineUsers, parsedUser],
-        })
-      })
+        });
+      });
 
       socket.on("users_offline", (userOffline) => {
         const parsedOffline = JSON.parse(userOffline);
 
         this.setState((prevState) => ({
-
-        })
-         
+          onlineUsers: prevState.usersOnline.filter((user) => {
+            return user.id !== parsedOffline;
+          }),
+        }));
       });
-
-      
 
       this.checkToken();
     }
@@ -203,8 +202,7 @@ class ChatRoom extends Component {
       });
   };
 
-  handleLogOut = async (e) => {
-    e.preventDefault();
+  handleLogOut = async () => {
     const { history } = this.props;
     const { currentUser } = this.state;
 
@@ -328,7 +326,9 @@ class ChatRoom extends Component {
                 Log Out
               </Button>{" "}
             </Form>
-            <h6 className="online-text">Online ({this.state.onlineUsers.length} Members)</h6>
+            <h6 className="online-text">
+              Online ({this.state.onlineUsers.length} Members)
+            </h6>
             <div className="container d-block users-list-container">
               <h6 className="users-list">
                 {this.state.onlineUsers === null ? (
@@ -342,7 +342,9 @@ class ChatRoom extends Component {
                 )}
               </h6>
               <hr className="onoff-hr" />
-              <h6 className="offline-text">Offline ({this.state.offlineUsers.length} Members)</h6>
+              <h6 className="offline-text">
+                Offline ({this.state.offlineUsers.length} Members)
+              </h6>
               <h6 className="users-list">{renderOfflineUsers}</h6>
             </div>
           </div>
