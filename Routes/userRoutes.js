@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const userDataAccess = require("../DataAccess/userDataAccess");
 const exjwt = require("express-jwt");
-require("dotenv").config();
+const io = socketService.getIo();
 
 const jwtMW = exjwt({
   secret: process.env.JWT_KEY,
@@ -27,6 +27,8 @@ router.post("/", async (req, res) => {
   let newUser = await userDataAccess.createUser(newUsername, password);
 
   res.status(201).send({ newUser });
+
+  io.emit("user_online", JSON.stringify(newUser));
 });
 
 module.exports = router;

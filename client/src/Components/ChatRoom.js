@@ -58,6 +58,25 @@ class ChatRoom extends Component {
         });
       });
 
+      socket.on("users_online", (userOnline) => {
+        const parsedUser = JSON.parse(userOnline);
+
+        this.setState({
+          onlineUsers: [...this.state.onlineUsers, parsedUser],
+        })
+      })
+
+      socket.on("users_offline", (userOffline) => {
+        const parsedOffline = JSON.parse(userOffline);
+
+        this.setState((prevState) => ({
+
+        })
+         
+      });
+
+      
+
       this.checkToken();
     }
   }
