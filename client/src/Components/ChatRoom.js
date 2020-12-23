@@ -20,13 +20,12 @@ class ChatRoom extends Component {
       users: [],
       onlineUsers: [],
       offlineUsers: [],
-      endpoint: "http://localhost:3000",
       confirm: null,
       loaded: false,
       setModalShow: false,
       loading: false,
     };
-    socket = io(this.state.endpoint);
+    socket = io.connect();
   }
 
   componentDidMount() {
