@@ -22,14 +22,14 @@ router.post("/login", async (req, res) => {
   io.emit("user_online", JSON.stringify(userMatch));
 });
 
-router.post("/logout", async (req, res) => {
+router.put("/logout", async (req, res) => {
   const username = req.body.username;
+  console.log(req.body);
+  const loggedOut = await authDataAccess.logOutUser(username);
 
-  const id = (logOutUser = await authDataAccess.logOutUser(username));
+  res.status(201).send({ loggedOut });
 
-  res.status(201).send({ logOutUser });
-
-  io.emit("user_offline", JSON.stringify(logOutUser));
+  io.emit("user_offline", JSON.stringify(loggedOut));
 });
 
 module.exports = router;

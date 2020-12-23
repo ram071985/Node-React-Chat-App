@@ -65,6 +65,7 @@ logOutUser = async (username) => {
       [username]
     );
     await pool.query("COMMIT");
+    return results.rows[0];
   } catch (err) {
     console.log(err);
   } finally {

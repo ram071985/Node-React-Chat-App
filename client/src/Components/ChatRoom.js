@@ -25,7 +25,7 @@ class ChatRoom extends Component {
       setModalShow: false,
       loading: false,
     };
-    socket = io.connect();
+    socket = io("http://localhost:3000");
   }
 
   componentDidMount() {
@@ -42,7 +42,7 @@ class ChatRoom extends Component {
       });
 
       this.getUsers();
-      window.setInterval(this.getUsers, 20000);
+
       this.getMessages();
 
       socket.on("new_message", (message) => {
@@ -78,6 +78,11 @@ class ChatRoom extends Component {
 
       this.checkToken();
     }
+  }
+
+  componentDidUpdate() {
+    const columnScroll = document.querySelector(".message-col");
+    columnScroll.scrollTop = columnScroll.scrollHeight;
   }
 
   checkToken = async () => {
@@ -151,10 +156,7 @@ class ChatRoom extends Component {
     };
     await axios
       .post("/api/messages", message, { headers })
-      .then((res) => {
-        const columnScroll = document.querySelector(".message-col");
-        columnScroll.scrollTop = columnScroll.scrollHeight;
-      })
+      .then(res)
       .catch((err) => console.log(err));
   };
 
@@ -202,12 +204,20 @@ class ChatRoom extends Component {
       });
   };
 
-  handleLogOut = async (e) => {
-    const { history } = this.props;
-    const { currentUser } = this.state;
+  handleLogOutSubmit = async (e) => {
+    e.preventDefault();
 
+    const offlineUser = {
+      username: this.state.currentUser.username,
+    };
+
+    this.logOutUser(offlineUser);
+  };
+
+  logOutUser = async (user) => {
+    const { history } = this.props;
     await axios
-      .post("/api/authorize/logout", currentUser.username)
+      .put("/api/authorize/logout", user)
       .then((res) => {
         localStorage.clear();
         history.push("/login");
@@ -318,7 +328,11 @@ class ChatRoom extends Component {
         <div className="container d-inline-block left-container">
           <div className="d-inline-block user-col">
             <h5 className="d-inline-block user-heading">Member List</h5>
-            <Form className="logout-form" onSubmit={this.handleLogOut} inline>
+            <Form
+              className="logout-form"
+              onSubmit={this.handleLogOutSubmit}
+              inline
+            >
               <Button
                 type="submit"
                 className="d-inline logout-button"
