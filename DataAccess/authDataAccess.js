@@ -31,7 +31,7 @@ logInUser = async (username, password) => {
     }
     let token = jwt.sign(
       { username: result.rows[0].username },
-      process.env.SECRET,
+      process.env.JWT_KEY,
       { expiresIn: "1d" }
     );
     let successfulLogin = {
