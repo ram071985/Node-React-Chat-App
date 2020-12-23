@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const authDataAccess = require("../DataAccess/authDataAccess")
+const authDataAccess = require("../DataAccess/authDataAccess");
+const io = socketService.getIo();
 
 router.post("/login", async (req, res) => {
  
@@ -16,6 +17,8 @@ router.post("/login", async (req, res) => {
   } else {
     res.status(201).send({ userMatch });
   }
+
+  io.emit("user_online", JSON.stringify(userMatch));
 });
 
 router.post("/logout", async (req, res) => {
@@ -24,6 +27,8 @@ router.post("/logout", async (req, res) => {
   const id = (logOutUser = await authDataAccess.logOutUser(username));
 
   res.status(201).send({ logOutUser });
+
+  io.emit("user_offline", JSON.stringify(logOutUser));
 });
 
 module.exports = router;
