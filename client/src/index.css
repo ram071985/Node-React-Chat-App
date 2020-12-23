@@ -184,6 +184,7 @@ textarea:focus {
 
 .message-col::-webkit-scrollbar-thumb {
   background: rgb(49, 49, 49);
+  border-radius: 6px;
 }
 
 .user-col::-webkit-scrollbar {

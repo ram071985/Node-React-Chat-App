@@ -45,6 +45,8 @@ class ChatRoom extends Component {
       window.setInterval(this.getUsers, 20000);
       this.getMessages();
 
+      window.setInterval(this.getMessages, 5000);
+
       socket.on("new_message", (message) => {
         console.log("connection to message socket:" + message);
       });
@@ -59,14 +61,7 @@ class ChatRoom extends Component {
       });
 
       this.checkToken();
-      const columnScroll = document.querySelector(".message-col");
-      columnScroll.scrollTop = columnScroll.scrollHeight;
     }
-  }
-
-  componentDidUpdate() {
-    const columnScroll = document.querySelector(".message-col");
-    columnScroll.scrollTop = columnScroll.scrollHeight;
   }
 
   checkToken = async () => {
@@ -140,7 +135,10 @@ class ChatRoom extends Component {
     };
     await axios
       .post("/api/messages", message, { headers })
-      .then((res) => console.log(res.data))
+      .then((res) => {
+        const columnScroll = document.querySelector(".message-col");
+        columnScroll.scrollTop = columnScroll.scrollHeight;
+      })
       .catch((err) => console.log(err));
   };
 
@@ -254,7 +252,7 @@ class ChatRoom extends Component {
           >
             <Image id="avatar" src={DefaultAvatar} roundedCircle />
             <p className="text-center username-avatar">
-              Yo <span id="time">12:32 PM</span>
+              {message.username} <span id="time">12:32 PM</span>
             </p>
           </div>
         </div>
@@ -287,14 +285,14 @@ class ChatRoom extends Component {
 
     const renderOfflineUsers = this.state.offlineUsers.map((user, index) => (
       <div>
-        <h5 className="username-text" key={index}>
+        <h5 style={{ color: "grey" }} className="username-text" key={index}>
           <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
           {user.username}
         </h5>
       </div>
     ));
 
-    console.log("time now", Date.now() / 1000);
+    console.log(this.state.messages);
     return (
       <div className="container-fluid chatroom-container">
         <ExpiredModal
@@ -313,17 +311,21 @@ class ChatRoom extends Component {
                 Log Out
               </Button>{" "}
             </Form>
-            <h6 className="online-text">Online (4 Members)</h6>
+            <h6 className="online-text">Online ({this.state.onlineUsers.length} Members)</h6>
             <div className="container d-block users-list-container">
               <h6 className="users-list">
                 {this.state.onlineUsers === null ? (
-                  <Spinner className="user-spinner" animation="grow" variant="warning" />
+                  <Spinner
+                    className="user-spinner"
+                    animation="grow"
+                    variant="warning"
+                  />
                 ) : (
                   renderUsers
                 )}
               </h6>
               <hr className="onoff-hr" />
-              <h6 className="offline-text">Offline (4 Members)</h6>
+              <h6 className="offline-text">Offline ({this.state.offlineUsers.length} Members)</h6>
               <h6 className="users-list">{renderOfflineUsers}</h6>
             </div>
           </div>
