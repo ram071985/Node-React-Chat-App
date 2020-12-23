@@ -120,10 +120,7 @@ class ChatRoom extends Component {
     this.setState({
       errorMessage: "",
       setShow: false,
-    });
-    const { name, value } = e.target;
-    this.setState({
-      [name]: value,
+      text: e.target.value,
     });
   };
 
@@ -261,7 +258,7 @@ class ChatRoom extends Component {
   };
 
   render() {
-    console.log(this.state.currentUser.id);
+    console.log(this.state.text);
 
     const renderMessages = this.state.messages.map((message, index) => (
       <div id="bubble-container" className="container">
@@ -382,6 +379,7 @@ class ChatRoom extends Component {
                   name="text"
                   onChange={this.handleChange}
                   className="message-input"
+                  value={this.state.text}
                   size="sm"
                   type="input"
                   placeholder="Say something"
