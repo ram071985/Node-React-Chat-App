@@ -45,8 +45,6 @@ class ChatRoom extends Component {
       window.setInterval(this.getUsers, 20000);
       this.getMessages();
 
-      window.setInterval(this.getMessages, 5000);
-
       socket.on("new_message", (message) => {
         console.log("connection to message socket:" + message);
       });
