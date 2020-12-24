@@ -22,6 +22,7 @@ class ChatRoom extends Component {
       offlineUsers: [],
       confirm: null,
       loaded: false,
+      endpoint: "",
       setModalShow: false,
       loading: false,
     };

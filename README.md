@@ -4,9 +4,9 @@ Simple full-stack chat application built with React, NodeJS and Express. It util
 
 ## Summary
 
-After building a chat application with .NETCore and React, I wanted to get a better grasp at using JavaScript and NodeJS to handle the back-end lifting as opposed to a C# based framework. 
+After building a chat application with .NET Core and React, I wanted to get a better grasp at using JavaScript and NodeJS to handle the back-end lifting as opposed to a C# based framework. 
 
-In this app, I added websockets for faster data and DOM manipulation and JSON Web Tokens to beef up my user authentication. As is important with any sensitive data stored in a database, I used the node package bcyrpt to create hashed version of user passwords that are stored in the database. For database queries, I used SQL to store and send message and user data. All api calls are handled by the promise based http client Axios. This application using asynchronous funtions. 
+In this app, I added web sockets for faster data and DOM manipulation and JSON Web Tokens to beef up my user authentication. As is important with any sensitive data stored in a database, I used the node package bcyrpt to create hashed version of user passwords that are stored in the database. For database queries, I used SQL to store and send message and user data. All api calls are handled by the promise based http client Axios. This application using asynchronous functions. 
 
 ![](client/src/Images/nodechat.png)
 
@@ -28,7 +28,7 @@ See my deployed version on Heroku - [Node Chat](https://reidnodechat.herokuapp.c
 
 4.) Navigate to the project root directory in terminal.
 
-5.) Create a new `.env` file for adding Postgres information (see `sample.env`).
+5.) Create a new `.env` file for adding Postgres information. Use the `dev.env` file located in the project root folder for the database config variables needed. WHere `JWT_KEY` is located, enter your own string with a a simple catch phrase such as "the sky is blue". The `jsonwebtoken` will hash the string phrase and sign for authentication.
 
 6.) Run the command `npm i` in the root directory.
 
