@@ -30,8 +30,6 @@ class ChatRoom extends Component {
   }
 
   componentDidMount() {
-    console.log(this.getToken());
-    console.log("yo");
     const { history } = this.props;
     if (localStorage.getItem("id_token") === null) {
       history.push("/login");
@@ -99,7 +97,6 @@ class ChatRoom extends Component {
       }
       return returnInterval;
     }, 300000);
-    console.log("decoded dates", decoded);
   };
 
   loggedIn = async () => {
@@ -173,7 +170,6 @@ class ChatRoom extends Component {
         this.setState({
           onlineUsers: res.data,
         });
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -240,7 +236,6 @@ class ChatRoom extends Component {
         this.setState({
           messages: sortMessages,
         });
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -259,10 +254,8 @@ class ChatRoom extends Component {
   };
 
   render() {
-    console.log(this.state.text);
-
     const renderMessages = this.state.messages.map((message, index) => (
-      <div id="bubble-container" className="container">
+      <div key={index} id="bubble-container" className="container">
         <div className="container avatar-container">
           <div
             style={{
@@ -280,7 +273,6 @@ class ChatRoom extends Component {
           </div>
         </div>
         <div
-          key={index}
           id="chat-bubble"
           style={{
             float:
@@ -298,7 +290,7 @@ class ChatRoom extends Component {
     ));
 
     const renderUsers = this.state.onlineUsers.map((user, index) => (
-      <div>
+      <div key={index}>
         <h5 className="username-text" key={index}>
           <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
           {user.username}
@@ -307,7 +299,7 @@ class ChatRoom extends Component {
     ));
 
     const renderOfflineUsers = this.state.offlineUsers.map((user, index) => (
-      <div>
+      <div key={index}>
         <h5 style={{ color: "grey" }} className="username-text" key={index}>
           <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
           {user.username}
@@ -315,8 +307,6 @@ class ChatRoom extends Component {
       </div>
     ));
 
-    console.log(this.state.currentUser);
-    console.log(this.state.messages);
     return (
       <div className="container-fluid chatroom-container">
         <ExpiredModal
@@ -355,7 +345,9 @@ class ChatRoom extends Component {
         <div className="container d-inline-block right-container">
           <h5 className="chatroom-name">#General</h5>
           <div className="d-inline-block message-col">
-            <p className="message-text">{renderMessages}</p>
+            <div>
+              {renderMessages}
+            </div>
           </div>
           <div className="container d-inline-block type-col">
             {" "}
