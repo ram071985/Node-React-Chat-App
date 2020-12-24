@@ -21,8 +21,11 @@ See my deployed version on Heroku - [Node Chat](https://reidnodechat.herokuapp.c
 - [NodeJS](https://nodejs.org/en/download/)
 
 1.) Clone the master repository onto your local machine.
+
 2.) Create a new server in pgAdmin. 
+
 3.) Copy and paste the contents of the db backup file located in project directory `/DbBackup/2020-23-12` into the pgAdmin Table Query Tool. 
+
 4.) 
 
 ## Tech Stack Used
