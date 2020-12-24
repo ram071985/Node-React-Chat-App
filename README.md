@@ -8,7 +8,7 @@ After building a chat application with .NET Core and React, I wanted to get a be
 
 In this app, I added web sockets for faster data and DOM manipulation and JSON Web Tokens to beef up my user authentication. As is important with any sensitive data stored in a database, I used the node package bcyrpt to create hashed version of user passwords that are stored in the database. For database queries, I used SQL to store and send message and user data. All api calls are handled by the promise based http client Axios. This application using asynchronous functions. 
 
-![](client/src/Images/nodechat.png)
+![](client/src/Images/node_chat.png)
 
 See my deployed version on Heroku - [Node Chat](https://reidnodechat.herokuapp.com)
 
