@@ -5,7 +5,6 @@ const socketService = require("../Services/socketService");
 const io = socketService.getIo();
 
 router.post("/login", async (req, res) => {
- 
   const username = req.body.username;
   const password = req.body.password;
 

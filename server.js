@@ -5,10 +5,8 @@ const port = process.env.PORT || 3000;
 const path = require("path");
 const http = require("http");
 const server = http.createServer(app);
-const exjwt = require("express-jwt");
 const socketService = require("./Services/socketService");
 const io = socketService.getIo(server);
-
 
 io.on("connection", (socket) => {
   socket.emit("new_message", "sockets connected");
@@ -16,7 +14,7 @@ io.on("connection", (socket) => {
 
 app.use("/", express.static(path.join(__dirname, "client/build")));
 
-app.use(express.json()); // for parsing application/json
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const userRoutes = require("./Routes/userRoutes");

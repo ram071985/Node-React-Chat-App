@@ -10,7 +10,7 @@ const jwtMW = exjwt({
   secret: process.env.JWT_KEY,
   algorithms: ["HS256"],
 });
- 
+
 router.get("/", jwtMW, async (req, res) => {
   const users = await userDataAccess.queryUsers();
   res.send(users);
