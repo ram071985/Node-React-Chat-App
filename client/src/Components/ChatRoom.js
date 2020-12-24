@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Button, Image, Spinner } from "react-bootstrap";
+import { Form, Button, Image } from "react-bootstrap";
 import axios from "axios";
 import io from "socket.io-client";
 import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg";
@@ -343,17 +343,7 @@ class ChatRoom extends Component {
               Online ({this.state.onlineUsers.length} Members)
             </h6>
             <div className="container d-block users-list-container">
-              <h6 className="users-list">
-                {this.state.onlineUsers === null ? (
-                  <Spinner
-                    className="user-spinner"
-                    animation="grow"
-                    variant="warning"
-                  />
-                ) : (
-                  renderUsers
-                )}
-              </h6>
+              <h6 className="users-list">renderUsers</h6>
               <hr className="onoff-hr" />
               <h6 className="offline-text">
                 Offline ({this.state.offlineUsers.length} Members)
