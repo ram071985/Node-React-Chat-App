@@ -26,7 +26,19 @@ See my deployed version on Heroku - [Node Chat](https://reidnodechat.herokuapp.c
 
 3.) Copy and paste the contents of the db backup file located in project directory `/DbBackup/2020-23-12` into the pgAdmin Table Query Tool. 
 
-4.) 
+4.) Navigate to the project root directory in terminal.
+
+5.) Create a new `.env` file for adding Postgres information (see `sample.env`).
+
+6.) Run the command `npm i` in the root directory.
+
+7.) Navigate to the `client` directory and run `npm i`.
+
+8.) In the ChatRoom.js component located in `client/src/Components/ChatRoom.js`, add the string `"http://localhost:3000"` into the empty endpoint state string. Change the socket variable underneath the state object to this: `socket = io(this.state.endpoint)`.
+
+9.) Navigate to the root directory. Run `npm run dev`.
+
+10.) Open browser to localhost:3000.
 
 ## Tech Stack Used
 ---
