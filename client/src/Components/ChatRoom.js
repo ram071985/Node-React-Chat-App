@@ -343,7 +343,7 @@ class ChatRoom extends Component {
               Online ({this.state.onlineUsers.length} Members)
             </h6>
             <div className="container d-block users-list-container">
-              <h6 className="users-list">renderUsers</h6>
+              <h6 className="users-list">{renderUsers}</h6>
               <hr className="onoff-hr" />
               <h6 className="offline-text">
                 Offline ({this.state.offlineUsers.length} Members)
