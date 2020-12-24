@@ -346,6 +346,7 @@ margin-right: 2em;
 .username-avatar {
   font-size: .9em;
   color: rgb(230, 230, 230);
+  margin-bottom: 0 !important;
 }
 
 #time {
@@ -390,4 +391,12 @@ div.spinner-grow.user-spinner {
 
 .alert-danger.auth-alert {
   font-weight: 500;
+}
+
+.time {
+  color: white;
+  font-size: .7em;
+  margin: 0 !important;
+  color: rgb(90, 90, 90);
+  margin-bottom: 10px !important;
 }

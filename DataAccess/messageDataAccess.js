@@ -27,6 +27,7 @@ createMessage = async (userId, text) => {
     ]);
 
     await pool.query("COMMIT");
+    console.log(result.rows[0]);
     return result.rows[0];
   } catch (err) {
     console.log(err);

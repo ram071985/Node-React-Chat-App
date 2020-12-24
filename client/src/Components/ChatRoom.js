@@ -5,6 +5,7 @@ import io from "socket.io-client";
 import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg";
 import decode from "jwt-decode";
 import ExpiredModal from "./ExpiredTokenModal";
+import moment from "moment";
 
 let socket;
 
@@ -268,8 +269,9 @@ class ChatRoom extends Component {
           >
             <Image id="avatar" src={DefaultAvatar} roundedCircle />
             <p className="text-center username-avatar">
-              {message.username} <span id="time">12:32 PM</span>
+              {message.username} <span id="time">{moment(message.created_date).format("l").toString()}</span>
             </p>
+            <h6 className="time">{moment(message.created_date).format("LT").toString()}</h6>
           </div>
         </div>
         <div
