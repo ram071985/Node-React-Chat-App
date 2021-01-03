@@ -6,6 +6,7 @@ import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg
 import decode from "jwt-decode";
 import ExpiredModal from "./ExpiredTokenModal";
 import moment from "moment";
+import { PlayCircle, PauseCircle } from "react-feather";
 
 let socket;
 
@@ -26,8 +27,13 @@ class ChatRoom extends Component {
       endpoint: "",
       setModalShow: false,
       loading: false,
+      play: false,
+      pause: true,
     };
+
     socket = io.connect();
+    this.url = "../Audio/serene_audio.m4a";
+    this.audio = new Audio(this.url);
   }
 
   componentDidMount() {
@@ -84,6 +90,22 @@ class ChatRoom extends Component {
     const columnScroll = document.querySelector(".message-col");
     columnScroll.scrollTop = columnScroll.scrollHeight;
   }
+
+  play = async () => {
+    this.setState({
+      play: true,
+      pause: false,
+    });
+    this.audio.play();
+  };
+
+  pause = async () => {
+    this.setState({
+      play: false,
+      pause: true,
+    });
+    this.audio.pause();
+  };
 
   checkToken = async () => {
     let returnInterval;
@@ -269,9 +291,14 @@ class ChatRoom extends Component {
           >
             <Image id="avatar" src={DefaultAvatar} roundedCircle />
             <p className="text-center username-avatar">
-              {message.username} <span id="time">{moment(message.created_date).format("l").toString()}</span>
+              {message.username}{" "}
+              <span id="time">
+                {moment(message.created_date).format("l").toString()}
+              </span>
             </p>
-            <h6 className="time">{moment(message.created_date).format("LT").toString()}</h6>
+            <h6 className="time">
+              {moment(message.created_date).format("LT").toString()}
+            </h6>
           </div>
         </div>
         <div
@@ -347,9 +374,7 @@ class ChatRoom extends Component {
         <div className="container d-inline-block right-container">
           <h5 className="chatroom-name">#General</h5>
           <div className="d-inline-block message-col">
-            <div>
-              {renderMessages}
-            </div>
+            <div>{renderMessages}</div>
           </div>
           <div className="container d-inline-block type-col">
             {" "}
@@ -378,6 +403,14 @@ class ChatRoom extends Component {
               >
                 Send
               </Button>{" "}
+              <h6
+                style={{ color: "white" }}
+                className="text-center audio-text"
+              >
+                Audio
+              </h6>
+              <PlayCircle id="play" />
+              <PauseCircle id="pause" />
             </Form>
           </div>
         </div>

@@ -57,6 +57,36 @@ body {
   padding: 0px;
 }
 
+polygon, circle, line {
+  color: white !important;
+}
+
+svg#play {
+  position: fixed;
+  right: 140px;
+}
+
+#pause {
+  position: fixed;
+  right: 110px;
+}
+
+.play-button {
+ width: 30%;
+ margin: 0px 0px;
+}
+
+.audio-text {
+  position: fixed;
+  right: 170px;
+  margin-top: 7px;
+  color: rgb(255, 180, 205) !important;
+}
+
+
+
+
+
 .text-input-container {
 }
 
