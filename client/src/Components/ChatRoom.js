@@ -403,10 +403,7 @@ class ChatRoom extends Component {
               >
                 Send
               </Button>{" "}
-              <h6
-                style={{ color: "white" }}
-                className="text-center audio-text"
-              >
+              <h6 style={{ color: "white" }} className="text-center audio-text">
                 Audio
               </h6>
               <PlayCircle id="play" />
