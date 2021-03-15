@@ -9,8 +9,14 @@ const slice = createSlice({
     lastFetch: null,
   },
   reducers: {
-      usersRequested: (bugs, action) => {
-          
+      usersRequested: (users, action) => {
+          users.loading = true;
+      },
+
+      usersReceived: (users, action) => {
+        users.list = action.payload;
+        users.loading = false;
+        users.lastFetch = Date.now();
       }
   }
 });
