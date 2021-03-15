@@ -20,3 +20,16 @@ const slice = createSlice({
       }
   }
 });
+
+export const {
+    usersRequested,
+    usersReceived
+} = slice.actions;
+export default slice.reducer;
+
+
+const url ="/users";
+
+export const loadUsers = () => (dispatch, getState) => {
+    
+}
