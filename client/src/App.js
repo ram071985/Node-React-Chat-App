@@ -3,6 +3,7 @@ import ChatRoom from "./Components/ChatRoom";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import LogIn from "./Components/LogIn";
 import Register from "./Components/Register";
+import configureStore from './store/configureStore';
 
 class App extends React.Component {
   render() {

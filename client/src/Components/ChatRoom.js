@@ -7,8 +7,15 @@ import decode from "jwt-decode";
 import ExpiredModal from "./ExpiredTokenModal";
 import moment from "moment";
 import { PlayCircle, PauseCircle } from "react-feather";
+import configureStore from './store/configureStore';
+import UsersList from './UsersList';
+import StoreContext from './contexts/storeContext';
+
+const store = configureStore();
 
 let socket;
+
+
 
 class ChatRoom extends Component {
   constructor() {
@@ -409,6 +416,7 @@ class ChatRoom extends Component {
               <PlayCircle id="play" />
               <PauseCircle id="pause" />
             </Form>
+            <StoreContext.Provider value={store}><UsersList /></StoreContext.Provider>
           </div>
         </div>
       </div>
