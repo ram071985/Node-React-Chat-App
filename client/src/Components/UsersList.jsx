@@ -12,7 +12,7 @@ class Users extends Component {
     render() {
         return (
             <div>
-                Dick
+                word
             </div>
         )
     }
