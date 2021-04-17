@@ -1,21 +1,21 @@
-import React, { component } from 'react';
-import StoreContext from './contexts/storeContext';
+// import React, { component } from 'react';
+// import StoreContext from './contexts/storeContext';
 
 
 
-class Users extends Component {
-    static contextType = StoreContext;
+// class Users extends Component {
+//     static contextType = StoreContext;
 
-    componentDidMount() {
-        console.log(this.context);
-    }
-    render() {
-        return (
-            <div>
-                word
-            </div>
-        )
-    }
-}
+//     componentDidMount() {
+//         console.log(this.context);
+//     }
+//     render() {
+//         return (
+//             <div>
+//                 word
+//             </div>
+//         )
+//     }
+// }
 
-export default Users;
+// export default Users;

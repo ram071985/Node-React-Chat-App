@@ -1,8 +1,10 @@
-import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { createSelector } from "reselect";
 import moment from "moment";
+import { apiCallBegan } from "./api";
 
 const slice = createSlice({
-  name: "stocks",
+  name: "messages",
   initialState: {
     list: [],
     loading: false,
@@ -10,30 +12,33 @@ const slice = createSlice({
   },
 
   reducers: {
-    stocksRequested: (stocks, action) => {
-      bugs.loading = true;
+    messagesRequested: (messages, action) => {
+      messages.loading = true;
     },
 
-    stocksReceived: (stocks, action) => {
-      stocks.list = action.payload;
-      stocks.loading = false;
-      stocks.lastFetch = Date.now();
+    messagesReceived: (messages, action) => {
+      messages.list = action.payload;
+      messages.loading = false;
+      messages.lastFetch = Date.now();
     },
 
-    stocksRequestfailed: (stocks, action) => {
-      stocks.loading = false;
+    messagesRequestFailed: (messages, action) => {
+      messages.loading = false;
     },
   },
 });
 
 export const {
-  stocksRequested,
-  stocksReceived,
-  stocksRequestFailed,
+  messagesRequested,
+  messagesReceived,
+  messagesRequestFailed,
 } = slice.actions;
 export default slice.reducer;
 
+// Action Creators
 const url = "/messages";
+
+const token = JSON.parse(localStorage.getItem("id_token"));
 
 export const loadMessages = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.messages;
@@ -44,6 +49,9 @@ export const loadMessages = () => (dispatch, getState) => {
   return dispatch(
     apiCallBegan({
       url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       onStart: messagesRequested.type,
       onSuccess: messagesReceived.type,
       onError: messagesRequestFailed.type,

@@ -7,15 +7,11 @@ import decode from "jwt-decode";
 import ExpiredModal from "./ExpiredTokenModal";
 import moment from "moment";
 import { PlayCircle, PauseCircle } from "react-feather";
-import configureStore from './store/configureStore';
-import UsersList from './UsersList';
-import StoreContext from './contexts/storeContext';
-
-const store = configureStore();
+import UsersList from "./UsersList";
+import { loadMessages, getMessages } from "../store/messages";
+import { connect } from "react-redux";
 
 let socket;
-
-
 
 class ChatRoom extends Component {
   constructor() {
@@ -251,25 +247,26 @@ class ChatRoom extends Component {
       });
   };
 
-  getMessages = async () => {
-    const token = JSON.parse(localStorage.getItem("id_token"));
-    await axios
-      .get("/api/messages", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        const sortMessages = res.data.sort(
-          (a, b) => parseFloat(a.id) - parseFloat(b.id)
-        );
-        this.setState({
-          messages: sortMessages,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  getMessages = () => {
+    // const token = JSON.parse(localStorage.getItem("id_token"));
+    // await axios
+    //   .get("/api/messages", {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     const sortMessages = res.data.sort(
+    //       (a, b) => parseFloat(a.id) - parseFloat(b.id)
+    //     );
+    //     this.setState({
+    //       messages: sortMessages,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    this.props.loadMessages();
   };
 
   avatarCondition = async () => {
@@ -284,7 +281,7 @@ class ChatRoom extends Component {
   };
 
   render() {
-    const renderMessages = this.state.messages.map((message, index) => (
+    const renderMessages = this.props.messages.map((message, index) => (
       <div key={index} id="bubble-container" className="container">
         <div className="container avatar-container">
           <div
@@ -416,7 +413,6 @@ class ChatRoom extends Component {
               <PlayCircle id="play" />
               <PauseCircle id="pause" />
             </Form>
-            <StoreContext.Provider value={store}><UsersList /></StoreContext.Provider>
           </div>
         </div>
       </div>
@@ -424,4 +420,12 @@ class ChatRoom extends Component {
   }
 }
 
-export default ChatRoom;
+const mapDispatchToProps = (dispatch) => ({
+  loadMessages: () => dispatch(loadMessages())
+})
+
+const mapStateToProps = (state) => ({
+  messages: getMessages(state)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);
