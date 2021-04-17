@@ -8,7 +8,7 @@ import ExpiredModal from "./ExpiredTokenModal";
 import moment from "moment";
 import { PlayCircle, PauseCircle } from "react-feather";
 import UsersList from "./UsersList";
-import { loadMessages, getMessages } from "../store/messages";
+import { loadMessages, getMessages, addMessage } from "../store/messages";
 import { connect } from "react-redux";
 
 let socket;
@@ -156,7 +156,7 @@ class ChatRoom extends Component {
       username: this.state.currentUser.username,
       text: this.state.text,
     };
-    this.submitMessage(data);
+    this.props.addMessage(data);
     this.setState({
       text: "",
     });
@@ -177,7 +177,7 @@ class ChatRoom extends Component {
     };
     await axios
       .post("/api/messages", message, { headers })
-      .then((res) => console.log(res))
+      .then((res) => this.props.loadMessages())
       .catch((err) => console.log(err));
   };
 
@@ -421,11 +421,12 @@ class ChatRoom extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  loadMessages: () => dispatch(loadMessages())
-})
+  loadMessages: () => dispatch(loadMessages()),
+  addMessage: (message) => dispatch(addMessage(message)),
+});
 
 const mapStateToProps = (state) => ({
-  messages: getMessages(state)
-})
+  messages: getMessages(state),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

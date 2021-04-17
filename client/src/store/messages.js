@@ -25,6 +25,10 @@ const slice = createSlice({
     messagesRequestFailed: (messages, action) => {
       messages.loading = false;
     },
+
+    messageAdded: (messages, action) => {
+      messages.list.push(action.payload);
+    },
   },
 });
 
@@ -32,6 +36,7 @@ export const {
   messagesRequested,
   messagesReceived,
   messagesRequestFailed,
+  messageAdded,
 } = slice.actions;
 export default slice.reducer;
 
@@ -58,6 +63,17 @@ export const loadMessages = () => (dispatch, getState) => {
     })
   );
 };
+
+export const addMessage = (message) =>
+  apiCallBegan({
+    url,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    method: "post",
+    data: message,
+    onSuccess: messageAdded.type,
+  });
 
 // Selectors
 

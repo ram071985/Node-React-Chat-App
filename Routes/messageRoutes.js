@@ -4,6 +4,7 @@ const router = express.Router();
 const messageDataAccess = require("../DataAccess/messageDataAccess");
 const socketService = require("../Services/socketService");
 const exjwt = require("express-jwt");
+const { response } = require("express");
 const io = socketService.getIo();
 
 const jwtMW = exjwt({
@@ -33,7 +34,7 @@ router.post("/", jwtMW, async (req, res) => {
   responseMessage.username = newMessage.username;
 
   res.status(201).send({ responseMessage });
-
+    console.log("message post route", responseMessage)
   io.emit("message", JSON.stringify(responseMessage));
 });
 module.exports = router;
