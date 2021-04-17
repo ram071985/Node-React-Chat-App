@@ -27,7 +27,7 @@ const slice = createSlice({
     },
 
     messageAdded: (messages, action) => {
-      messages.list.push(action.payload);
+      messages.list.push(action.payload.responseMessage);
     },
   },
 });

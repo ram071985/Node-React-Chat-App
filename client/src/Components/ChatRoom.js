@@ -52,19 +52,18 @@ class ChatRoom extends Component {
 
       this.getUsers();
       window.setInterval(this.getUsers, 60000);
-      this.getMessages();
+      this.props.loadMessages();
 
       socket.on("new_message", (message) => {
         console.log("connection to message socket:" + message);
       });
 
       socket.on("message", (chatMessage) => {
-        console.log("message sent back");
+        console.log("message sent back", chatMessage);
         const parsedMessage = JSON.parse(chatMessage);
-
-        this.setState({
-          messages: [...this.state.messages, parsedMessage],
-        });
+        // this.setState({
+        //   messages: [...this.state.messages, parsedMessage],
+        // });
       });
 
       socket.on("users_online", (userOnline) => {
@@ -148,7 +147,7 @@ class ChatRoom extends Component {
     });
   };
 
-  handleSubmit = async (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
 
     const data = {
@@ -168,17 +167,6 @@ class ChatRoom extends Component {
     this.setState({
       setModalShow: false,
     });
-  };
-
-  submitMessage = async (message) => {
-    const token = JSON.parse(localStorage.getItem("id_token"));
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-    await axios
-      .post("/api/messages", message, { headers })
-      .then((res) => this.props.loadMessages())
-      .catch((err) => console.log(err));
   };
 
   getUsers = async () => {
@@ -247,28 +235,6 @@ class ChatRoom extends Component {
       });
   };
 
-  getMessages = () => {
-    // const token = JSON.parse(localStorage.getItem("id_token"));
-    // await axios
-    //   .get("/api/messages", {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     const sortMessages = res.data.sort(
-    //       (a, b) => parseFloat(a.id) - parseFloat(b.id)
-    //     );
-    //     this.setState({
-    //       messages: sortMessages,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    this.props.loadMessages();
-  };
-
   avatarCondition = async () => {
     const messageBackground = document.getElementById("chat-bubble");
     if (messageBackground) {
@@ -281,6 +247,7 @@ class ChatRoom extends Component {
   };
 
   render() {
+    console.log(this.props.messages)
     const renderMessages = this.props.messages.map((message, index) => (
       <div key={index} id="bubble-container" className="container">
         <div className="container avatar-container">
