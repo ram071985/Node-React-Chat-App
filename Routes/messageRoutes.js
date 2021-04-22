@@ -13,8 +13,9 @@ const jwtMW = exjwt({
 });
 
 router.get("/", jwtMW, async (req, res) => {
-  const messages = await messageDataAccess.queryMessages();
-  res.send(messages);
+  const updateMessages = await messageDataAccess.queryMessages();
+  io.emit("get_messages", JSON.stringify(updateMessages));
+  console.log("HEY!", updateMessages)
 });
 router.post("/", jwtMW, async (req, res) => {
   let newMessage = {

@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Image } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import io from "socket.io-client";
 import DefaultAvatar from "../Images/rahmadiyono-widodo-rFMonBYsDqE-unsplash.jpg";
@@ -10,50 +11,63 @@ import { PlayCircle, PauseCircle } from "react-feather";
 import UsersList from "./UsersList";
 import { loadMessages, getMessages, addMessage } from "../store/messages";
 import { connect } from "react-redux";
+import { wsConnect, wsDisconnect } from '../store/middleware/websocket';
 
 let socket;
+let messages;
+const ChatRoom = (props) => {
+  const dispatch = useDispatch();
+  messages = useSelector(getMessages);
+  // constructor() {
+  //   super();
+  //   state = {
+  //     text: "",
+  //     errorMessage: "",
+  //     setshow: false,
+  //     currentUser: {},
+  //     messages: [],
+  //     users: [],
+  //     onlineUsers: [],
+  //     offlineUsers: [],
+  //     confirm: null,
+  //     loaded: false,
+  //     endpoint: "",
+  //     setModalShow: false,
+  //     loading: false,
+  //     play: false,
+  //     pause: true,
+  //   };
+  const [text, setText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [setShow, changeShow] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [offlineUsers, setOfflineUsers] = useState([]);
+  const [confirm, setConfirm] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const [endpoint, setEndpoint] = useState("");
+  const [setModalShow, changeModalShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [play, setPlay] = useState(false);
+  const [pause, setPause] = useState(true);
+  socket = io.connect();
+  // url = "../Audio/serene_audio.m4a";
+  // audio = new Audio(url);
 
-class ChatRoom extends Component {
-  constructor() {
-    super();
-    this.state = {
-      text: "",
-      errorMessage: "",
-      setshow: false,
-      currentUser: {},
-      messages: [],
-      users: [],
-      onlineUsers: [],
-      offlineUsers: [],
-      confirm: null,
-      loaded: false,
-      endpoint: "",
-      setModalShow: false,
-      loading: false,
-      play: false,
-      pause: true,
-    };
-
-    socket = io.connect();
-    this.url = "../Audio/serene_audio.m4a";
-    this.audio = new Audio(this.url);
-  }
-
-  componentDidMount() {
-    const { history } = this.props;
+  useEffect(() => {
+    const { history } = props;
     if (localStorage.getItem("id_token") === null) {
       history.push("/login");
     } else {
       const storedUser = JSON.parse(localStorage.getItem("user"));
 
-      this.setState({
-        currentUser: storedUser,
-      });
+      setCurrentUser(storedUser);
+      dispatch(loadMessages());
+  
 
-      this.getUsers();
-      window.setInterval(this.getUsers, 60000);
-      this.props.loadMessages();
-
+      getUsers();
+      window.setInterval(getUsers, 60000);
+      
       socket.on("new_message", (message) => {
         console.log("connection to message socket:" + message);
       });
@@ -61,62 +75,55 @@ class ChatRoom extends Component {
       socket.on("message", (chatMessage) => {
         console.log("message sent back", chatMessage);
         const parsedMessage = JSON.parse(chatMessage);
-        // this.setState({
-        //   messages: [...this.state.messages, parsedMessage],
-        // });
       });
 
       socket.on("users_online", (userOnline) => {
         const parsedUser = JSON.parse(userOnline);
-
-        this.setState({
-          onlineUsers: [...this.state.onlineUsers, parsedUser],
-        });
+        setOnlineUsers([...onlineUsers, parsedUser]);
       });
 
       socket.on("users_offline", (userOffline) => {
         const parsedOffline = JSON.parse(userOffline);
 
-        this.setState((prevState) => ({
-          onlineUsers: prevState.usersOnline.filter((user) => {
-            return user.id !== parsedOffline;
-          }),
-        }));
+        setOnlineUsers((prevState) => {
+          return {
+            ...prevState.usersOnline.filter((user) => {
+              user.id !== parsedOffline;
+            }),
+          };
+        });
       });
 
-      this.checkToken();
+      checkToken();
+      const columnScroll = document.querySelector(".message-col");
+      columnScroll.scrollTop = columnScroll.scrollHeight;
     }
-  }
+  }, []);
 
-  componentDidUpdate() {
-    const columnScroll = document.querySelector(".message-col");
-    columnScroll.scrollTop = columnScroll.scrollHeight;
-  }
+  // play = async () => {
+  //   setState({
+  //     play: true,
+  //     pause: false,
+  //   });
+  //   audio.play();
+  // };
 
-  play = async () => {
-    this.setState({
-      play: true,
-      pause: false,
-    });
-    this.audio.play();
-  };
+  // pause = async () => {
+  //   setState({
+  //     play: false,
+  //     pause: true,
+  //   });
+  //   audio.pause();
+  // };
 
-  pause = async () => {
-    this.setState({
-      play: false,
-      pause: true,
-    });
-    this.audio.pause();
-  };
-
-  checkToken = async () => {
+  const checkToken = async () => {
     let returnInterval;
     const token = localStorage.getItem("id_token");
     const decoded = decode(token);
 
     returnInterval = setInterval(() => {
       if (decoded.exp < Date.now() / 1000) {
-        this.setState({
+        setState({
           setModalShow: true,
         });
       }
@@ -124,12 +131,12 @@ class ChatRoom extends Component {
     }, 300000);
   };
 
-  loggedIn = async () => {
+  const loggedIn = async () => {
     const token = localStorage.getItem("id_token");
-    return !!token && !this.isTokenExpired(token);
+    return !!token && !isTokenExpired(token);
   };
 
-  getConfirm = async () => {
+  const getConfirm = async () => {
     let token = localStorage.getItem("id_token");
     let answer = decode(token);
     try {
@@ -139,40 +146,34 @@ class ChatRoom extends Component {
     }
   };
 
-  handleChange = (e) => {
-    this.setState({
-      errorMessage: "",
-      setShow: false,
-      text: e.target.value,
-    });
+  const handleChange = (e) => {
+    setText(e.target.value);
+    setErrorMessage("");
+    changeShow(false);
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const data = {
-      id: this.state.currentUser.id,
-      username: this.state.currentUser.username,
-      text: this.state.text,
+      id: currentUser.id,
+      username: currentUser.username,
+      text: text,
     };
-    this.props.addMessage(data);
-    this.setState({
-      text: "",
-    });
+    dispatch(addMessage(data));
+    setText("");
   };
 
-  handleClose = async (e) => {
+  const handleClose = async (e) => {
     localStorage.clear();
-    const { history } = this.props;
-    this.setState({
+    const { history } = props;
+    setState({
       setModalShow: false,
     });
   };
 
-  getUsers = async () => {
-    this.setState({
-      loading: true,
-    });
+  const getUsers = async () => {
+    setLoading(true);
     const token = JSON.parse(localStorage.getItem("id_token"));
     await axios
       .get("/api/users", {
@@ -181,20 +182,16 @@ class ChatRoom extends Component {
         },
       })
       .then((res) => {
-        this.setState({
-          onlineUsers: res.data,
-        });
+        setOnlineUsers(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-    this.getOfflineUsers();
-    this.setState({
-      loading: false,
-    });
+    getOfflineUsers();
+    setLoading(false);
   };
 
-  getOfflineUsers = async () => {
+  const getOfflineUsers = async () => {
     const token = JSON.parse(localStorage.getItem("id_token"));
     await axios
       .get("/api/users/inactive", {
@@ -203,27 +200,25 @@ class ChatRoom extends Component {
         },
       })
       .then((res) => {
-        this.setState({
-          offlineUsers: res.data,
-        });
+        setOfflineUsers(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  handleLogOutSubmit = async (e) => {
+  const handleLogOutSubmit = async (e) => {
     e.preventDefault();
 
     const offlineUser = {
-      username: this.state.currentUser.username,
+      username: currentUser.username,
     };
 
-    this.logOutUser(offlineUser);
+    logOutUser(offlineUser);
   };
 
-  logOutUser = async (user) => {
-    const { history } = this.props;
+  const logOutUser = async (user) => {
+    const { history } = props;
     await axios
       .put("/api/authorize/logout", user)
       .then((res) => {
@@ -235,157 +230,144 @@ class ChatRoom extends Component {
       });
   };
 
-  avatarCondition = async () => {
+  const avatarCondition = async () => {
     const messageBackground = document.getElementById("chat-bubble");
     if (messageBackground) {
       return messageBackground.style.backgroundColor;
     }
   };
 
-  getToken = async () => {
+  const getToken = async () => {
     return JSON.parse(localStorage.getItem("id_token"));
   };
 
-  render() {
-    console.log(this.props.messages)
-    const renderMessages = this.props.messages.map((message, index) => (
-      <div key={index} id="bubble-container" className="container">
-        <div className="container avatar-container">
-          <div
-            style={{
-              float:
-                this.avatarCondition === "rgb(177, 47, 30)" ||
-                message.user_id !== this.state.currentUser.id
-                  ? "left"
-                  : "right",
-            }}
-          >
-            <Image id="avatar" src={DefaultAvatar} roundedCircle />
-            <p className="text-center username-avatar">
-              {message.username}{" "}
-              <span id="time">
-                {moment(message.created_date).format("l").toString()}
-              </span>
-            </p>
-            <h6 className="time">
-              {moment(message.created_date).format("LT").toString()}
-            </h6>
-          </div>
-        </div>
+  const renderMessages = messages.map((message, index) => (
+    <div key={index} id="bubble-container" className="container">
+      <div className="container avatar-container">
         <div
-          id="chat-bubble"
           style={{
             float:
-              message.user_id !== this.state.currentUser.id ? "left" : "right",
-            background:
-              message.user_id !== this.state.currentUser.id
-                ? "rgb(48, 48, 48)"
-                : "rgb(170, 77, 84)",
+              avatarCondition === "rgb(177, 47, 30)" ||
+              message.user_id !== currentUser.id
+                ? "left"
+                : "right",
           }}
-          className="container d-block mt-3"
         >
-          {message.text}
+          <Image id="avatar" src={DefaultAvatar} roundedCircle />
+          <p className="text-center username-avatar">
+            {message.username}{" "}
+            <span id="time">
+              {moment(message.created_date).format("l").toString()}
+            </span>
+          </p>
+          <h6 className="time">
+            {moment(message.created_date).format("LT").toString()}
+          </h6>
         </div>
       </div>
-    ));
-
-    const renderUsers = this.state.onlineUsers.map((user, index) => (
-      <div key={index}>
-        <h5 className="username-text" key={index}>
-          <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
-          {user.username}
-        </h5>
+      <div
+        id="chat-bubble"
+        style={{
+          float: message.user_id !== currentUser.id ? "left" : "right",
+          background:
+            message.user_id !== currentUser.id
+              ? "rgb(48, 48, 48)"
+              : "rgb(170, 77, 84)",
+        }}
+        className="container d-block mt-3"
+      >
+        {message.text}
       </div>
-    ));
+    </div>
+  ));
 
-    const renderOfflineUsers = this.state.offlineUsers.map((user, index) => (
-      <div key={index}>
-        <h5 style={{ color: "grey" }} className="username-text" key={index}>
-          <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
-          {user.username}
-        </h5>
-      </div>
-    ));
+  const renderUsers = onlineUsers.map((user, index) => (
+    <div key={index}>
+      <h5 className="username-text" key={index}>
+        <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
+        {user.username}
+      </h5>
+    </div>
+  ));
 
-    return (
-      <div className="container-fluid chatroom-container">
-        <ExpiredModal
-          show={this.state.setModalShow}
-          onHide={this.handleLogOutSubmit}
-        />
-        <div className="container d-inline-block left-container">
-          <div className="d-inline-block user-col">
-            <h5 className="d-inline-block user-heading">Member List</h5>
-            <Form
-              className="logout-form"
-              onSubmit={this.handleLogOutSubmit}
-              inline
+  const renderOfflineUsers = offlineUsers.map((user, index) => (
+    <div key={index}>
+      <h5 style={{ color: "grey" }} className="username-text" key={index}>
+        <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
+        {user.username}
+      </h5>
+    </div>
+  ));
+    console.log(messages)
+  return (
+    <div className="container-fluid chatroom-container">
+      <ExpiredModal show={setModalShow} onHide={handleLogOutSubmit} />
+      <div className="container d-inline-block left-container">
+        <div className="d-inline-block user-col">
+          <h5 className="d-inline-block user-heading">Member List</h5>
+          <Form className="logout-form" onSubmit={handleLogOutSubmit} inline>
+            <Button
+              type="submit"
+              className="d-inline logout-button"
+              variant="outline-dark"
             >
-              <Button
-                type="submit"
-                className="d-inline logout-button"
-                variant="outline-dark"
-              >
-                Log Out
-              </Button>{" "}
-            </Form>
-            <h6 className="online-text">
-              Online ({this.state.onlineUsers.length} Members)
+              Log Out
+            </Button>{" "}
+          </Form>
+          <h6 className="online-text">Online ({onlineUsers.length} Members)</h6>
+          <div className="container d-block users-list-container">
+            <h6 className="users-list">{renderUsers}</h6>
+            <hr className="onoff-hr" />
+            <h6 className="offline-text">
+              Offline ({offlineUsers.length} Members)
             </h6>
-            <div className="container d-block users-list-container">
-              <h6 className="users-list">{renderUsers}</h6>
-              <hr className="onoff-hr" />
-              <h6 className="offline-text">
-                Offline ({this.state.offlineUsers.length} Members)
-              </h6>
-              <h6 className="users-list">{renderOfflineUsers}</h6>
-            </div>
-          </div>
-        </div>
-        <div className="container d-inline-block right-container">
-          <h5 className="chatroom-name">#General</h5>
-          <div className="d-inline-block message-col">
-            <div>{renderMessages}</div>
-          </div>
-          <div className="container d-inline-block type-col">
-            {" "}
-            <Form
-              className="justify-content-center message-form"
-              onSubmit={this.handleSubmit}
-              inline
-            >
-              <Form.Group>
-                <Form.Control
-                  autoComplete="off"
-                  name="text"
-                  onChange={this.handleChange}
-                  className="message-input"
-                  value={this.state.text}
-                  size="sm"
-                  type="input"
-                  placeholder="Say something"
-                />
-              </Form.Group>
-              <Button
-                id="message-button"
-                className="d-inline-inline"
-                type="submit"
-                variant="outline-secondary"
-              >
-                Send
-              </Button>{" "}
-              <h6 style={{ color: "white" }} className="text-center audio-text">
-                Audio
-              </h6>
-              <PlayCircle id="play" />
-              <PauseCircle id="pause" />
-            </Form>
+            <h6 className="users-list">{renderOfflineUsers}</h6>
           </div>
         </div>
       </div>
-    );
-  }
-}
+      <div className="container d-inline-block right-container">
+        <h5 className="chatroom-name">#General</h5>
+        <div className="d-inline-block message-col">
+          <div>{renderMessages}</div>
+        </div>
+        <div className="container d-inline-block type-col">
+          {" "}
+          <Form
+            className="justify-content-center message-form"
+            onSubmit={handleSubmit}
+            inline
+          >
+            <Form.Group>
+              <Form.Control
+                autoComplete="off"
+                name="text"
+                onChange={handleChange}
+                className="message-input"
+                value={text}
+                size="sm"
+                type="input"
+                placeholder="Say something"
+              />
+            </Form.Group>
+            <Button
+              id="message-button"
+              className="d-inline-inline"
+              type="submit"
+              variant="outline-secondary"
+            >
+              Send
+            </Button>{" "}
+            <h6 style={{ color: "white" }} className="text-center audio-text">
+              Audio
+            </h6>
+            <PlayCircle id="play" />
+            <PauseCircle id="pause" />
+          </Form>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const mapDispatchToProps = (dispatch) => ({
   loadMessages: () => dispatch(loadMessages()),
