@@ -11,13 +11,14 @@ import { PlayCircle, PauseCircle } from "react-feather";
 import UsersList from "./UsersList";
 import { loadMessages, getMessages, addMessage } from "../store/messages";
 import { connect } from "react-redux";
-import { wsConnect, wsDisconnect } from '../store/middleware/websocket';
+import { wsConnect, wsDisconnect } from "../modules/websocket";
 
 let socket;
-let messages;
+
 const ChatRoom = (props) => {
   const dispatch = useDispatch();
-  messages = useSelector(getMessages);
+  const messages = useSelector(getMessages);
+
   // constructor() {
   //   super();
   //   state = {
@@ -63,11 +64,10 @@ const ChatRoom = (props) => {
 
       setCurrentUser(storedUser);
       dispatch(loadMessages());
-  
-
+      
       getUsers();
       window.setInterval(getUsers, 60000);
-      
+
       socket.on("new_message", (message) => {
         console.log("connection to message socket:" + message);
       });
@@ -298,7 +298,8 @@ const ChatRoom = (props) => {
       </h5>
     </div>
   ));
-    console.log(messages)
+
+  console.log(renderMessages);
   return (
     <div className="container-fluid chatroom-container">
       <ExpiredModal show={setModalShow} onHide={handleLogOutSubmit} />

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import moment from "moment";
-import { apiCallBegan } from "./api";
+import { apiCallBegan } from "../modules/api";
 
 const slice = createSlice({
   name: "messages",
