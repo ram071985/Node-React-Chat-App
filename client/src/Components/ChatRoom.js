@@ -58,10 +58,13 @@ const ChatRoom = (props) => {
   // audio = new Audio(url);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      window.scrollTo(0,scrollRef.current.scrollHeight);
+    if (scrollRef) {
+      scrollRef.current.addEventListener("DOMNodeInserted", (event) => {
+        const { currentTarget: target } = event;
+        target.scroll({ top: target.scrollHeight, behavior: "smooth" });
+      });
     }
-  }, [isLoading])
+  }, []);
 
   useEffect(() => {
     const { history } = props;
@@ -104,8 +107,6 @@ const ChatRoom = (props) => {
       checkToken();
     }
   }, []);
-
-  useEffect(() => {}, []);
 
   // play = async () => {
   //   setState({
