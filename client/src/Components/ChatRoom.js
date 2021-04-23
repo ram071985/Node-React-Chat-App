@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, Image } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -12,12 +12,13 @@ import UsersList from "./UsersList";
 import { loadMessages, getMessages, addMessage } from "../store/messages";
 import { connect } from "react-redux";
 import { wsConnect, wsDisconnect } from "../modules/websocket";
+import { useParams } from "react-router";
 
 let socket;
 
 const ChatRoom = (props) => {
   const dispatch = useDispatch();
-  const messages = useSelector(getMessages);
+  let scrollRef = useRef();
 
   // constructor() {
   //   super();
@@ -51,9 +52,16 @@ const ChatRoom = (props) => {
   const [loading, setLoading] = useState(false);
   const [play, setPlay] = useState(false);
   const [pause, setPause] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   socket = io.connect();
   // url = "../Audio/serene_audio.m4a";
   // audio = new Audio(url);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      window.scrollTo(0,scrollRef.current.scrollHeight);
+    }
+  }, [isLoading])
 
   useEffect(() => {
     const { history } = props;
@@ -64,7 +72,6 @@ const ChatRoom = (props) => {
 
       setCurrentUser(storedUser);
       dispatch(loadMessages());
-      
       getUsers();
       window.setInterval(getUsers, 60000);
 
@@ -95,10 +102,10 @@ const ChatRoom = (props) => {
       });
 
       checkToken();
-      const columnScroll = document.querySelector(".message-col");
-      columnScroll.scrollTop = columnScroll.scrollHeight;
     }
   }, []);
+
+  useEffect(() => {}, []);
 
   // play = async () => {
   //   setState({
@@ -240,46 +247,47 @@ const ChatRoom = (props) => {
   const getToken = async () => {
     return JSON.parse(localStorage.getItem("id_token"));
   };
-
-  const renderMessages = messages.map((message, index) => (
-    <div key={index} id="bubble-container" className="container">
-      <div className="container avatar-container">
+  const callRenderMessages = () => {
+    return messages.map((message, index) => (
+      <div key={index} id="bubble-container" className="container">
+        <div className="container avatar-container">
+          <div
+            style={{
+              float:
+                avatarCondition === "rgb(177, 47, 30)" ||
+                message.user_id !== currentUser.id
+                  ? "left"
+                  : "right",
+            }}
+          >
+            <Image id="avatar" src={DefaultAvatar} roundedCircle />
+            <p className="text-center username-avatar">
+              {message.username}{" "}
+              <span id="time">
+                {moment(message.created_date).format("l").toString()}
+              </span>
+            </p>
+            <h6 className="time">
+              {moment(message.created_date).format("LT").toString()}
+            </h6>
+          </div>
+        </div>
         <div
+          id="chat-bubble"
           style={{
-            float:
-              avatarCondition === "rgb(177, 47, 30)" ||
+            float: message.user_id !== currentUser.id ? "left" : "right",
+            background:
               message.user_id !== currentUser.id
-                ? "left"
-                : "right",
+                ? "rgb(48, 48, 48)"
+                : "rgb(170, 77, 84)",
           }}
+          className="container d-block mt-3"
         >
-          <Image id="avatar" src={DefaultAvatar} roundedCircle />
-          <p className="text-center username-avatar">
-            {message.username}{" "}
-            <span id="time">
-              {moment(message.created_date).format("l").toString()}
-            </span>
-          </p>
-          <h6 className="time">
-            {moment(message.created_date).format("LT").toString()}
-          </h6>
+          {message.text}
         </div>
       </div>
-      <div
-        id="chat-bubble"
-        style={{
-          float: message.user_id !== currentUser.id ? "left" : "right",
-          background:
-            message.user_id !== currentUser.id
-              ? "rgb(48, 48, 48)"
-              : "rgb(170, 77, 84)",
-        }}
-        className="container d-block mt-3"
-      >
-        {message.text}
-      </div>
-    </div>
-  ));
+    ));
+  };
 
   const renderUsers = onlineUsers.map((user, index) => (
     <div key={index}>
@@ -299,7 +307,9 @@ const ChatRoom = (props) => {
     </div>
   ));
 
-  console.log(renderMessages);
+  console.log("before return");
+  const messages = useSelector(getMessages);
+  console.log(messages);
   return (
     <div className="container-fluid chatroom-container">
       <ExpiredModal show={setModalShow} onHide={handleLogOutSubmit} />
@@ -328,8 +338,15 @@ const ChatRoom = (props) => {
       </div>
       <div className="container d-inline-block right-container">
         <h5 className="chatroom-name">#General</h5>
-        <div className="d-inline-block message-col">
-          <div>{renderMessages}</div>
+        <div ref={scrollRef} className="d-inline-block message-col">
+          <div>
+            {callRenderMessages()}
+            {/* {messages.map((message, index) => (
+              <div>
+                <p>{message}</p>
+              </div>
+            ))} */}
+          </div>
         </div>
         <div className="container d-inline-block type-col">
           {" "}
