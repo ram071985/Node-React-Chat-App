@@ -27,7 +27,7 @@ const slice = createSlice({
     },
 
     messageAdded: (messages, action) => {
-      messages.list.push(action.payload.responseMessage);
+      messages.loading = true;
     },
   },
 });
@@ -50,13 +50,14 @@ export const loadMessages = () => (dispatch, getState) => {
 
   const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
   if (diffInMinutes < 10) return;
-
+  console.log(getState().entities.messages);
   return dispatch(
     apiCallBegan({
       url,
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      method: "get",
       onStart: messagesRequested.type,
       onSuccess: messagesReceived.type,
       onError: messagesRequestFailed.type,
@@ -72,7 +73,9 @@ export const addMessage = (message) =>
     },
     method: "post",
     data: message,
-    onSuccess: messageAdded.type,
+    onStart: messagesRequested.type,
+    onSuccess: messagesReceived.type,
+    onError: messagesRequestFailed.type,
   });
 
 // Selectors
@@ -80,5 +83,4 @@ export const addMessage = (message) =>
 export const getMessages = createSelector(
   (state) => state.entities.messages,
   (messages) => messages.list
-  
 );

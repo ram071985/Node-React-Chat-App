@@ -30,14 +30,22 @@ const api = ({ dispatch }) => (next) => async (action) => {
       headers,
       data,
     });
-    if (method === "get" && onSuccess)
-      socket.on("get_messages", (messages) => {
-        dispatch(actions.apiCallSuccess(JSON.parse(messages.updateMessages)));
-        dispatch({ type: onSuccess, payload: JSON.parse(messages.updateMessages) });
-      });
 
-    if (onSuccess) dispatch(actions.apiCallSuccess(response.data));
-    dispatch({ type: onSuccess, payload: response.data });
+    if (onSuccess)
+      switch (method) {
+        case "get":
+          socket.on("get_messages", (messages) => {
+            dispatch(actions.apiCallSuccess(JSON.parse(messages)));
+            dispatch({ type: onSuccess, payload: JSON.parse(messages) });
+          });
+          break;
+        case "post":
+          socket.on("message", (messages) => {
+            dispatch(actions.apiCallSuccess(JSON.parse(messages)));
+            dispatch({ type: onSuccess, payload: JSON.parse(messages) });
+          });
+          break;
+      }
   } catch (error) {
     dispatch(actions.apiCallFailed(error.message));
     if (onError) dispatch({ type: onError, payload: error.message });

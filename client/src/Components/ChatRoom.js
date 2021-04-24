@@ -82,11 +82,6 @@ const ChatRoom = (props) => {
         console.log("connection to message socket:" + message);
       });
 
-      socket.on("message", (chatMessage) => {
-        console.log("message sent back", chatMessage);
-        const parsedMessage = JSON.parse(chatMessage);
-      });
-
       socket.on("users_online", (userOnline) => {
         const parsedUser = JSON.parse(userOnline);
         setOnlineUsers([...onlineUsers, parsedUser]);
@@ -169,6 +164,7 @@ const ChatRoom = (props) => {
       text: text,
     };
     dispatch(addMessage(data));
+    // dispatch(loadMessages);
     setText("");
   };
 
@@ -309,8 +305,8 @@ const ChatRoom = (props) => {
   ));
 
   console.log("before return");
-  const messages = useSelector(getMessages);
-  console.log(messages);
+  const messages = useSelector(getMessages, []);
+
   return (
     <div className="container-fluid chatroom-container">
       <ExpiredModal show={setModalShow} onHide={handleLogOutSubmit} />

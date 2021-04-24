@@ -33,9 +33,8 @@ router.post("/", jwtMW, async (req, res) => {
   );
 
   responseMessage.username = newMessage.username;
-
-  res.status(201).send({ responseMessage });
-    console.log("message post route", responseMessage)
-  io.emit("message", JSON.stringify(responseMessage));
+  const updateMessages = await messageDataAccess.queryMessages();
+  res.status(201).send(updateMessages);
+  io.emit("message", JSON.stringify(updateMessages));
 });
 module.exports = router;
