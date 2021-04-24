@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const pgDataAccess = require("./pgDataAccess.js");
+const moment = require("moment");
 
 createUser = async (username, password) => {
   let pool = await pgDataAccess.dbConnection();
@@ -33,9 +34,18 @@ createUser = async (username, password) => {
 queryUsers = async () => {
   let pool = await pgDataAccess.dbConnection();
   try {
-    const results = await pool.query(
-      "SELECT * FROM users WHERE is_logged_in = true;"
+    await pool.query(
+      "UPDATE users SET is_logged_in = false WHERE last_active_at < NOW() - INTERVAL '1 day'"
     );
+    await pool.query("COMMIT");
+    const results = await pool.query(
+      "SELECT * FROM users WHERE is_logged_in = true"
+    );
+    // const yesterday = moment().subtract(1, "d");
+    // const filterLoggedIn = results.rows.filter((user) =>
+    //   user.last_active_at.isBefore(moment())
+    // );
+    console.log(results.rows);
     return results.rows;
   } catch (err) {
     console.log(err);
