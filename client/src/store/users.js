@@ -1,54 +1,77 @@
-// import { createSlice } from "@reduxjs/toolkit";
-// import { createSelector } from "reselect";
-// import moment from 'moment';
+import { createSlice } from "@reduxjs/toolkit";
+import { createSelector } from "reselect";
+import moment from "moment";
+import { apiCallBegan } from "../modules/api";
 
-// const slice = createSlice({
-//   name: "users",
-//   initialState: {
-//     list: [],
-//     loading: false,
-//     lastFetch: null,
-//   },
-//   reducers: {
-//     usersRequested: (users, action) => {
-//       users.loading = true;
-//     },
+const slice = createSlice({
+  name: "users",
+  initialState: {
+    list: [{ onlineUsers: [], offlineUsers: [] }],
+    loading: false,
+    lastFetch: null,
+  },
+  reducers: {
+    usersRequested: (users, action) => {
+      users.loading = true;
+    },
 
-//     usersReceived: (users, action) => {
-//       users.list = action.payload;
-//       users.loading = false;
-//       users.lastFetch = Date.now();
-//     },
+    usersReceived: (users, action) => {
+      users.list = action.payload;
+      users.loading = false;
+      users.lastFetch = Date.now();
+    },
 
-//     usersRequestFailed: (users, action) => {
-//       users.loading = false;
-//     },
-//   },
-// });
+    usersRequestFailed: (users, action) => {
+      users.loading = false;
+    },
 
-// export const {
-//   usersRequested,
-//   usersReceived,
-//   usersRequestFailed,
-// } = slice.actions;
-// export default slice.reducer;
+    usersOfflineRequested: (users, action) => {
+      users.loading = true;
+    },
 
-// const url = "/users";
+    usersOfflineReceived: (users, action) => {
+      users.offlineUsers.list.push(action.payload);
+      users.loading = false;
+      users.lastFetch = Date.now();
+    },
 
-// export const loadUsers = () => (dispatch, getState) => {
-//   const { lastFetch } = getState().entities.users;
+    usersOfflineRequestFailed: (users, action) => {
+      users.loading = false;
+    },
+  },
+});
 
-//   const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
-//   if (diffInMinutes < 10) return;
+export const {
+  usersRequested,
+  usersReceived,
+  usersRequestFailed,
+  usersOfflineRequested,
+  usersOfflineReceived,
+  usersOfflineRequestFailed,
+} = slice.actions;
+export default slice.reducer;
 
-//   return dispatch(
-//     apiCallBegan({
-//       url,
-//       onStart: usersRequested.type,
-//       onSuccess: usersReceived.type,
-//       onError: usersRequestFailed.type,
-//     })
-//   );
-// };
+const url = "/users";
 
-// Selector
+export const loadOnlineUsers = () => (dispatch, getState) => {
+  const { lastFetch } = getState().entities.users;
+
+  const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
+  if (diffInMinutes < 10) return;
+
+  return dispatch(
+    apiCallBegan({
+      url,
+      onStart: usersRequested.type,
+      onSuccess: usersReceived.type,
+      onError: usersRequestFailed.type,
+    })
+  );
+};
+
+// Selectors
+
+export const getOnlineUsers = createSelector(
+  (state) => state.entities.users,
+  (users) => users.list
+);

@@ -176,10 +176,6 @@ const ChatRoom = (props) => {
     });
   };
 
-  const filterUserStatus = (users) => {
-    
-  }
-
   const getUsers = async () => {
     setLoading(true);
     const token = JSON.parse(localStorage.getItem("id_token"));
