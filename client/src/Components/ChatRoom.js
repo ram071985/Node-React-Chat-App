@@ -15,7 +15,6 @@ import {
   getOnlineUsers,
   getOfflineUsers,
 } from "../store/users";
-import { connect } from "react-redux";
 
 let socket;
 
@@ -32,25 +31,16 @@ const ChatRoom = (props) => {
   //     text: "",
   //     errorMessage: "",
   //     setshow: false,
-  //     currentUser: {},
-  //     messages: [],
-  //     users: [],
-  //     onlineUsers: [],
-  //     offlineUsers: [],
   //     confirm: null,
   //     loaded: false,
   //     endpoint: "",
   //     setModalShow: false,
   //     loading: false,
-  //     play: false,
-  //     pause: true,
   //   };
   const [text, setText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [setShow, changeShow] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [onlineUsers, setOnlineUsers] = useState([]);
-  const [offlineUsers, setOfflineUsers] = useState([]);
   const [confirm, setConfirm] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [endpoint, setEndpoint] = useState("");
@@ -81,28 +71,12 @@ const ChatRoom = (props) => {
 
       setCurrentUser(storedUser);
       dispatch(loadMessages());
-      getUsers();
-      window.setInterval(getUsers, 60000);
+      dispatch(loadOnlineUsers());
+      dispatch(loadOfflineUsers());
+      // window.setInterval(getUsers, 60000);
 
       socket.on("new_message", (message) => {
         console.log("connection to message socket:" + message);
-      });
-
-      socket.on("users_online", (userOnline) => {
-        const parsedUser = JSON.parse(userOnline);
-        setOnlineUsers([...onlineUsers, parsedUser]);
-      });
-
-      socket.on("users_offline", (userOffline) => {
-        const parsedOffline = JSON.parse(userOffline);
-
-        setOnlineUsers((prevState) => {
-          return {
-            ...prevState.usersOnline.filter((user) => {
-              user.id !== parsedOffline;
-            }),
-          };
-        });
       });
 
       checkToken();
@@ -182,29 +156,6 @@ const ChatRoom = (props) => {
     });
   };
 
-  const getUsers = async () => {
-    setLoading(true);
-    dispatch(loadOnlineUsers());
-    dispatch(loadOfflineUsers());
-    setLoading(false);
-  };
-
-  // const getOfflineUsers = async () => {
-  //   const token = JSON.parse(localStorage.getItem("id_token"));
-  //   await axios
-  //     .get("/api/users/inactive", {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       setOfflineUsers(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
   const handleLogOutSubmit = async (e) => {
     e.preventDefault();
 
@@ -281,7 +232,7 @@ const ChatRoom = (props) => {
   };
 
   const renderUsers = () => {
-    return onlineUsers.map((user, index) => (
+    return usersOnline.map((user, index) => (
       <div key={index}>
         <h5 className="username-text" key={index}>
           <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
@@ -292,7 +243,7 @@ const ChatRoom = (props) => {
   };
 
   const renderOfflineUsers = () => {
-    return offlineUsers.map((user, index) => (
+    return usersOffline.map((user, index) => (
       <div key={index}>
         <h5 style={{ color: "grey" }} className="username-text" key={index}>
           <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
@@ -317,12 +268,12 @@ const ChatRoom = (props) => {
               Log Out
             </Button>{" "}
           </Form>
-          <h6 className="online-text">Online ({onlineUsers.length} Members)</h6>
+          <h6 className="online-text">Online ({usersOnline.length} Members)</h6>
           <div className="container d-block users-list-container">
             <h6 className="users-list">{renderUsers()}</h6>
             <hr className="onoff-hr" />
             <h6 className="offline-text">
-              Offline ({offlineUsers.length} Members)
+              Offline ({usersOffline.length} Members)
             </h6>
             <h6 className="users-list">{renderOfflineUsers()}</h6>
           </div>
@@ -372,13 +323,4 @@ const ChatRoom = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  loadMessages: () => dispatch(loadMessages()),
-  addMessage: (message) => dispatch(addMessage(message)),
-});
-
-const mapStateToProps = (state) => ({
-  messages: getMessages(state),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);
+export default ChatRoom;

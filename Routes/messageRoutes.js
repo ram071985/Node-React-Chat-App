@@ -4,7 +4,6 @@ const router = express.Router();
 const messageDataAccess = require("../DataAccess/messageDataAccess");
 const socketService = require("../Services/socketService");
 const exjwt = require("express-jwt");
-const { response } = require("express");
 const io = socketService.getIo();
 
 const jwtMW = exjwt({

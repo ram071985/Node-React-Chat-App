@@ -2,11 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import moment from "moment";
 import { apiCallBegan } from "../modules/api";
+import { token } from "./middleware/api";
 
 const slice = createSlice({
   name: "users",
   initialState: {
-    list: [{ onlineUsers: [], offlineUsers: [] }],
+    onlineUsers: [],
+    offlineUsers: [],
     loading: false,
     lastFetch: null,
   },
@@ -16,7 +18,7 @@ const slice = createSlice({
     },
 
     usersReceived: (users, action) => {
-      users.list.onlineUsers = action.payload;
+      users.onlineUsers = action.payload;
       users.loading = false;
       users.lastFetch = Date.now();
     },
@@ -30,7 +32,7 @@ const slice = createSlice({
     },
 
     usersOfflineReceived: (users, action) => {
-      users.list.offlineUsers = action.payload;
+      users.offlineUsers = action.payload;
       users.loading = false;
       users.lastFetch = Date.now();
     },
@@ -55,7 +57,6 @@ const url = "/users";
 
 export const loadOnlineUsers = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.users;
-
   const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
   if (diffInMinutes < 10) return;
 
@@ -63,7 +64,7 @@ export const loadOnlineUsers = () => (dispatch, getState) => {
     apiCallBegan({
       url,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token()}`,
       },
       method: "get",
       onStart: usersRequested.type,
@@ -75,13 +76,12 @@ export const loadOnlineUsers = () => (dispatch, getState) => {
 
 export const loadOfflineUsers = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.users;
-    console.log(getState().entities.users)
   const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
   if (diffInMinutes < 10) return;
 
   return dispatch(
     apiCallBegan({
-      url,
+      url: "/users/inactive",
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -97,10 +97,10 @@ export const loadOfflineUsers = () => (dispatch, getState) => {
 
 export const getOnlineUsers = createSelector(
   (state) => state.entities.users,
-  (users) => users.list.onlineUsers
+  (users) => users.onlineUsers
 );
 
 export const getOfflineUsers = createSelector(
   (state) => state.entities.users,
-  (users) => users.list.offlineUsers
+  (users) => users.offlineUsers
 );

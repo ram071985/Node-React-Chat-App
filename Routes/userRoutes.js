@@ -13,12 +13,18 @@ const jwtMW = exjwt({
 
 router.get("/", jwtMW, async (req, res) => {
   const users = await userDataAccess.queryUsers();
-  res.send(users);
+
+  res.status(201).send(users);
+console.log("user online",users)
+  io.emit("get_users", JSON.stringify(users));
 });
 
 router.get("/inactive", jwtMW, async (req, res) => {
   const users = await userDataAccess.queryInactiveUsers();
-  res.send(users);
+
+  res.status(201).send(users);
+console.log("offline users", users)
+  io.emit("get_offline_users", JSON.stringify(users));
 });
 
 router.post("/", async (req, res) => {

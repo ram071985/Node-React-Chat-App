@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import moment from "moment";
 import { apiCallBegan } from "../modules/api";
+import { token } from "./middleware/api";
 
 const slice = createSlice({
   name: "messages",
@@ -43,8 +44,6 @@ export default slice.reducer;
 // Action Creators
 const url = "/messages";
 
-const token = JSON.parse(localStorage.getItem("id_token"));
-
 export const loadMessages = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.messages;
 
@@ -54,7 +53,7 @@ export const loadMessages = () => (dispatch, getState) => {
     apiCallBegan({
       url,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token()}`,
       },
       method: "get",
       onStart: messagesRequested.type,
