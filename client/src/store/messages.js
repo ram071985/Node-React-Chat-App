@@ -50,7 +50,6 @@ export const loadMessages = () => (dispatch, getState) => {
 
   const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
   if (diffInMinutes < 10) return;
-  console.log(getState().entities.messages);
   return dispatch(
     apiCallBegan({
       url,

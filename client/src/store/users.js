@@ -16,7 +16,7 @@ const slice = createSlice({
     },
 
     usersReceived: (users, action) => {
-      users.list = action.payload;
+      users.list.onlineUsers = action.payload;
       users.loading = false;
       users.lastFetch = Date.now();
     },
@@ -30,7 +30,7 @@ const slice = createSlice({
     },
 
     usersOfflineReceived: (users, action) => {
-      users.offlineUsers.list.push(action.payload);
+      users.list.offlineUsers = action.payload;
       users.loading = false;
       users.lastFetch = Date.now();
     },
@@ -62,9 +62,33 @@ export const loadOnlineUsers = () => (dispatch, getState) => {
   return dispatch(
     apiCallBegan({
       url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      method: "get",
       onStart: usersRequested.type,
       onSuccess: usersReceived.type,
       onError: usersRequestFailed.type,
+    })
+  );
+};
+
+export const loadOfflineUsers = () => (dispatch, getState) => {
+  const { lastFetch } = getState().entities.users;
+    console.log(getState().entities.users)
+  const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
+  if (diffInMinutes < 10) return;
+
+  return dispatch(
+    apiCallBegan({
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      method: "get",
+      onStart: usersOfflineRequested.type,
+      onSuccess: usersOfflineReceived.type,
+      onError: usersOfflineRequestFailed.type,
     })
   );
 };
@@ -73,5 +97,10 @@ export const loadOnlineUsers = () => (dispatch, getState) => {
 
 export const getOnlineUsers = createSelector(
   (state) => state.entities.users,
-  (users) => users.list
+  (users) => users.list.onlineUsers
+);
+
+export const getOfflineUsers = createSelector(
+  (state) => state.entities.users,
+  (users) => users.list.offlineUsers
 );

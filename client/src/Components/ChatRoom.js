@@ -8,17 +8,23 @@ import decode from "jwt-decode";
 import ExpiredModal from "./ExpiredTokenModal";
 import moment from "moment";
 import { PlayCircle, PauseCircle } from "react-feather";
-import UsersList from "./UsersList";
 import { loadMessages, getMessages, addMessage } from "../store/messages";
+import {
+  loadOnlineUsers,
+  loadOfflineUsers,
+  getOnlineUsers,
+  getOfflineUsers,
+} from "../store/users";
 import { connect } from "react-redux";
-import { wsConnect, wsDisconnect } from "../modules/websocket";
-import { useParams } from "react-router";
 
 let socket;
 
 const ChatRoom = (props) => {
   const dispatch = useDispatch();
   let scrollRef = useRef();
+  const messages = useSelector(getMessages, []);
+  const usersOnline = useSelector(getOnlineUsers, []);
+  const usersOffline = useSelector(getOfflineUsers, []);
 
   // constructor() {
   //   super();
@@ -178,38 +184,26 @@ const ChatRoom = (props) => {
 
   const getUsers = async () => {
     setLoading(true);
-    const token = JSON.parse(localStorage.getItem("id_token"));
-    await axios
-      .get("/api/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setOnlineUsers(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    getOfflineUsers();
+    dispatch(loadOnlineUsers());
+    dispatch(loadOfflineUsers());
     setLoading(false);
   };
 
-  const getOfflineUsers = async () => {
-    const token = JSON.parse(localStorage.getItem("id_token"));
-    await axios
-      .get("/api/users/inactive", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setOfflineUsers(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const getOfflineUsers = async () => {
+  //   const token = JSON.parse(localStorage.getItem("id_token"));
+  //   await axios
+  //     .get("/api/users/inactive", {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       setOfflineUsers(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const handleLogOutSubmit = async (e) => {
     e.preventDefault();
@@ -286,26 +280,27 @@ const ChatRoom = (props) => {
     ));
   };
 
-  const renderUsers = onlineUsers.map((user, index) => (
-    <div key={index}>
-      <h5 className="username-text" key={index}>
-        <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
-        {user.username}
-      </h5>
-    </div>
-  ));
+  const renderUsers = () => {
+    return onlineUsers.map((user, index) => (
+      <div key={index}>
+        <h5 className="username-text" key={index}>
+          <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
+          {user.username}
+        </h5>
+      </div>
+    ));
+  };
 
-  const renderOfflineUsers = offlineUsers.map((user, index) => (
-    <div key={index}>
-      <h5 style={{ color: "grey" }} className="username-text" key={index}>
-        <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
-        {user.username}
-      </h5>
-    </div>
-  ));
-
-  console.log("before return");
-  const messages = useSelector(getMessages, []);
+  const renderOfflineUsers = () => {
+    return offlineUsers.map((user, index) => (
+      <div key={index}>
+        <h5 style={{ color: "grey" }} className="username-text" key={index}>
+          <Image id="main-avatar" src={DefaultAvatar} roundedCircle />
+          {user.username}
+        </h5>
+      </div>
+    ));
+  };
 
   return (
     <div className="container-fluid chatroom-container">
@@ -324,26 +319,19 @@ const ChatRoom = (props) => {
           </Form>
           <h6 className="online-text">Online ({onlineUsers.length} Members)</h6>
           <div className="container d-block users-list-container">
-            <h6 className="users-list">{renderUsers}</h6>
+            <h6 className="users-list">{renderUsers()}</h6>
             <hr className="onoff-hr" />
             <h6 className="offline-text">
               Offline ({offlineUsers.length} Members)
             </h6>
-            <h6 className="users-list">{renderOfflineUsers}</h6>
+            <h6 className="users-list">{renderOfflineUsers()}</h6>
           </div>
         </div>
       </div>
       <div className="container d-inline-block right-container">
         <h5 className="chatroom-name">#General</h5>
         <div ref={scrollRef} className="d-inline-block message-col">
-          <div>
-            {callRenderMessages()}
-            {/* {messages.map((message, index) => (
-              <div>
-                <p>{message}</p>
-              </div>
-            ))} */}
-          </div>
+          <div>{callRenderMessages()}</div>
         </div>
         <div className="container d-inline-block type-col">
           {" "}
