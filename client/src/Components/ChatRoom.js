@@ -137,7 +137,6 @@ const ChatRoom = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const data = {
       id: currentUser.id,
       username: currentUser.username,

@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import moment from "moment";
 import { apiCallBegan } from "../modules/api";
-import { token } from "./middleware/api";
 
 const slice = createSlice({
   name: "users",
@@ -54,6 +53,7 @@ export const {
 export default slice.reducer;
 
 const url = "/users";
+const token = JSON.parse(localStorage.getItem("id_token"));
 
 export const loadOnlineUsers = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.users;
@@ -64,7 +64,7 @@ export const loadOnlineUsers = () => (dispatch, getState) => {
     apiCallBegan({
       url,
       headers: {
-        Authorization: `Bearer ${token()}`,
+        Authorization: `Bearer ${token}`,
       },
       method: "get",
       onStart: usersRequested.type,
