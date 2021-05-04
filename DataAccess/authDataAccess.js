@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 
 logInUser = async (username, password) => {
   let pool = await pgDataAccess.dbConnection();
-  console.log("connected to login");
   try {
     const result = await pool.query("SELECT * FROM users WHERE username = $1", [
       username,
@@ -39,7 +38,6 @@ logInUser = async (username, password) => {
       user: result.rows[0],
       secretToken: token,
     };
-    console.log(result.rows[0]);
     return successfulLogin;
   } catch (err) {
     console.log(err);

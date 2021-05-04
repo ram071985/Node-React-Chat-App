@@ -100,32 +100,10 @@ const ChatRoom = (props) => {
   // };
 
   const checkToken = async () => {
-    let returnInterval;
     const token = localStorage.getItem("id_token");
     const decoded = decode(token);
-
-    returnInterval = setInterval(() => {
-      if (decoded.exp < Date.now() / 1000) {
-        setState({
-          setModalShow: true,
-        });
-      }
-      return returnInterval;
-    }, 300000);
-  };
-
-  const loggedIn = async () => {
-    const token = localStorage.getItem("id_token");
-    return !!token && !isTokenExpired(token);
-  };
-
-  const getConfirm = async () => {
-    let token = localStorage.getItem("id_token");
-    let answer = decode(token);
-    try {
-      return answer;
-    } catch (err) {
-      console.log(err);
+    if (decoded.exp < Date.now() / 1000) {
+      changeModalShow(true);
     }
   };
 
@@ -251,7 +229,7 @@ const ChatRoom = (props) => {
       </div>
     ));
   };
-
+  console.log("before return", setModalShow);
   return (
     <div className="container-fluid chatroom-container">
       <ExpiredModal show={setModalShow} onHide={handleLogOutSubmit} />
